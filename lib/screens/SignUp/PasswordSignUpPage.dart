@@ -39,11 +39,17 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
     final args = ModalRoute.of(context)!.settings.arguments
         as PasswordSignUpPageArguments;
 
+    void showMessage(message) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(message),
+      ));
+    }
+
     Future<void> handleSignIn() async {
       dynamic res = await signIn(
           email: args.email, password: passwordInputController.text);
       if (res.runtimeType == String) {
-        print(res);
+        showMessage(res);
       } else {
         print("Sign in success");
       }
@@ -57,10 +63,9 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
           if (res == Messages.signUpFailedDuplicateEmail) {
             await handleSignIn();
           } else {
-            print(res);
+            showMessage(res);
           }
         } else {
-          print("Sign up success");
           await handleSignIn();
         }
       }
