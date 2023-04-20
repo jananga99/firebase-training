@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:project1/services/auth.service.dart';
 import 'package:project1/utils/constants.dart';
 
+import '../../utils/routes.dart';
+
 class PasswordSignUpPageArguments {
   final String email;
   PasswordSignUpPageArguments(this.email);
@@ -51,7 +53,11 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
       if (res.runtimeType == String) {
         showMessage(res);
       } else {
-        print("Sign in success");
+        if (context.mounted) {
+          Navigator.pushNamed(context, RouteConstants.homeRoute);
+        } else {
+          showMessage(Messages.signInFailed);
+        }
       }
     }
 
