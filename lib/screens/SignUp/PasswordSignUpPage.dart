@@ -25,6 +25,7 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
   }
 
   bool isPasswordEmpty = true;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -52,28 +53,29 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
           email: args.email, password: passwordInputController.text);
       if (res.runtimeType == String) {
         showMessage(res);
+      } else if (context.mounted) {
+        Navigator.pushNamed(context, RouteConstants.homeRoute);
       } else {
-        if (context.mounted) {
-          Navigator.pushNamed(context, RouteConstants.homeRoute);
-        } else {
-          showMessage(Messages.signInFailed);
-        }
+        showMessage(Messages.signInFailed);
       }
     }
 
     Future<void> handleSignUp() async {
       if (_formKey.currentState!.validate()) {
+        setState(() {
+          isLoading = true;
+        });
         dynamic res = await signUp(
             email: args.email, password: passwordInputController.text);
-        if (res.runtimeType == String) {
-          if (res == Messages.signUpFailedDuplicateEmail) {
-            await handleSignIn();
-          } else {
-            showMessage(res);
-          }
+        if (res.runtimeType == String &&
+            res != Messages.signUpFailedDuplicateEmail) {
+          showMessage(res);
         } else {
           await handleSignIn();
         }
+        setState(() {
+          isLoading = false;
+        });
       }
     }
 
@@ -113,7 +115,7 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
                           children: <Widget>[
                             Container(
                               width: 300,
-                              margin: EdgeInsets.all(20),
+                              margin: const EdgeInsets.all(20),
                               child: TextFormField(
                                 controller: passwordInputController,
                                 obscureText: true,
@@ -177,6 +179,11 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
                                 ),
                               ),
                             ),
+                            Container(
+                              child: isLoading
+                                  ? const CircularProgressIndicator()
+                                  : const SizedBox(),
+                            )
                           ],
                         ),
                       )
