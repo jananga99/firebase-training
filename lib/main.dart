@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project1/screens/SignUp.dart';
+import 'package:project1/screens/SignUp/EmailSignUpPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const SignUpPage(),
+      home: const EmailSignUpPage(),
     );
   }
 }

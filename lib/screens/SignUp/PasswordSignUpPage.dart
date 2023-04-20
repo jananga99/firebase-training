@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class PasswordSignUpPage extends StatefulWidget {
+  const PasswordSignUpPage({super.key});
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<PasswordSignUpPage> createState() => _PasswordSignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController emailInputController = TextEditingController();
+  TextEditingController passwordInputController = TextEditingController();
 
   bool isContinueButtonDisabled() {
-    return emailInputController.text.isEmpty;
+    return passwordInputController.text.isEmpty;
   }
 
-  bool isEmailEmpty = true;
+  bool isPasswordEmpty = true;
 
   @override
   void initState() {
     super.initState();
-    emailInputController.addListener(() {
+    passwordInputController.addListener(() {
       setState(() {
-        isEmailEmpty = emailInputController.text.isEmpty;
+        isPasswordEmpty = passwordInputController.text.isEmpty;
       });
     });
   }
@@ -67,18 +67,23 @@ class _SignUpPageState extends State<SignUpPage> {
                               width: 300,
                               margin: EdgeInsets.all(20),
                               child: TextFormField(
-                                controller: emailInputController,
+                                controller: passwordInputController,
                                 decoration: InputDecoration(
-                                  hintText: 'Email*',
+                                  hintText: 'Password*',
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide:
+                                        const BorderSide(color: Colors.black),
+                                  ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                     borderSide:
-                                        const BorderSide(color: Colors.grey),
+                                        const BorderSide(color: Colors.black),
                                   ),
                                 ),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please enter an email';
+                                    return 'Please enter an Password';
                                   }
                                   return null;
                                 },
@@ -86,6 +91,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                             Container(
                               margin: const EdgeInsets.all(20),
+                              width: 300,
                               // padding: const EdgeInsets.all(20),
                               child: ElevatedButton(
                                 style: ButtonStyle(
@@ -94,7 +100,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                           (Set<MaterialState> states) {
                                     if (states
                                         .contains(MaterialState.disabled)) {
-                                      return Colors.grey;
+                                      return Colors.black12;
                                     }
                                     return Colors.blue;
                                   }),
@@ -103,7 +109,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                           (Set<MaterialState> states) {
                                     if (states
                                         .contains(MaterialState.disabled)) {
-                                      return Colors.black;
+                                      return Colors.white;
                                     }
                                     return Colors.white;
                                   }),
@@ -114,7 +120,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     ),
                                   ),
                                 ),
-                                onPressed: isEmailEmpty
+                                onPressed: isPasswordEmpty
                                     ? null
                                     : () {
                                         if (_formKey.currentState!.validate()) {
@@ -126,9 +132,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                           );
                                         }
                                       },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: const Text('CONTINUE ->'),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(15),
+                                  child: Text('CONTINUE ->'),
                                 ),
                               ),
                             ),
