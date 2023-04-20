@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project1/common/routes.dart';
+import 'package:project1/screens/SignUp/PasswordSignUpPage.dart';
 
 class EmailSignUpPage extends StatefulWidget {
   const EmailSignUpPage({super.key});
@@ -124,11 +126,12 @@ class _EmailSignUpPageState extends State<EmailSignUpPage> {
                                     ? null
                                     : () {
                                         if (_formKey.currentState!.validate()) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content:
-                                                    Text('Processing Data')),
+                                          Navigator.pushNamed(
+                                            context,
+                                            RouteConstants.passwordSignUpRoute,
+                                            arguments:
+                                                PasswordSignUpPageArguments(
+                                                    emailInputController.text),
                                           );
                                         }
                                       },

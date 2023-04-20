@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:project1/common/routes.dart';
 import 'package:project1/screens/SignUp/EmailSignUpPage.dart';
+import 'package:project1/screens/SignUp/PasswordSignUpPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +28,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const EmailSignUpPage(),
+      initialRoute: RouteConstants.homeRoute,
+      routes: {
+        RouteConstants.homeRoute: (context) => const EmailSignUpPage(),
+        RouteConstants.emailSignUpRoute: (context) => const EmailSignUpPage(),
+        RouteConstants.passwordSignUpRoute: (context) =>
+            const PasswordSignUpPage(),
+      },
     );
   }
 }

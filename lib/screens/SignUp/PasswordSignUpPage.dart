@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+class PasswordSignUpPageArguments {
+  final String email;
+  PasswordSignUpPageArguments(this.email);
+}
+
 class PasswordSignUpPage extends StatefulWidget {
   const PasswordSignUpPage({super.key});
   @override
@@ -29,6 +34,9 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments
+        as PasswordSignUpPageArguments;
+
     return Scaffold(
         backgroundColor: Colors.blue,
         body: Center(
@@ -68,6 +76,7 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
                               margin: EdgeInsets.all(20),
                               child: TextFormField(
                                 controller: passwordInputController,
+                                obscureText: true,
                                 decoration: InputDecoration(
                                   hintText: 'Password*',
                                   focusedBorder: OutlineInputBorder(
@@ -124,12 +133,8 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
                                     ? null
                                     : () {
                                         if (_formKey.currentState!.validate()) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content:
-                                                    Text('Processing Data')),
-                                          );
+                                          print(args.email);
+                                          print(passwordInputController.text);
                                         }
                                       },
                                 child: const Padding(
