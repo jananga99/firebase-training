@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project1/services/auth.service.dart';
+import 'package:project1/utils/constants.dart';
 
 class PasswordSignUpPageArguments {
   final String email;
@@ -36,6 +38,33 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments
         as PasswordSignUpPageArguments;
+
+    Future<void> handleSignIn() async {
+      dynamic res = await signIn(
+          email: args.email, password: passwordInputController.text);
+      if (res.runtimeType == String) {
+        print(res);
+      } else {
+        print("Sign in success");
+      }
+    }
+
+    Future<void> handleSignUp() async {
+      if (_formKey.currentState!.validate()) {
+        dynamic res = await signUp(
+            email: args.email, password: passwordInputController.text);
+        if (res.runtimeType == String) {
+          if (res == Messages.signUpFailedDuplicateEmail) {
+            await handleSignIn();
+          } else {
+            print(res);
+          }
+        } else {
+          print("Sign up success");
+          await handleSignIn();
+        }
+      }
+    }
 
     return Scaffold(
         backgroundColor: Colors.blue,
@@ -129,17 +158,11 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
                                     ),
                                   ),
                                 ),
-                                onPressed: isPasswordEmpty
-                                    ? null
-                                    : () {
-                                        if (_formKey.currentState!.validate()) {
-                                          print(args.email);
-                                          print(passwordInputController.text);
-                                        }
-                                      },
+                                onPressed:
+                                    isPasswordEmpty ? null : handleSignUp,
                                 child: const Padding(
                                   padding: EdgeInsets.all(15),
-                                  child: Text('CONTINUE ->'),
+                                  child: Text('REGISTER ->'),
                                 ),
                               ),
                             ),

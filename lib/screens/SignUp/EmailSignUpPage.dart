@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project1/common/routes.dart';
 import 'package:project1/screens/SignUp/PasswordSignUpPage.dart';
+import 'package:project1/utils/routes.dart';
 
 class EmailSignUpPage extends StatefulWidget {
   const EmailSignUpPage({super.key});

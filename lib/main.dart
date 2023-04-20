@@ -1,9 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:project1/common/routes.dart';
 import 'package:project1/screens/SignUp/EmailSignUpPage.dart';
 import 'package:project1/screens/SignUp/PasswordSignUpPage.dart';
+import 'package:project1/utils/routes.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+Future<void> main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
