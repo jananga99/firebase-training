@@ -41,3 +41,11 @@ Future<dynamic> signIn(
     return errorMessage;
   }
 }
+
+Future<dynamic> signOut() async {
+  try {
+    await FirebaseAuth.instance.signOut();
+  } catch (e) {
+    return Messages.signOutFailed;
+  }
+}

@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/screens/Home/HomePage.dart';
-import 'package:project1/screens/SignUp/EmailSignUpPage.dart';
 import 'package:project1/screens/SignUp/PasswordSignUpPage.dart';
 import 'package:project1/utils/routes.dart';
+import 'package:project1/widgets/AuthGuard.dart';
 
 import 'firebase_options.dart';
 
@@ -26,10 +26,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: RouteConstants.emailSignUpRoute,
+      initialRoute: RouteConstants.homeRoute,
       routes: {
-        RouteConstants.homeRoute: (context) => const HomePage(),
-        RouteConstants.emailSignUpRoute: (context) => const EmailSignUpPage(),
+        RouteConstants.homeRoute: (context) =>
+            const AuthGuard(component: HomePage()),
         RouteConstants.passwordSignUpRoute: (context) =>
             const PasswordSignUpPage(),
       },

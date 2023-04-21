@@ -31,6 +31,24 @@ class _EmailSignUpPageState extends State<EmailSignUpPage> {
 
   @override
   Widget build(BuildContext context) {
+    void showMessage(message) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(message),
+      ));
+    }
+
+    void handleContinue() {
+      if (_formKey.currentState!.validate()) {
+        Navigator.pushNamed(
+          context,
+          RouteConstants.passwordSignUpRoute,
+          arguments: PasswordSignUpPageArguments(emailInputController.text),
+        );
+      } else {
+        showMessage("Enter a valid email");
+      }
+    }
+
     return Scaffold(
         backgroundColor: Colors.blue,
         body: Center(
@@ -122,19 +140,7 @@ class _EmailSignUpPageState extends State<EmailSignUpPage> {
                                     ),
                                   ),
                                 ),
-                                onPressed: isEmailEmpty
-                                    ? null
-                                    : () {
-                                        if (_formKey.currentState!.validate()) {
-                                          Navigator.pushNamed(
-                                            context,
-                                            RouteConstants.passwordSignUpRoute,
-                                            arguments:
-                                                PasswordSignUpPageArguments(
-                                                    emailInputController.text),
-                                          );
-                                        }
-                                      },
+                                onPressed: isEmailEmpty ? null : handleContinue,
                                 child: const Padding(
                                   padding: EdgeInsets.all(15),
                                   child: Text('CONTINUE ->'),

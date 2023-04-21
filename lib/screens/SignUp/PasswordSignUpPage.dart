@@ -76,6 +76,8 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
         setState(() {
           isLoading = false;
         });
+      } else {
+        showMessage("Enter a valid password");
       }
     }
 

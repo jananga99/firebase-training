@@ -8,4 +8,6 @@ class Messages {
       "The account already exists for that email.";
   static const String signUpFailedWeakPassword =
       "The password provided is too weak..";
+
+  static const String signOutFailed = "Sign out failed.";
 }
