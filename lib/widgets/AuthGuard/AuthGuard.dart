@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:project1/services/auth.service.dart';
 
 import '../../screens/SignIn/SignInPage.dart';
 
@@ -13,7 +14,7 @@ class AuthGuard extends StatefulWidget {
 }
 
 class _AuthGuardState extends State<AuthGuard> {
-  bool isAuthenticated = FirebaseAuth.instance.currentUser != null;
+  bool isAuthenticated = getCurrentUser() != null;
 
   @override
   Widget build(BuildContext context) {

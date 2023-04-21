@@ -51,3 +51,7 @@ Future<dynamic> signOut() async {
     return Messages.signOutFailed;
   }
 }
+
+User? getCurrentUser() {
+  return FirebaseAuth.instance.currentUser;
+}

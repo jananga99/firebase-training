@@ -11,4 +11,9 @@ class Messages {
       "The password provided is too weak..";
 
   static const String signOutFailed = "Sign out failed.";
+
+  static const String unauthorized = "Unauthorized user.";
+
+  static const String addNoteFailed = "Add note was failed";
+  static const String addNoteSuccess = "Note added successfully";
 }
