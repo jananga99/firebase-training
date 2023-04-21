@@ -9,7 +9,11 @@ Future<String> addNote(
   final email = getCurrentUser()?.email;
   late String message;
   if (email != null) {
-    final note = Note(title, description, email);
+    final note = Note(
+        title: title,
+        description: description,
+        email: email,
+        createdAt: DateTime.now());
     try {
       await FirebaseFirestore.instance.collection("notes").add(note.toMap());
       message = Messages.addNoteSuccess;
@@ -20,4 +24,11 @@ Future<String> addNote(
     message = Messages.addNoteFailed;
   }
   return message;
+}
+
+Stream<QuerySnapshot<dynamic>> getNotesStream() {
+  return FirebaseFirestore.instance
+      .collection("notes")
+      .orderBy("createdAt")
+      .snapshots();
 }

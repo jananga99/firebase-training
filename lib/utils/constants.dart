@@ -16,4 +16,6 @@ class Messages {
 
   static const String addNoteFailed = "Add note was failed";
   static const String addNoteSuccess = "Note added successfully";
+
+  static const String getNotesFailed = "Getting notes failed";
 }
