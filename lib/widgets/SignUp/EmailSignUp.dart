@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:project1/utils/enums.dart';
 
+import '../../utils/routes.dart';
+
 class EmailSignUp extends StatefulWidget {
   final Function setEmail;
   final Function setSignUpFlowState;
@@ -19,7 +21,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
   TextEditingController emailInputController = TextEditingController();
 
   bool isContinueButtonDisabled() {
-    return emailInputController.text.isEmpty;
+    return isEmailEmpty;
   }
 
   bool isEmailEmpty = true;
@@ -32,6 +34,10 @@ class _EmailSignUpState extends State<EmailSignUp> {
         isEmailEmpty = emailInputController.text.isEmpty;
       });
     });
+  }
+
+  void handleSignIn() {
+    Navigator.pushNamed(context, RouteConstants.homeRoute);
   }
 
   @override
@@ -54,6 +60,17 @@ class _EmailSignUpState extends State<EmailSignUp> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            OutlinedButton(
+                onPressed: handleSignIn,
+                child: const Text(
+                  "Sign In",
+                  style: TextStyle(fontSize: 25, color: Colors.lightBlue),
+                )),
+          ],
+        ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 15),
           child: const Text(
@@ -116,7 +133,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                       ),
                     ),
                   ),
-                  onPressed: isEmailEmpty ? null : handleContinue,
+                  onPressed: isContinueButtonDisabled() ? null : handleContinue,
                   child: const Padding(
                     padding: EdgeInsets.all(15),
                     child: Text('CONTINUE ->'),

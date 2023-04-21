@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:project1/screens/SignUp/SignUpPage.dart';
+
+import '../../screens/SignIn/SignInPage.dart';
 
 class AuthGuard extends StatefulWidget {
   final Widget component;
@@ -28,6 +29,6 @@ class _AuthGuardState extends State<AuthGuard> {
       }
     });
 
-    return isAuthenticated ? widget.component : const SignUpPage();
+    return isAuthenticated ? widget.component : const SignInPage();
   }
 }

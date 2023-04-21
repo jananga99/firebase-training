@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:project1/utils/constants.dart';
 import 'package:project1/utils/enums.dart';
 
 import '../../services/auth.service.dart';
-import '../../utils/constants.dart';
 import '../../utils/routes.dart';
 
 class PasswordSignUp extends StatefulWidget {
@@ -22,8 +22,8 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
 
   TextEditingController passwordInputController = TextEditingController();
 
-  bool isContinueButtonDisabled() {
-    return passwordInputController.text.isEmpty;
+  bool isRegisterButtonDisabled() {
+    return isPasswordEmpty;
   }
 
   bool isPasswordEmpty = true;
@@ -47,30 +47,20 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
       ));
     }
 
-    Future<void> handleSignIn() async {
-      dynamic res = await signIn(
-          email: widget.email, password: passwordInputController.text);
-      if (res.runtimeType == String) {
-        showMessage(res);
-      } else if (context.mounted) {
-        Navigator.pushNamed(context, RouteConstants.homeRoute);
-      } else {
-        showMessage(Messages.signInFailed);
-      }
-    }
-
     Future<void> handleSignUp() async {
       if (_formKey.currentState!.validate()) {
         setState(() {
           isLoading = true;
         });
+        await signOut();
         dynamic res = await signUp(
             email: widget.email, password: passwordInputController.text);
-        if (res.runtimeType == String &&
-            res != Messages.signUpFailedDuplicateEmail) {
+        if (res.runtimeType == String) {
           showMessage(res);
+        } else if (context.mounted) {
+          Navigator.pushNamed(context, RouteConstants.homeRoute);
         } else {
-          await handleSignIn();
+          showMessage(Messages.signUpSuccess);
         }
         setState(() {
           isLoading = false;
@@ -161,7 +151,7 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
                       ),
                     ),
                   ),
-                  onPressed: isPasswordEmpty ? null : handleSignUp,
+                  onPressed: isRegisterButtonDisabled() ? null : handleSignUp,
                   child: const Padding(
                     padding: EdgeInsets.all(15),
                     child: Text('REGISTER ->'),

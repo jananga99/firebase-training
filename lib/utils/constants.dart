@@ -4,6 +4,7 @@ class Messages {
       "Invalid password or email.";
 
   static const String signUpFailed = "Sign up failed.";
+  static const String signUpSuccess = "User registered successfully.";
   static const String signUpFailedDuplicateEmail =
       "The account already exists for that email.";
   static const String signUpFailedWeakPassword =

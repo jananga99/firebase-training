@@ -33,7 +33,9 @@ Future<dynamic> signIn(
     return credential;
   } on FirebaseAuthException catch (e) {
     late String errorMessage;
-    if (e.code == 'wrong-password') {
+    if (e.code == 'wrong-password' ||
+        e.code == 'user-not-found' ||
+        e.code == 'invalid-email') {
       errorMessage = Messages.signInFailedInvalidEmailPassword;
     } else {
       errorMessage = Messages.signInFailed;
