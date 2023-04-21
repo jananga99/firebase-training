@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:project1/screens/SignUp/EmailSignUpPage.dart';
+import 'package:project1/screens/SignUp/SignUpPage.dart';
 
 class AuthGuard extends StatefulWidget {
   final Widget component;
@@ -28,6 +28,6 @@ class _AuthGuardState extends State<AuthGuard> {
       }
     });
 
-    return isAuthenticated ? widget.component : const EmailSignUpPage();
+    return isAuthenticated ? widget.component : const SignUpPage();
   }
 }

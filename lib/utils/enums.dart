@@ -1,0 +1,1 @@
+enum SignUpFlowState { email, password }
