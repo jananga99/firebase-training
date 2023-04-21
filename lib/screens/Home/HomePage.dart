@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:project1/services/auth.service.dart';
 import 'package:project1/services/note.service.dart';
 import 'package:project1/utils/constants.dart';
+import 'package:project1/widgets/NoteCard/NoteCard.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -166,10 +167,10 @@ class _HomePageState extends State<HomePage> {
                                   .map((DocumentSnapshot document) {
                                     Map<String, dynamic> data = document.data()!
                                         as Map<String, dynamic>;
-                                    return ListTile(
-                                      title: Text(data['title']),
-                                      subtitle: Text(data['description']),
-                                    );
+                                    return NoteCard(
+                                        title: data['title'],
+                                        description: data['description'],
+                                        email: data['email']);
                                   })
                                   .toList()
                                   .cast(),
