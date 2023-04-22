@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:project1/services/auth.service.dart';
 import 'package:project1/services/note.service.dart';
 import 'package:project1/utils/constants.dart';
+import 'package:project1/utils/routes.dart';
 import 'package:project1/widgets/NoteCard/NoteCard.dart';
 
 class HomePage extends StatefulWidget {
@@ -51,6 +52,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   bool isAddLoading = false;
+
+  void handleCardPress(String id) {
+    Navigator.pushNamed(context, RouteConstants.noteViewRoute, arguments: id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -139,44 +144,48 @@ class _HomePageState extends State<HomePage> {
                               )
                             : const SizedBox(),
                       ),
-                      Container(
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: getNotesStream(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (snapshot.hasError) {
-                              showMessage(Messages.getNotesFailed);
-                              return const SizedBox();
-                            }
+                      StreamBuilder<QuerySnapshot>(
+                        stream: getNotesStream(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            showMessage(Messages.getNotesFailed);
+                            return const SizedBox();
+                          }
 
-                            if (snapshot.connectionState ==
-                                    ConnectionState.waiting &&
-                                snapshot.data == null) {
-                              return const CircularProgressIndicator(
-                                color: Colors.green,
-                              );
-                            }
+                          if (snapshot.connectionState ==
+                                  ConnectionState.waiting &&
+                              snapshot.data == null) {
+                            return const CircularProgressIndicator(
+                              color: Colors.green,
+                            );
+                          }
 
-                            if (isAddLoading) {
-                              return const SizedBox();
-                            }
+                          if (isAddLoading) {
+                            return const SizedBox();
+                          }
 
-                            return ListView(
-                              shrinkWrap: true,
-                              children: snapshot.data!.docs
-                                  .map((DocumentSnapshot document) {
-                                    Map<String, dynamic> data = document.data()!
-                                        as Map<String, dynamic>;
-                                    return NoteCard(
+                          return ListView(
+                            shrinkWrap: true,
+                            children: snapshot.data!.docs
+                                .map((DocumentSnapshot document) {
+                                  Map<String, dynamic> data =
+                                      document.data()! as Map<String, dynamic>;
+                                  return TextButton(
+                                    onPressed: () {
+                                      handleCardPress(document.id);
+                                    },
+                                    child: NoteCard(
+                                        id: document.id,
                                         title: data['title'],
                                         description: data['description'],
-                                        email: data['email']);
-                                  })
-                                  .toList()
-                                  .cast(),
-                            );
-                          },
-                        ),
+                                        email: data['email']),
+                                  );
+                                })
+                                .toList()
+                                .cast(),
+                          );
+                        },
                       )
                     ],
                   )),

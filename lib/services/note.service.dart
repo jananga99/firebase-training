@@ -26,9 +26,13 @@ Future<String> addNote(
   return message;
 }
 
-Stream<QuerySnapshot<dynamic>> getNotesStream() {
+Stream<QuerySnapshot<Map<String, dynamic>>> getNotesStream() {
   return FirebaseFirestore.instance
       .collection("notes")
       .orderBy("createdAt")
       .snapshots();
+}
+
+Stream<DocumentSnapshot<Map<String, dynamic>>> getNoteStream(String id) {
+  return FirebaseFirestore.instance.collection("notes").doc(id).snapshots();
 }

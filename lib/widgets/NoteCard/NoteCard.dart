@@ -4,12 +4,14 @@ class NoteCard extends StatefulWidget {
   final String title;
   final String description;
   final String email;
+  final String id;
 
   const NoteCard(
       {Key? key,
       required this.title,
       required this.description,
-      required this.email})
+      required this.email,
+      required this.id})
       : super(key: key);
 
   @override

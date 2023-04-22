@@ -1,0 +1,55 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:project1/services/note.service.dart';
+import 'package:project1/widgets/NoteCard/NoteCard.dart';
+
+import '../../utils/constants.dart';
+
+class NotePage extends StatelessWidget {
+  const NotePage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    void showMessage(message) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(message),
+      ));
+    }
+
+    final args = ModalRoute.of(context)!.settings.arguments;
+    if (args == null || (args as String).isEmpty) {
+      Navigator.pop(context);
+    }
+    final id = ModalRoute.of(context)!.settings.arguments as String;
+
+    return StreamBuilder(
+      stream: getNoteStream(id),
+      builder: (BuildContext context,
+          AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+        if (snapshot.hasError) {
+          showMessage(Messages.getNoteFailed);
+          return const SizedBox();
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator(
+            color: Colors.green,
+          );
+        }
+
+        if (snapshot.data == null || snapshot.data!.data() == null) {
+          showMessage(Messages.getNoteFailed);
+          return const SizedBox();
+        }
+
+        final data = snapshot.data!.data();
+        final title = data!['title'];
+        final description = data['description'];
+        final email = data['email'];
+
+        return NoteCard(
+            title: title, description: description, email: email, id: id);
+      },
+    );
+  }
+}
