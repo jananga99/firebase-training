@@ -3,7 +3,6 @@ import 'package:project1/utils/constants.dart';
 import 'package:project1/utils/enums.dart';
 
 import '../../services/auth.service.dart';
-import '../../utils/routes.dart';
 
 class PasswordSignUp extends StatefulWidget {
   final String email;

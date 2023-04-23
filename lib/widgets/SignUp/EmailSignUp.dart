@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project1/utils/constants.dart';
 import 'package:project1/utils/enums.dart';
-
-import '../../utils/routes.dart';
 
 class EmailSignUp extends StatefulWidget {
   final Function setEmail;
@@ -60,17 +59,6 @@ class _EmailSignUpState extends State<EmailSignUp> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            OutlinedButton(
-                onPressed: handleSignIn,
-                child: const Text(
-                  "Sign In",
-                  style: TextStyle(fontSize: 25, color: Colors.lightBlue),
-                )),
-          ],
-        ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 15),
           child: const Text(
@@ -110,7 +98,6 @@ class _EmailSignUpState extends State<EmailSignUp> {
               Container(
                 margin: const EdgeInsets.all(20),
                 width: 300,
-                // padding: const EdgeInsets.all(20),
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -142,7 +129,30 @@ class _EmailSignUpState extends State<EmailSignUp> {
               ),
             ],
           ),
-        )
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 25),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                child: const Text(
+                  "Already have an account?",
+                  style: TextStyle(fontSize: 15, color: Colors.black),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                child: InkWell(
+                    onTap: handleSignIn,
+                    child: const Text("Sign in",
+                        style:
+                            TextStyle(fontSize: 15, color: Colors.lightBlue))),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

@@ -20,3 +20,13 @@ class Messages {
   static const String getNotesFailed = "Getting notes failed";
   static const String getNoteFailed = "Getting note failed";
 }
+
+class Assets {
+  static const String logo = 'assets/images/logo.png';
+}
+
+class RouteConstants {
+  static const String homeRoute = '/';
+  static const String signUpRoute = '/signUp';
+  static const String noteViewRoute = '/note';
+}

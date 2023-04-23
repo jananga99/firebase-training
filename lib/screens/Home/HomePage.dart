@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:project1/services/auth.service.dart';
 import 'package:project1/services/note.service.dart';
 import 'package:project1/utils/constants.dart';
-import 'package:project1/utils/routes.dart';
 import 'package:project1/widgets/NoteCard/NoteCard.dart';
 
 class HomePage extends StatefulWidget {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:project1/screens/Home/HomePage.dart';
 import 'package:project1/screens/Note/NotePage.dart';
 import 'package:project1/screens/SignUp/SignUpPage.dart';
-import 'package:project1/utils/routes.dart';
+import 'package:project1/utils/constants.dart';
 import 'package:project1/widgets/AuthGuard/AuthGuard.dart';
 
 import 'firebase_options.dart';
