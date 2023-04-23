@@ -3,6 +3,7 @@ class Messages {
   static const String signInFailedInvalidEmailPassword =
       "Invalid password or email.";
 
+  static const String emailCheckFailed = "Email checking failed. Try again.";
   static const String signUpFailed = "Sign up failed.";
   static const String signUpSuccess = "User registered successfully.";
   static const String signUpFailedDuplicateEmail =

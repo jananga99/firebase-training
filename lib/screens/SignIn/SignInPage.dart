@@ -66,6 +66,7 @@ class _SignInPageState extends State<SignInPage> {
       } else {
         showMessage(Messages.signInFailed);
       }
+      passwordInputController.clear();
       setState(() {
         isLoading = false;
       });

@@ -55,3 +55,13 @@ Future<dynamic> signOut() async {
 User? getCurrentUser() {
   return FirebaseAuth.instance.currentUser;
 }
+
+Future<dynamic> isEmailAlreadyRegistered(String email) async {
+  try {
+    List<String> signInMethods =
+        await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+    return signInMethods.isNotEmpty;
+  } catch (e) {
+    return Messages.emailCheckFailed;
+  }
+}

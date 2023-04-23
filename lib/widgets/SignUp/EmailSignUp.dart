@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:project1/utils/constants.dart';
 import 'package:project1/utils/enums.dart';
 
+import '../../services/auth.service.dart';
+
 class EmailSignUp extends StatefulWidget {
   final Function setEmail;
   final Function setSignUpFlowState;
@@ -40,6 +42,8 @@ class _EmailSignUpState extends State<EmailSignUp> {
     Navigator.pushNamed(context, RouteConstants.homeRoute);
   }
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     void showMessage(message) {
@@ -48,13 +52,30 @@ class _EmailSignUpState extends State<EmailSignUp> {
       ));
     }
 
-    void handleContinue() {
+    void handleContinue() async {
+      setState(() {
+        isLoading = true;
+      });
       if (_formKey.currentState!.validate()) {
-        widget.setEmail(emailInputController.text);
-        widget.setSignUpFlowState(SignUpFlowState.password);
+        final res = await isEmailAlreadyRegistered(emailInputController.text);
+        if (res.runtimeType == String) {
+          showMessage(res);
+        } else if (res.runtimeType == bool) {
+          if (res) {
+            showMessage(Messages.signUpFailedDuplicateEmail);
+          } else {
+            widget.setEmail(emailInputController.text);
+            widget.setSignUpFlowState(SignUpFlowState.password);
+          }
+        } else {
+          showMessage(Messages.emailCheckFailed);
+        }
       } else {
         showMessage("Enter a valid email");
       }
+      setState(() {
+        isLoading = false;
+      });
     }
 
     return Column(
@@ -130,6 +151,11 @@ class _EmailSignUpState extends State<EmailSignUp> {
                   ),
                 ),
               ),
+              Container(
+                child: isLoading
+                    ? const CircularProgressIndicator()
+                    : const SizedBox(),
+              )
             ],
           ),
         ),

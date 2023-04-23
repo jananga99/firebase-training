@@ -67,6 +67,7 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
       } else {
         showMessage("Enter a valid password");
       }
+      passwordInputController.clear();
     }
 
     void handleGoBack() {
