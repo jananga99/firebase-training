@@ -79,7 +79,7 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            OutlinedButton(
+            TextButton(
                 onPressed: handleGoBack,
                 child: const Text(
                   "<--",

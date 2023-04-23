@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/utils/constants.dart';
 import 'package:project1/utils/enums.dart';
@@ -90,6 +91,8 @@ class _EmailSignUpState extends State<EmailSignUp> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter an email';
+                    } else if (!EmailValidator.validate(value)) {
+                      return "Please enter a valid email";
                     }
                     return null;
                   },
