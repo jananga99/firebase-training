@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:project1/services/battery.service.dart';
 
 import '../../services/auth.service.dart';
 import '../../utils/constants.dart';
 
-class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
+class HeaderBar extends StatefulWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
 
   const HeaderBar({Key? key})
       : preferredSize = const Size.fromHeight(56.0),
         super(key: key);
+
+  @override
+  State<HeaderBar> createState() => _HeaderBarState();
+}
+
+class _HeaderBarState extends State<HeaderBar> {
+  int _batteryLevel = -1;
+
+  Future<void> setBatteryPercentage() async {
+    final result = await getBatteryPercentage();
+    setState(() {
+      _batteryLevel = result;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +44,8 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
         showMessage(res);
       }
     }
+
+    setBatteryPercentage();
 
     return AppBar(
       automaticallyImplyLeading: false,
@@ -71,7 +88,22 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
               )
             ],
           ),
-        )
+        ),
+        _batteryLevel >= -1
+            ? Row(
+                children: [
+                  Text(
+                    _batteryLevel >= 0 ? "$_batteryLevel%" : "??%",
+                    style: const TextStyle(fontSize: 15, color: Colors.white),
+                  ),
+                  const Icon(
+                    Icons.battery_full,
+                    color: Colors.white,
+                    size: 30,
+                  )
+                ],
+              )
+            : const SizedBox()
       ],
     );
   }
