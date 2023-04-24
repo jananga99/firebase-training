@@ -43,31 +43,34 @@ class _SignUpPageState extends State<SignUpPage> {
 
     return Scaffold(
         backgroundColor: Colors.blue,
-        body: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Image.asset(Assets.logo, width: 25, height: 25),
-                ),
-                const Text("Dear Diary",
-                    style: TextStyle(fontSize: 18, color: Colors.white)),
-              ],
-            ),
-            Container(
-              padding: const EdgeInsets.all(5),
-              margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
+        body: SingleChildScrollView(
+          child: Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Image.asset(Assets.logo, width: 25, height: 25),
+                  ),
+                  const Text("Dear Diary",
+                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                ],
               ),
-              child: formWidget,
-            ),
-          ],
-        )));
+              Container(
+                padding: const EdgeInsets.all(5),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: formWidget,
+              ),
+            ],
+          )),
+        ));
   }
 }

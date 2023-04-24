@@ -26,59 +26,63 @@ class NotePage extends StatelessWidget {
     return Scaffold(
       appBar: const HeaderBar(),
       backgroundColor: const Color(0xff00ffff),
-      body: Container(
-        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    "Note Details",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                ],
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      "Note Details",
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 50),
-              child: StreamBuilder(
-                stream: getNoteStream(id),
-                builder: (BuildContext context,
-                    AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
-                        snapshot) {
-                  if (snapshot.hasError) {
-                    showMessage(Messages.getNoteFailed);
-                    return const SizedBox();
-                  }
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 50),
+                child: StreamBuilder(
+                  stream: getNoteStream(id),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
+                          snapshot) {
+                    if (snapshot.hasError) {
+                      showMessage(Messages.getNoteFailed);
+                      return const SizedBox();
+                    }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator(
-                      color: Colors.green,
-                    );
-                  }
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator(
+                        color: Colors.green,
+                      );
+                    }
 
-                  if (snapshot.data == null || snapshot.data!.data() == null) {
-                    showMessage(Messages.getNoteFailed);
-                    return const SizedBox();
-                  }
+                    if (snapshot.data == null ||
+                        snapshot.data!.data() == null) {
+                      showMessage(Messages.getNoteFailed);
+                      return const SizedBox();
+                    }
 
-                  final data = snapshot.data!.data();
-                  final title = data!['title'];
-                  final description = data['description'];
-                  final email = data['email'];
+                    final data = snapshot.data!.data();
+                    final title = data!['title'];
+                    final description = data['description'];
+                    final email = data['email'];
 
-                  return NoteCard(
-                      title: title,
-                      description: description,
-                      email: email,
-                      id: id);
-                },
+                    return NoteCard(
+                        title: title,
+                        description: description,
+                        email: email,
+                        id: id);
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
