@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:project1/services/auth.service.dart';
 import 'package:project1/services/note.service.dart';
 import 'package:project1/utils/constants.dart';
+import 'package:project1/widgets/HeaderBar/HeaderBar.dart';
 import 'package:project1/widgets/NoteCard/NoteCard.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,13 +22,6 @@ class _HomePageState extends State<HomePage> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(message),
     ));
-  }
-
-  Future<void> handleSignOut() async {
-    final res = await signOut();
-    if (res.runtimeType == String) {
-      showMessage(res);
-    }
   }
 
   Future<void> handleSubmit() async {
@@ -59,17 +52,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const HeaderBar(),
       backgroundColor: Colors.blue,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                    onPressed: handleSignOut, child: const Text("Sign out")),
-              ],
-            ),
             Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: const Text(

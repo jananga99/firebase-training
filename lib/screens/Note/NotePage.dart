@@ -4,6 +4,7 @@ import 'package:project1/services/note.service.dart';
 import 'package:project1/widgets/NoteCard/NoteCard.dart';
 
 import '../../utils/constants.dart';
+import '../../widgets/HeaderBar/HeaderBar.dart';
 
 class NotePage extends StatelessWidget {
   const NotePage({Key? key}) : super(key: key);
@@ -22,34 +23,38 @@ class NotePage extends StatelessWidget {
     }
     final id = ModalRoute.of(context)!.settings.arguments as String;
 
-    return StreamBuilder(
-      stream: getNoteStream(id),
-      builder: (BuildContext context,
-          AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
-        if (snapshot.hasError) {
-          showMessage(Messages.getNoteFailed);
-          return const SizedBox();
-        }
+    return Scaffold(
+      appBar: const HeaderBar(),
+      backgroundColor: Colors.blue,
+      body: StreamBuilder(
+        stream: getNoteStream(id),
+        builder: (BuildContext context,
+            AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.hasError) {
+            showMessage(Messages.getNoteFailed);
+            return const SizedBox();
+          }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator(
-            color: Colors.green,
-          );
-        }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator(
+              color: Colors.green,
+            );
+          }
 
-        if (snapshot.data == null || snapshot.data!.data() == null) {
-          showMessage(Messages.getNoteFailed);
-          return const SizedBox();
-        }
+          if (snapshot.data == null || snapshot.data!.data() == null) {
+            showMessage(Messages.getNoteFailed);
+            return const SizedBox();
+          }
 
-        final data = snapshot.data!.data();
-        final title = data!['title'];
-        final description = data['description'];
-        final email = data['email'];
+          final data = snapshot.data!.data();
+          final title = data!['title'];
+          final description = data['description'];
+          final email = data['email'];
 
-        return NoteCard(
-            title: title, description: description, email: email, id: id);
-      },
+          return NoteCard(
+              title: title, description: description, email: email, id: id);
+        },
+      ),
     );
   }
 }
