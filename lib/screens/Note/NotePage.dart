@@ -25,7 +25,7 @@ class NotePage extends StatelessWidget {
 
     return Scaffold(
       appBar: const HeaderBar(),
-      backgroundColor: Colors.blue,
+      backgroundColor: const Color(0xff00ffff),
       body: StreamBuilder(
         stream: getNoteStream(id),
         builder: (BuildContext context,

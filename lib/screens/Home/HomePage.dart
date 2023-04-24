@@ -53,130 +53,184 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const HeaderBar(),
-      backgroundColor: Colors.blue,
+      backgroundColor: const Color(0xff00ffff),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: const Text(
-                  "Home",
-                  style: TextStyle(color: Colors.white, fontSize: 25),
-                )),
-            Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: const Text(
-                  "You are here. Homw",
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                )),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              child: Form(
-                  key: _formKey,
-                  child: Column(
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Column(
+            children: [
+              Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      TextFormField(
-                        controller: titleInputController,
-                        decoration: InputDecoration(
-                          hintText: 'Submit New',
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Colors.black),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Colors.black),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter the title';
-                          }
-                          return null;
-                        },
+                    children: const [
+                      Text(
+                        "Home",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w900),
                       ),
-                      TextFormField(
-                        controller: descriptionInputController,
-                        decoration: InputDecoration(
-                          hintText: 'Enter description',
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Colors.black),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: const BorderSide(color: Colors.black),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter the description';
-                          }
-                          return null;
-                        },
-                      ),
-                      ElevatedButton(
-                          onPressed: handleSubmit,
-                          child: const Text(
-                            "SUBMIT",
-                            style: TextStyle(fontSize: 20, color: Colors.black),
-                          )),
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 15),
-                        child: isAddLoading
-                            ? const CircularProgressIndicator(
-                                color: Colors.red,
-                              )
-                            : const SizedBox(),
-                      ),
-                      StreamBuilder<QuerySnapshot>(
-                        stream: getNotesStream(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> snapshot) {
-                          if (snapshot.hasError) {
-                            showMessage(Messages.getNotesFailed);
-                            return const SizedBox();
-                          }
-
-                          if (snapshot.connectionState ==
-                                  ConnectionState.waiting &&
-                              snapshot.data == null) {
-                            return const CircularProgressIndicator(
-                              color: Colors.green,
-                            );
-                          }
-
-                          if (isAddLoading) {
-                            return const SizedBox();
-                          }
-
-                          return ListView(
-                            shrinkWrap: true,
-                            children: snapshot.data!.docs
-                                .map((DocumentSnapshot document) {
-                                  Map<String, dynamic> data =
-                                      document.data()! as Map<String, dynamic>;
-                                  return TextButton(
-                                    onPressed: () {
-                                      handleCardPress(document.id);
-                                    },
-                                    child: NoteCard(
-                                        id: document.id,
-                                        title: data['title'],
-                                        description: data['description'],
-                                        email: data['email']),
-                                  );
-                                })
-                                .toList()
-                                .cast(),
-                          );
-                        },
-                      )
                     ],
                   )),
-            )
-          ],
+              Container(
+                  margin: const EdgeInsets.symmetric(vertical: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "You are here: Home",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  )),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          // width: 300,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: TextFormField(
+                            controller: titleInputController,
+                            cursorColor: Colors.white,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.all(20),
+                              filled: true,
+                              fillColor: const Color(0xff4284f5),
+                              hintText: 'Submit New',
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: const BorderSide(
+                                  color: Color(0xff4284f5),
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: const BorderSide(
+                                  color: Color(0xff4284f5),
+                                ),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter the title';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        Container(
+                          // width: 300,
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: TextFormField(
+                            maxLines: null,
+                            minLines: 10,
+                            controller: descriptionInputController,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: const Color(0xff4284f5),
+                              hintText: 'Enter Description',
+                              contentPadding: const EdgeInsets.all(20),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  color: Color(0xff4284f5),
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: const BorderSide(
+                                  color: Color(0xff4284f5),
+                                ),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter the description';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 480,
+                          child: ElevatedButton(
+                              onPressed: handleSubmit,
+                              style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30))),
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "SUBMIT",
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.black),
+                                ),
+                              )),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 15),
+                          child: isAddLoading
+                              ? const CircularProgressIndicator(
+                                  color: Colors.red,
+                                )
+                              : const SizedBox(),
+                        ),
+                        StreamBuilder<QuerySnapshot>(
+                          stream: getNotesStream(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            if (snapshot.hasError) {
+                              showMessage(Messages.getNotesFailed);
+                              return const SizedBox();
+                            }
+
+                            if (snapshot.connectionState ==
+                                    ConnectionState.waiting &&
+                                snapshot.data == null) {
+                              return const CircularProgressIndicator(
+                                color: Colors.green,
+                              );
+                            }
+
+                            if (isAddLoading) {
+                              return const SizedBox();
+                            }
+
+                            return ListView(
+                              shrinkWrap: true,
+                              children: snapshot.data!.docs
+                                  .map((DocumentSnapshot document) {
+                                    Map<String, dynamic> data = document.data()!
+                                        as Map<String, dynamic>;
+                                    return TextButton(
+                                      onPressed: () {
+                                        handleCardPress(document.id);
+                                      },
+                                      child: NoteCard(
+                                          id: document.id,
+                                          title: data['title'],
+                                          description: data['description'],
+                                          email: data['email']),
+                                    );
+                                  })
+                                  .toList()
+                                  .cast(),
+                            );
+                          },
+                        )
+                      ],
+                    )),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -27,12 +27,21 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       automaticallyImplyLeading: false,
+      backgroundColor: const Color(0xff00ffff),
+      elevation: 0,
       actions: [
-        const Icon(Icons.notifications),
+        const Icon(
+          Icons.notifications_outlined,
+          color: Colors.white,
+          size: 30,
+        ),
         Container(
           margin: const EdgeInsets.only(right: 30),
           child: DropdownButton<String>(
-            icon: const Icon(Icons.person_2_rounded),
+            icon: const CircleAvatar(
+                backgroundColor: Colors.deepPurple,
+                radius: 15,
+                child: Icon(Icons.person_2_rounded)),
             onChanged: (String? value) {
               if (value == "sign-out") {
                 handleSignOut();

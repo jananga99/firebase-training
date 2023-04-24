@@ -44,19 +44,54 @@ class _NoteCardState extends State<NoteCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.red,
+      color: const Color(0xffccffff),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Column(children: [
         ListTile(
-          title: Text(widget.title),
-          subtitle: Text(widget.email),
+          title: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Text(
+              widget.title,
+              style: const TextStyle(fontSize: 28),
+            ),
+          ),
+          subtitle: Text(
+            widget.email,
+            style: const TextStyle(fontSize: 18),
+          ),
         ),
-        Text(getDescription(widget.description)),
-        TextButton(
-            onPressed: toggleShowMore,
-            child: Text(getShowMoreText(widget.description)))
+        Padding(
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 50),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  getDescription(widget.description),
+                  softWrap: false,
+                  maxLines: 1000,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              TextButton(
+                  onPressed: toggleShowMore,
+                  child: Text(getShowMoreText(widget.description),
+                      style: const TextStyle(color: Colors.black))),
+            ],
+          ),
+        )
       ]),
     );
   }
