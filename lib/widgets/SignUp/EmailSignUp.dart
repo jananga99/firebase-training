@@ -161,8 +161,8 @@ class _EmailSignUpState extends State<EmailSignUp> {
         ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 25),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 5),
