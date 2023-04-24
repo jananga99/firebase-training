@@ -43,9 +43,9 @@ class _SignUpPageState extends State<SignUpPage> {
 
     return Scaffold(
         backgroundColor: Colors.blue,
-        body: SingleChildScrollView(
-          child: Center(
-              child: Column(
+        body: Center(
+            child: SingleChildScrollView(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
@@ -70,7 +70,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: formWidget,
               ),
             ],
-          )),
-        ));
+          ),
+        )));
   }
 }

@@ -74,9 +74,9 @@ class _SignInPageState extends State<SignInPage> {
 
     return Scaffold(
         backgroundColor: Colors.blue,
-        body: SingleChildScrollView(
-          child: Center(
-              child: Column(
+        body: Center(
+            child: SingleChildScrollView(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Row(
@@ -240,7 +240,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
             ],
-          )),
-        ));
+          ),
+        )));
   }
 }
