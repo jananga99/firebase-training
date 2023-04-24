@@ -90,18 +90,21 @@ class _HeaderBarState extends State<HeaderBar> {
           ),
         ),
         _batteryLevel >= -1
-            ? Row(
-                children: [
-                  Text(
-                    _batteryLevel >= 0 ? "$_batteryLevel%" : "??%",
-                    style: const TextStyle(fontSize: 15, color: Colors.white),
-                  ),
-                  const Icon(
-                    Icons.battery_full,
-                    color: Colors.white,
-                    size: 30,
-                  )
-                ],
+            ? Container(
+                margin: const EdgeInsets.only(right: 30),
+                child: Row(
+                  children: [
+                    Text(
+                      _batteryLevel >= 0 ? "$_batteryLevel%" : "??%",
+                      style: const TextStyle(fontSize: 15, color: Colors.white),
+                    ),
+                    const Icon(
+                      Icons.battery_full,
+                      color: Colors.white,
+                      size: 30,
+                    )
+                  ],
+                ),
               )
             : const SizedBox()
       ],

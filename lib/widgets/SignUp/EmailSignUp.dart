@@ -165,14 +165,14 @@ class _EmailSignUpState extends State<EmailSignUp> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 5),
+                margin: const EdgeInsets.symmetric(vertical: 5),
                 child: const Text(
                   "Already have an account?",
                   style: TextStyle(fontSize: 15, color: Colors.black),
                 ),
               ),
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 5),
+                margin: const EdgeInsets.symmetric(vertical: 5),
                 child: InkWell(
                     onTap: handleSignIn,
                     child: const Text("Sign in",

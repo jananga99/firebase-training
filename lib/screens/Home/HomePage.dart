@@ -230,8 +230,10 @@ class _HomePageState extends State<HomePage> {
                               if (snapshot.connectionState ==
                                       ConnectionState.waiting &&
                                   snapshot.data == null) {
-                                return const CircularProgressIndicator(
-                                  color: Colors.green,
+                                return const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.green,
+                                  ),
                                 );
                               }
 
