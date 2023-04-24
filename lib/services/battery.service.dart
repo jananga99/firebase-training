@@ -12,8 +12,12 @@ Future<int> getBatteryPercentage() async {
   final platformDefault = getPlatform();
   if (platformDefault == "web") {
     return -2;
-  } else if (platformDefault == TargetPlatform.android ||
-      platformDefault == TargetPlatform.iOS) {
+  } else if ([
+    TargetPlatform.android,
+    TargetPlatform.iOS,
+    TargetPlatform.linux,
+    TargetPlatform.macOS
+  ].contains(platformDefault)) {
     const platform = MethodChannel("samples.flutter.dev/battery");
     int batteryLevel;
     try {
