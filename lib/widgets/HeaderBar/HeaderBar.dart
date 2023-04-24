@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../services/auth.service.dart';
+import '../../utils/constants.dart';
 
 class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -18,6 +19,10 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
       ));
     }
 
+    void handleHomeClick() {
+      Navigator.pushNamed(context, RouteConstants.homeRoute);
+    }
+
     Future<void> handleSignOut() async {
       final res = await signOut();
       if (res.runtimeType == String) {
@@ -30,6 +35,17 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: const Color(0xff00ffff),
       elevation: 0,
       actions: [
+        Container(
+          margin: const EdgeInsets.only(right: 40),
+          child: TextButton(
+            onPressed: handleHomeClick,
+            child: const Icon(
+              Icons.home,
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
+        ),
         const Icon(
           Icons.notifications_outlined,
           color: Colors.white,
