@@ -42,7 +42,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 setEmail: setEmail, setSignUpFlowState: setSignUpFlowState);
 
     return Scaffold(
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color(0xff00ffff),
         body: Center(
             child: SingleChildScrollView(
           child: Column(

@@ -73,7 +73,7 @@ class _SignInPageState extends State<SignInPage> {
     }
 
     return Scaffold(
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color(0xff00ffff),
         body: Center(
             child: SingleChildScrollView(
           child: Column(
