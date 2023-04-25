@@ -30,13 +30,14 @@ class _EmailSignUpState extends State<EmailSignUp> {
     return isEmailEmpty;
   }
 
-  bool isEmailEmpty = true;
+  late bool isEmailEmpty;
 
   @override
   void initState() {
     super.initState();
+    isEmailEmpty = widget.getEmail().isEmpty;
+    emailInputController.text = widget.getEmail();
     emailInputController.addListener(() {
-      emailInputController.text = widget.getEmail();
       setState(() {
         isEmailEmpty = emailInputController.text.isEmpty;
       });
