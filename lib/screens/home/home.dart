@@ -159,61 +159,61 @@ class _HomePageState extends State<HomePage> {
                               },
                             ),
                           ),
-                          showCompleteForm
-                              ? Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: TextFormField(
-                                    maxLines: null,
-                                    minLines: 10,
-                                    controller: descriptionInputController,
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: const Color(0xff4284f5),
-                                      hintText: 'Enter Description',
-                                      contentPadding: const EdgeInsets.all(20),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xff4284f5),
-                                        ),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                        borderSide: const BorderSide(
-                                          color: Color(0xff4284f5),
-                                        ),
-                                      ),
+                          Visibility(
+                            visible: showCompleteForm,
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              child: TextFormField(
+                                maxLines: null,
+                                minLines: 10,
+                                controller: descriptionInputController,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: const Color(0xff4284f5),
+                                  hintText: 'Enter Description',
+                                  contentPadding: const EdgeInsets.all(20),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      color: Color(0xff4284f5),
                                     ),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter the description';
-                                      }
-                                      return null;
-                                    },
                                   ),
-                                )
-                              : const SizedBox(),
-                          showCompleteForm
-                              ? SizedBox(
-                                  width: 480,
-                                  child: ElevatedButton(
-                                      onPressed: handleSubmit,
-                                      style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(30))),
-                                      child: const Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "SUBMIT",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.black),
-                                        ),
-                                      )),
-                                )
-                              : const SizedBox(),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    borderSide: const BorderSide(
+                                      color: Color(0xff4284f5),
+                                    ),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter the description';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ),
+                          Visibility(
+                            visible: showCompleteForm,
+                            child: SizedBox(
+                              width: 480,
+                              child: ElevatedButton(
+                                  onPressed: handleSubmit,
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30))),
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "SUBMIT",
+                                      style: TextStyle(
+                                          fontSize: 20, color: Colors.black),
+                                    ),
+                                  )),
+                            ),
+                          ),
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 15),
                             child: Row(
