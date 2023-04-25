@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/note.dart';
 import '../../services/note_service.dart';
 import '../../utils/constants.dart';
 import '../../widgets/header_bar/header_bar.dart';
@@ -253,17 +254,17 @@ class _HomePageState extends State<HomePage> {
                                 shrinkWrap: true,
                                 children: snapshot.data!.docs
                                     .map((DocumentSnapshot document) {
-                                      Map<String, dynamic> data = document
-                                          .data()! as Map<String, dynamic>;
+                                      Note note = Note.fromFirebase(document
+                                          .data()! as Map<String, dynamic>);
                                       return TextButton(
                                         onPressed: () {
                                           handleCardPress(document.id);
                                         },
                                         child: NoteCard(
                                             id: document.id,
-                                            title: data['title'],
-                                            description: data['description'],
-                                            email: data['email']),
+                                            title: note.title,
+                                            description: note.description,
+                                            email: note.email),
                                       );
                                     })
                                     .toList()

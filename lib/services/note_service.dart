@@ -15,7 +15,9 @@ Future<String> addNote(
         email: email,
         createdAt: DateTime.now());
     try {
-      await FirebaseFirestore.instance.collection("notes").add(note.toMap());
+      await FirebaseFirestore.instance
+          .collection("notes")
+          .add(note.toFirebase());
       message = Messages.addNoteSuccess;
     } catch (e) {
       message = Messages.addNoteFailed;

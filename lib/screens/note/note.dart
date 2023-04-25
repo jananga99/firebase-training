@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../models/note.dart';
 import '../../services/note_service.dart';
 import '../../utils/constants.dart';
 import '../../widgets/header_bar/header_bar.dart';
@@ -68,15 +69,12 @@ class NotePage extends StatelessWidget {
                       return const SizedBox();
                     }
 
-                    final data = snapshot.data!.data();
-                    final title = data!['title'];
-                    final description = data['description'];
-                    final email = data['email'];
+                    final note = Note.fromFirebase(snapshot.data!.data()!);
 
                     return NoteCard(
-                        title: title,
-                        description: description,
-                        email: email,
+                        title: note.title,
+                        description: note.description,
+                        email: note.email,
                         id: id);
                   },
                 ),
