@@ -8,9 +8,13 @@ import '../../services/auth.service.dart';
 class EmailSignUp extends StatefulWidget {
   final Function setEmail;
   final Function setSignUpFlowState;
+  final Function getEmail;
 
   const EmailSignUp(
-      {Key? key, required this.setEmail, required this.setSignUpFlowState})
+      {Key? key,
+      required this.setEmail,
+      required this.setSignUpFlowState,
+      required this.getEmail})
       : super(key: key);
 
   @override
@@ -26,11 +30,13 @@ class _EmailSignUpState extends State<EmailSignUp> {
     return isEmailEmpty;
   }
 
-  bool isEmailEmpty = true;
+  late bool isEmailEmpty;
 
   @override
   void initState() {
     super.initState();
+    isEmailEmpty = widget.getEmail().isEmpty;
+    emailInputController.text = widget.getEmail();
     emailInputController.addListener(() {
       setState(() {
         isEmailEmpty = emailInputController.text.isEmpty;

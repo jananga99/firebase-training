@@ -30,6 +30,10 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
+  String getEmail() {
+    return email;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Widget formWidget =
@@ -39,7 +43,9 @@ class _SignUpPageState extends State<SignUpPage> {
                 setSignUpFlowState: setSignUpFlowState,
               )
             : EmailSignUp(
-                setEmail: setEmail, setSignUpFlowState: setSignUpFlowState);
+                getEmail: getEmail,
+                setEmail: setEmail,
+                setSignUpFlowState: setSignUpFlowState);
 
     return Scaffold(
         backgroundColor: const Color(0xff00ffff),
