@@ -34,6 +34,13 @@ class _SignInPageState extends State<SignInPage> {
     });
   }
 
+  @override
+  void dispose() {
+    emailInputController.dispose();
+    passwordInputController.dispose();
+    super.dispose();
+  }
+
   bool isSignInDisabled() {
     return isEmailEmpty || isPasswordEmpty;
   }

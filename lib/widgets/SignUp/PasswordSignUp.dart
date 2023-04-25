@@ -39,6 +39,12 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
   }
 
   @override
+  void dispose() {
+    passwordInputController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     void showMessage(message) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

@@ -44,6 +44,12 @@ class _EmailSignUpState extends State<EmailSignUp> {
     });
   }
 
+  @override
+  void dispose() {
+    emailInputController.dispose();
+    super.dispose();
+  }
+
   void handleSignIn() {
     Navigator.pushNamed(context, RouteConstants.homeRoute);
   }

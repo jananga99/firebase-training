@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:project1/services/auth.service.dart';
@@ -15,10 +17,12 @@ class AuthGuard extends StatefulWidget {
 
 class _AuthGuardState extends State<AuthGuard> {
   bool isAuthenticated = getCurrentUser() != null;
+  late StreamSubscription<User?> subscription;
 
   @override
-  Widget build(BuildContext context) {
-    FirebaseAuth.instance.userChanges().listen((User? user) {
+  void initState() {
+    super.initState();
+    subscription = FirebaseAuth.instance.userChanges().listen((User? user) {
       if (user == null && isAuthenticated) {
         setState(() {
           isAuthenticated = false;
@@ -29,7 +33,16 @@ class _AuthGuardState extends State<AuthGuard> {
         });
       }
     });
+  }
 
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return isAuthenticated ? widget.component : const SignInPage();
   }
 }
