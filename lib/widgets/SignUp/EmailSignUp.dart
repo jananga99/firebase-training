@@ -70,8 +70,6 @@ class _EmailSignUpState extends State<EmailSignUp> {
         } else {
           showMessage(Messages.emailCheckFailed);
         }
-      } else {
-        showMessage("Enter a valid email");
       }
       setState(() {
         isLoading = false;

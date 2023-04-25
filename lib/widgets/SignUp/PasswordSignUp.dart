@@ -64,8 +64,6 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
         setState(() {
           isLoading = false;
         });
-      } else {
-        showMessage("Enter a valid password");
       }
       passwordInputController.clear();
     }
