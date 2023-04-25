@@ -16,17 +16,17 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(const App());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class App extends StatefulWidget {
+  const App({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<App> createState() => _AppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,29 +45,4 @@ class _MyAppState extends State<MyApp> {
       },
     );
   }
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //     title: '',
-  //     debugShowCheckedModeBanner: false,
-  //     theme: ThemeData(
-  //       primarySwatch: Colors.blue,
-  //     ),
-  //     home: Scaffold(
-  //       body: Center(
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //           children: [
-  //             Text("Test"),
-  //             ElevatedButton(
-  //               onPressed: _getBatteryLevel,
-  //               child: const Text('Get Battery Level'),
-  //             ),
-  //             Text(_batteryLevel),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }
