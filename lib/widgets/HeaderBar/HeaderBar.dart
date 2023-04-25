@@ -27,6 +27,12 @@ class _HeaderBarState extends State<HeaderBar> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    setBatteryPercentage();
+  }
+
+  @override
   Widget build(BuildContext context) {
     void showMessage(message) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -44,8 +50,6 @@ class _HeaderBarState extends State<HeaderBar> {
         showMessage(res);
       }
     }
-
-    setBatteryPercentage();
 
     return AppBar(
       automaticallyImplyLeading: false,
