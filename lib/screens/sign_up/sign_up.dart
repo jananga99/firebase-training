@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:project1/widgets/SignUp/EmailSignUp.dart';
-import 'package:project1/widgets/SignUp/PasswordSignUp.dart';
 
 import '../../utils/constants.dart';
 import '../../utils/enums.dart';
+import '../../widgets/sign_up/email_sign_up.dart';
+import '../../widgets/sign_up/password_sign_up.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);

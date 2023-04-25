@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:project1/models/Note.dart';
 
+import '../models/note.dart';
 import '../utils/constants.dart';
-import 'auth.service.dart';
+import 'auth_service.dart';
 
 Future<String> addNote(
     {required String title, required String description}) async {

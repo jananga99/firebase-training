@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:project1/screens/Home/HomePage.dart';
-import 'package:project1/screens/Note/NotePage.dart';
-import 'package:project1/screens/SignUp/SignUpPage.dart';
+import 'package:project1/screens/home/home.dart';
+import 'package:project1/screens/note/note.dart';
+import 'package:project1/screens/sign_up/sign_up.dart';
 import 'package:project1/utils/constants.dart';
-import 'package:project1/widgets/AuthGuard/AuthGuard.dart';
+import 'package:project1/widgets/auth_guard/auth_guard.dart';
 
 import 'firebase_options.dart';
 

@@ -1,60 +1,48 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:project1/utils/constants.dart';
-import 'package:project1/utils/enums.dart';
 
-import '../../services/auth.service.dart';
+import '../../services/auth_service.dart';
+import '../../utils/constants.dart';
+import '../../utils/enums.dart';
 
-class EmailSignUp extends StatefulWidget {
-  final Function setEmail;
+class PasswordSignUp extends StatefulWidget {
+  final String email;
   final Function setSignUpFlowState;
-  final Function getEmail;
 
-  const EmailSignUp(
-      {Key? key,
-      required this.setEmail,
-      required this.setSignUpFlowState,
-      required this.getEmail})
+  const PasswordSignUp(
+      {Key? key, required this.email, required this.setSignUpFlowState})
       : super(key: key);
 
   @override
-  State<EmailSignUp> createState() => _EmailSignUpState();
+  State<PasswordSignUp> createState() => _PasswordSignUpState();
 }
 
-class _EmailSignUpState extends State<EmailSignUp> {
+class _PasswordSignUpState extends State<PasswordSignUp> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController emailInputController = TextEditingController();
+  TextEditingController passwordInputController = TextEditingController();
 
-  bool isContinueButtonDisabled() {
-    return isEmailEmpty;
+  bool isRegisterButtonDisabled() {
+    return isPasswordEmpty;
   }
 
-  late bool isEmailEmpty;
+  bool isPasswordEmpty = true;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    isEmailEmpty = widget.getEmail().isEmpty;
-    emailInputController.text = widget.getEmail();
-    emailInputController.addListener(() {
+    passwordInputController.addListener(() {
       setState(() {
-        isEmailEmpty = emailInputController.text.isEmpty;
+        isPasswordEmpty = passwordInputController.text.isEmpty;
       });
     });
   }
 
   @override
   void dispose() {
-    emailInputController.dispose();
+    passwordInputController.dispose();
     super.dispose();
   }
-
-  void handleSignIn() {
-    Navigator.pushNamed(context, RouteConstants.homeRoute);
-  }
-
-  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,33 +52,46 @@ class _EmailSignUpState extends State<EmailSignUp> {
       ));
     }
 
-    void handleContinue() async {
-      setState(() {
-        isLoading = true;
-      });
+    Future<void> handleSignUp() async {
       if (_formKey.currentState!.validate()) {
-        final res = await isEmailAlreadyRegistered(emailInputController.text);
+        setState(() {
+          isLoading = true;
+        });
+        await signOut();
+        dynamic res = await signUp(
+            email: widget.email, password: passwordInputController.text);
         if (res.runtimeType == String) {
           showMessage(res);
-        } else if (res.runtimeType == bool) {
-          if (res) {
-            showMessage(Messages.signUpFailedDuplicateEmail);
-          } else {
-            widget.setEmail(emailInputController.text);
-            widget.setSignUpFlowState(SignUpFlowState.password);
-          }
+        } else if (context.mounted) {
+          Navigator.pushNamed(context, RouteConstants.homeRoute);
         } else {
-          showMessage(Messages.emailCheckFailed);
+          showMessage(Messages.signUpSuccess);
         }
+        setState(() {
+          isLoading = false;
+        });
       }
-      setState(() {
-        isLoading = false;
-      });
+      passwordInputController.clear();
+    }
+
+    void handleGoBack() {
+      widget.setSignUpFlowState(SignUpFlowState.email);
     }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            TextButton(
+                onPressed: handleGoBack,
+                child: const Text(
+                  "<--",
+                  style: TextStyle(fontSize: 25, color: Colors.lightBlue),
+                )),
+          ],
+        ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 15),
           child: const Text(
@@ -107,9 +108,10 @@ class _EmailSignUpState extends State<EmailSignUp> {
                 width: 300,
                 margin: const EdgeInsets.all(20),
                 child: TextFormField(
-                  controller: emailInputController,
+                  controller: passwordInputController,
+                  obscureText: true,
                   decoration: InputDecoration(
-                    hintText: 'Email*',
+                    hintText: 'Password*',
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: const BorderSide(color: Colors.black),
@@ -121,9 +123,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter an email';
-                    } else if (!EmailValidator.validate(value)) {
-                      return "Please enter a valid email";
+                      return 'Please enter an Password';
                     }
                     return null;
                   },
@@ -132,6 +132,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
               Container(
                 margin: const EdgeInsets.all(20),
                 width: 300,
+                // padding: const EdgeInsets.all(20),
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -154,10 +155,10 @@ class _EmailSignUpState extends State<EmailSignUp> {
                       ),
                     ),
                   ),
-                  onPressed: isContinueButtonDisabled() ? null : handleContinue,
+                  onPressed: isRegisterButtonDisabled() ? null : handleSignUp,
                   child: const Padding(
                     padding: EdgeInsets.all(15),
-                    child: Text('CONTINUE ->'),
+                    child: Text('REGISTER ->'),
                   ),
                 ),
               ),
@@ -168,30 +169,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
               )
             ],
           ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                child: const Text(
-                  "Already have an account?",
-                  style: TextStyle(fontSize: 15, color: Colors.black),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 5),
-                child: InkWell(
-                    onTap: handleSignIn,
-                    child: const Text("Sign in",
-                        style:
-                            TextStyle(fontSize: 15, color: Colors.lightBlue))),
-              ),
-            ],
-          ),
-        ),
+        )
       ],
     );
   }

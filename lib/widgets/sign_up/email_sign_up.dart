@@ -1,48 +1,60 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:project1/utils/constants.dart';
-import 'package:project1/utils/enums.dart';
 
-import '../../services/auth.service.dart';
+import '../../services/auth_service.dart';
+import '../../utils/constants.dart';
+import '../../utils/enums.dart';
 
-class PasswordSignUp extends StatefulWidget {
-  final String email;
+class EmailSignUp extends StatefulWidget {
+  final Function setEmail;
   final Function setSignUpFlowState;
+  final Function getEmail;
 
-  const PasswordSignUp(
-      {Key? key, required this.email, required this.setSignUpFlowState})
+  const EmailSignUp(
+      {Key? key,
+      required this.setEmail,
+      required this.setSignUpFlowState,
+      required this.getEmail})
       : super(key: key);
 
   @override
-  State<PasswordSignUp> createState() => _PasswordSignUpState();
+  State<EmailSignUp> createState() => _EmailSignUpState();
 }
 
-class _PasswordSignUpState extends State<PasswordSignUp> {
+class _EmailSignUpState extends State<EmailSignUp> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController passwordInputController = TextEditingController();
+  TextEditingController emailInputController = TextEditingController();
 
-  bool isRegisterButtonDisabled() {
-    return isPasswordEmpty;
+  bool isContinueButtonDisabled() {
+    return isEmailEmpty;
   }
 
-  bool isPasswordEmpty = true;
-  bool isLoading = false;
+  late bool isEmailEmpty;
 
   @override
   void initState() {
     super.initState();
-    passwordInputController.addListener(() {
+    isEmailEmpty = widget.getEmail().isEmpty;
+    emailInputController.text = widget.getEmail();
+    emailInputController.addListener(() {
       setState(() {
-        isPasswordEmpty = passwordInputController.text.isEmpty;
+        isEmailEmpty = emailInputController.text.isEmpty;
       });
     });
   }
 
   @override
   void dispose() {
-    passwordInputController.dispose();
+    emailInputController.dispose();
     super.dispose();
   }
+
+  void handleSignIn() {
+    Navigator.pushNamed(context, RouteConstants.homeRoute);
+  }
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -52,46 +64,33 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
       ));
     }
 
-    Future<void> handleSignUp() async {
+    void handleContinue() async {
+      setState(() {
+        isLoading = true;
+      });
       if (_formKey.currentState!.validate()) {
-        setState(() {
-          isLoading = true;
-        });
-        await signOut();
-        dynamic res = await signUp(
-            email: widget.email, password: passwordInputController.text);
+        final res = await isEmailAlreadyRegistered(emailInputController.text);
         if (res.runtimeType == String) {
           showMessage(res);
-        } else if (context.mounted) {
-          Navigator.pushNamed(context, RouteConstants.homeRoute);
+        } else if (res.runtimeType == bool) {
+          if (res) {
+            showMessage(Messages.signUpFailedDuplicateEmail);
+          } else {
+            widget.setEmail(emailInputController.text);
+            widget.setSignUpFlowState(SignUpFlowState.password);
+          }
         } else {
-          showMessage(Messages.signUpSuccess);
+          showMessage(Messages.emailCheckFailed);
         }
-        setState(() {
-          isLoading = false;
-        });
       }
-      passwordInputController.clear();
-    }
-
-    void handleGoBack() {
-      widget.setSignUpFlowState(SignUpFlowState.email);
+      setState(() {
+        isLoading = false;
+      });
     }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            TextButton(
-                onPressed: handleGoBack,
-                child: const Text(
-                  "<--",
-                  style: TextStyle(fontSize: 25, color: Colors.lightBlue),
-                )),
-          ],
-        ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 15),
           child: const Text(
@@ -108,10 +107,9 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
                 width: 300,
                 margin: const EdgeInsets.all(20),
                 child: TextFormField(
-                  controller: passwordInputController,
-                  obscureText: true,
+                  controller: emailInputController,
                   decoration: InputDecoration(
-                    hintText: 'Password*',
+                    hintText: 'Email*',
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide: const BorderSide(color: Colors.black),
@@ -123,7 +121,9 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter an Password';
+                      return 'Please enter an email';
+                    } else if (!EmailValidator.validate(value)) {
+                      return "Please enter a valid email";
                     }
                     return null;
                   },
@@ -132,7 +132,6 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
               Container(
                 margin: const EdgeInsets.all(20),
                 width: 300,
-                // padding: const EdgeInsets.all(20),
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -155,10 +154,10 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
                       ),
                     ),
                   ),
-                  onPressed: isRegisterButtonDisabled() ? null : handleSignUp,
+                  onPressed: isContinueButtonDisabled() ? null : handleContinue,
                   child: const Padding(
                     padding: EdgeInsets.all(15),
-                    child: Text('REGISTER ->'),
+                    child: Text('CONTINUE ->'),
                   ),
                 ),
               ),
@@ -169,7 +168,30 @@ class _PasswordSignUpState extends State<PasswordSignUp> {
               )
             ],
           ),
-        )
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 25),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                child: const Text(
+                  "Already have an account?",
+                  style: TextStyle(fontSize: 15, color: Colors.black),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 5),
+                child: InkWell(
+                    onTap: handleSignIn,
+                    child: const Text("Sign in",
+                        style:
+                            TextStyle(fontSize: 15, color: Colors.lightBlue))),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

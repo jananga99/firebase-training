@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:project1/services/note.service.dart';
-import 'package:project1/utils/constants.dart';
-import 'package:project1/widgets/HeaderBar/HeaderBar.dart';
-import 'package:project1/widgets/NoteCard/NoteCard.dart';
+
+import '../../services/note_service.dart';
+import '../../utils/constants.dart';
+import '../../widgets/header_bar/header_bar.dart';
+import '../../widgets/note_card/note_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

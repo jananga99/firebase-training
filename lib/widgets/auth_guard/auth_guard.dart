@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:project1/services/auth.service.dart';
 
-import '../../screens/SignIn/SignInPage.dart';
+import '../../screens/sign_in/sign_in.dart';
+import '../../services/auth_service.dart';
 
 class AuthGuard extends StatefulWidget {
   final Widget component;

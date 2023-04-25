@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project1/services/battery.service.dart';
 
-import '../../services/auth.service.dart';
+import '../../services/auth_service.dart';
+import '../../services/battery_service.dart';
 import '../../utils/constants.dart';
 
 class HeaderBar extends StatefulWidget implements PreferredSizeWidget {
