@@ -46,7 +46,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   void handleSignUp() {
-    Navigator.pushNamed(context, RouteConstants.signUpEmailRoute);
+    Navigator.pushReplacementNamed(context, RouteConstants.signUpEmailRoute);
   }
 
   bool isLoading = false;

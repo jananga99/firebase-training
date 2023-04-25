@@ -1,11 +1,11 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth_service.dart';
 import '../../utils/constants.dart';
 
 class PasswordSignUpPage extends StatefulWidget {
-  const PasswordSignUpPage({Key? key}) : super(key: key);
+  final String email;
+  const PasswordSignUpPage({Key? key, required this.email}) : super(key: key);
 
   @override
   State<PasswordSignUpPage> createState() => _PasswordSignUpPageState();
@@ -22,8 +22,6 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
 
   bool isPasswordEmpty = true;
   bool isLoading = false;
-  late String email;
-  dynamic args;
 
   @override
   void initState() {
@@ -43,15 +41,6 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    args = ModalRoute.of(context)!.settings.arguments;
-    if (args == null ||
-        args.runtimeType != String ||
-        !EmailValidator.validate(args.toString())) {
-      Navigator.pop(context);
-    } else {
-      email = args.toString();
-    }
-
     void showMessage(message) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(message),
@@ -64,12 +53,12 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
           isLoading = true;
         });
         await signOut();
-        dynamic res =
-            await signUp(email: email, password: passwordInputController.text);
+        dynamic res = await signUp(
+            email: widget.email, password: passwordInputController.text);
         if (res.runtimeType == String) {
           showMessage(res);
         } else if (context.mounted) {
-          Navigator.pushNamed(context, RouteConstants.homeRoute);
+          Navigator.pushReplacementNamed(context, RouteConstants.homeRoute);
         } else {
           showMessage(Messages.signUpSuccess);
         }
@@ -81,8 +70,8 @@ class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
     }
 
     void handleGoBack() {
-      Navigator.pushNamed(context, RouteConstants.signUpEmailRoute,
-          arguments: email);
+      Navigator.pushReplacementNamed(context, RouteConstants.signUpEmailRoute,
+          arguments: widget.email);
     }
 
     return Scaffold(

@@ -41,7 +41,7 @@ class _HeaderBarState extends State<HeaderBar> {
     }
 
     void handleHomeClick() {
-      Navigator.pushNamed(context, RouteConstants.homeRoute);
+      Navigator.pushReplacementNamed(context, RouteConstants.homeRoute);
     }
 
     Future<void> handleSignOut() async {

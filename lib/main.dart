@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/screens/home/home.dart';
@@ -38,9 +39,32 @@ class _AppState extends State<App> {
       ),
       initialRoute: RouteConstants.homeRoute,
       routes: {
-        RouteConstants.signUpEmailRoute: (context) => const EmailSignUpPage(),
-        RouteConstants.signUpPasswordRoute: (context) =>
-            const PasswordSignUpPage(),
+        RouteConstants.signUpEmailRoute: (context) {
+          final args = ModalRoute.of(context)!.settings.arguments;
+          if (args == null ||
+              args.runtimeType != String ||
+              args.toString().isEmpty ||
+              !EmailValidator.validate(args.toString())) {
+            return const EmailSignUpPage();
+          } else {
+            return EmailSignUpPage(
+              email: args.toString(),
+            );
+          }
+        },
+        RouteConstants.signUpPasswordRoute: (context) {
+          final args = ModalRoute.of(context)!.settings.arguments;
+          if (args == null ||
+              args.runtimeType != String ||
+              args.toString().isEmpty ||
+              !EmailValidator.validate(args.toString())) {
+            return const EmailSignUpPage();
+          } else {
+            return PasswordSignUpPage(
+              email: args.toString(),
+            );
+          }
+        },
         RouteConstants.homeRoute: (context) =>
             const AuthGuard(component: HomePage()),
         RouteConstants.noteViewRoute: (context) =>

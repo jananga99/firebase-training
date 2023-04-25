@@ -5,7 +5,8 @@ import '../../services/auth_service.dart';
 import '../../utils/constants.dart';
 
 class EmailSignUpPage extends StatefulWidget {
-  const EmailSignUpPage({Key? key}) : super(key: key);
+  final String? email;
+  const EmailSignUpPage({Key? key, this.email}) : super(key: key);
 
   @override
   State<EmailSignUpPage> createState() => _EmailSignUpPageState();
@@ -20,11 +21,17 @@ class _EmailSignUpPageState extends State<EmailSignUpPage> {
     return isEmailEmpty;
   }
 
-  late bool isEmailEmpty;
+  bool isEmailEmpty = true;
 
   @override
   void initState() {
     super.initState();
+    if (widget.email != null && widget.email!.isNotEmpty) {
+      emailInputController.text = widget.email!;
+      setState(() {
+        isEmailEmpty = false;
+      });
+    }
     emailInputController.addListener(() {
       setState(() {
         isEmailEmpty = emailInputController.text.isEmpty;
@@ -39,24 +46,13 @@ class _EmailSignUpPageState extends State<EmailSignUpPage> {
   }
 
   void handleSignIn() {
-    Navigator.pushNamed(context, RouteConstants.homeRoute);
+    Navigator.pushReplacementNamed(context, RouteConstants.homeRoute);
   }
 
   bool isLoading = false;
-  dynamic args;
 
   @override
   Widget build(BuildContext context) {
-    if (emailInputController.text.isEmpty) {
-      args = ModalRoute.of(context)!.settings.arguments;
-      if (args == null || args.runtimeType != String) {
-        isEmailEmpty = true;
-      } else {
-        isEmailEmpty = args.toString().isEmpty;
-        emailInputController.text = args.toString();
-      }
-    }
-
     void showMessage(message) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(message),
@@ -75,7 +71,8 @@ class _EmailSignUpPageState extends State<EmailSignUpPage> {
           if (res) {
             showMessage(Messages.signUpFailedDuplicateEmail);
           } else if (context.mounted) {
-            Navigator.pushNamed(context, RouteConstants.signUpPasswordRoute,
+            Navigator.pushReplacementNamed(
+                context, RouteConstants.signUpPasswordRoute,
                 arguments: emailInputController.text);
           } else {
             showMessage(Messages.emailCheckFailed);

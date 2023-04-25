@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
   bool showCompleteForm = false;
 
   void handleCardPress(String id) {
-    Navigator.pushNamed(context, RouteConstants.noteViewRoute, arguments: id);
+    Navigator.pushReplacementNamed(context, RouteConstants.noteViewRoute, arguments: id);
   }
 
   void showFullForm() {

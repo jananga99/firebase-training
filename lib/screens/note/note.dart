@@ -20,7 +20,7 @@ class NotePage extends StatelessWidget {
 
     final args = ModalRoute.of(context)!.settings.arguments;
     if (args == null || (args as String).isEmpty) {
-      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, RouteConstants.homeRoute);
     }
     final id = ModalRoute.of(context)!.settings.arguments as String;
 
