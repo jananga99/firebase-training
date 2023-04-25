@@ -28,6 +28,7 @@ class Assets {
 
 class RouteConstants {
   static const String homeRoute = '/';
-  static const String signUpRoute = '/signUp';
+  static const String signUpEmailRoute = '/signUp/email';
+  static const String signUpPasswordRoute = '/signUp/password';
   static const String noteViewRoute = '/note';
 }

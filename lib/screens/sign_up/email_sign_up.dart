@@ -1,23 +1,26 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth_service.dart';
 import '../../utils/constants.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key}) : super(key: key);
+class EmailSignUpPage extends StatefulWidget {
+  const EmailSignUpPage({Key? key}) : super(key: key);
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<EmailSignUpPage> createState() => _EmailSignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _EmailSignUpPageState extends State<EmailSignUpPage> {
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController emailInputController = TextEditingController();
-  TextEditingController passwordInputController = TextEditingController();
 
-  bool isEmailEmpty = true;
-  bool isPasswordEmpty = true;
+  bool isContinueButtonDisabled() {
+    return isEmailEmpty;
+  }
+
+  late bool isEmailEmpty;
 
   @override
   void initState() {
@@ -27,49 +30,60 @@ class _SignInPageState extends State<SignInPage> {
         isEmailEmpty = emailInputController.text.isEmpty;
       });
     });
-    passwordInputController.addListener(() {
-      setState(() {
-        isPasswordEmpty = passwordInputController.text.isEmpty;
-      });
-    });
   }
 
   @override
   void dispose() {
     emailInputController.dispose();
-    passwordInputController.dispose();
     super.dispose();
   }
 
-  bool isSignInDisabled() {
-    return isEmailEmpty || isPasswordEmpty;
-  }
-
-  void handleSignUp() {
-    Navigator.pushNamed(context, RouteConstants.signUpEmailRoute);
+  void handleSignIn() {
+    Navigator.pushNamed(context, RouteConstants.homeRoute);
   }
 
   bool isLoading = false;
+  dynamic args;
 
   @override
   Widget build(BuildContext context) {
+    if (emailInputController.text.isEmpty) {
+      args = ModalRoute.of(context)!.settings.arguments;
+      if (args == null || args.runtimeType != String) {
+        isEmailEmpty = true;
+      } else {
+        isEmailEmpty = args.toString().isEmpty;
+        emailInputController.text = args.toString();
+      }
+    }
+
     void showMessage(message) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(message),
       ));
     }
 
-    Future<void> handleSignIn() async {
+    void handleContinue() async {
       setState(() {
         isLoading = true;
       });
-      dynamic res = await signIn(
-          email: emailInputController.text,
-          password: passwordInputController.text);
-      if (res.runtimeType == String) {
-        showMessage(res);
+      if (_formKey.currentState!.validate()) {
+        final res = await isEmailAlreadyRegistered(emailInputController.text);
+        if (res.runtimeType == String) {
+          showMessage(res);
+        } else if (res.runtimeType == bool) {
+          if (res) {
+            showMessage(Messages.signUpFailedDuplicateEmail);
+          } else if (context.mounted) {
+            Navigator.pushNamed(context, RouteConstants.signUpPasswordRoute,
+                arguments: emailInputController.text);
+          } else {
+            showMessage(Messages.emailCheckFailed);
+          }
+        } else {
+          showMessage(Messages.emailCheckFailed);
+        }
       }
-      passwordInputController.clear();
       setState(() {
         isLoading = false;
       });
@@ -107,7 +121,7 @@ class _SignInPageState extends State<SignInPage> {
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 15),
                       child: const Text(
-                        "Sign In",
+                        "Sign Up",
                         style: TextStyle(fontSize: 35, color: Colors.lightBlue),
                       ),
                     ),
@@ -136,34 +150,9 @@ class _SignInPageState extends State<SignInPage> {
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter the Email';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          Container(
-                            width: 300,
-                            margin: const EdgeInsets.all(20),
-                            child: TextFormField(
-                              controller: passwordInputController,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                hintText: 'Password*',
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  borderSide:
-                                      const BorderSide(color: Colors.black),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  borderSide:
-                                      const BorderSide(color: Colors.black),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter the Password';
+                                  return 'Please enter an email';
+                                } else if (!EmailValidator.validate(value)) {
+                                  return "Please enter a valid email";
                                 }
                                 return null;
                               },
@@ -172,7 +161,6 @@ class _SignInPageState extends State<SignInPage> {
                           Container(
                             margin: const EdgeInsets.all(20),
                             width: 300,
-                            // padding: const EdgeInsets.all(20),
                             child: ElevatedButton(
                               style: ButtonStyle(
                                 backgroundColor:
@@ -198,11 +186,12 @@ class _SignInPageState extends State<SignInPage> {
                                   ),
                                 ),
                               ),
-                              onPressed:
-                                  isSignInDisabled() ? null : handleSignIn,
+                              onPressed: isContinueButtonDisabled()
+                                  ? null
+                                  : handleContinue,
                               child: const Padding(
                                 padding: EdgeInsets.all(15),
-                                child: Text('SIGN IN  ->'),
+                                child: Text('CONTINUE ->'),
                               ),
                             ),
                           ),
@@ -222,7 +211,7 @@ class _SignInPageState extends State<SignInPage> {
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 5),
                             child: const Text(
-                              "Don't have an account yet?",
+                              "Already have an account?",
                               style:
                                   TextStyle(fontSize: 15, color: Colors.black),
                             ),
@@ -230,8 +219,8 @@ class _SignInPageState extends State<SignInPage> {
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 5),
                             child: InkWell(
-                                onTap: handleSignUp,
-                                child: const Text("Create an account",
+                                onTap: handleSignIn,
+                                child: const Text("Sign in",
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: Colors.lightBlue))),

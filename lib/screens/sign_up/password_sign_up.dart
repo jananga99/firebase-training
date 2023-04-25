@@ -1,32 +1,33 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth_service.dart';
 import '../../utils/constants.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key}) : super(key: key);
+class PasswordSignUpPage extends StatefulWidget {
+  const PasswordSignUpPage({Key? key}) : super(key: key);
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<PasswordSignUpPage> createState() => _PasswordSignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _PasswordSignUpPageState extends State<PasswordSignUpPage> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController emailInputController = TextEditingController();
   TextEditingController passwordInputController = TextEditingController();
 
-  bool isEmailEmpty = true;
+  bool isRegisterButtonDisabled() {
+    return isPasswordEmpty;
+  }
+
   bool isPasswordEmpty = true;
+  bool isLoading = false;
+  late String email;
+  dynamic args;
 
   @override
   void initState() {
     super.initState();
-    emailInputController.addListener(() {
-      setState(() {
-        isEmailEmpty = emailInputController.text.isEmpty;
-      });
-    });
     passwordInputController.addListener(() {
       setState(() {
         isPasswordEmpty = passwordInputController.text.isEmpty;
@@ -36,43 +37,52 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   void dispose() {
-    emailInputController.dispose();
     passwordInputController.dispose();
     super.dispose();
   }
 
-  bool isSignInDisabled() {
-    return isEmailEmpty || isPasswordEmpty;
-  }
-
-  void handleSignUp() {
-    Navigator.pushNamed(context, RouteConstants.signUpEmailRoute);
-  }
-
-  bool isLoading = false;
-
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)!.settings.arguments;
+    if (args == null ||
+        args.runtimeType != String ||
+        !EmailValidator.validate(args.toString())) {
+      Navigator.pop(context);
+    } else {
+      email = args.toString();
+    }
+
     void showMessage(message) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(message),
       ));
     }
 
-    Future<void> handleSignIn() async {
-      setState(() {
-        isLoading = true;
-      });
-      dynamic res = await signIn(
-          email: emailInputController.text,
-          password: passwordInputController.text);
-      if (res.runtimeType == String) {
-        showMessage(res);
+    Future<void> handleSignUp() async {
+      if (_formKey.currentState!.validate()) {
+        setState(() {
+          isLoading = true;
+        });
+        await signOut();
+        dynamic res =
+            await signUp(email: email, password: passwordInputController.text);
+        if (res.runtimeType == String) {
+          showMessage(res);
+        } else if (context.mounted) {
+          Navigator.pushNamed(context, RouteConstants.homeRoute);
+        } else {
+          showMessage(Messages.signUpSuccess);
+        }
+        setState(() {
+          isLoading = false;
+        });
       }
       passwordInputController.clear();
-      setState(() {
-        isLoading = false;
-      });
+    }
+
+    void handleGoBack() {
+      Navigator.pushNamed(context, RouteConstants.signUpEmailRoute,
+          arguments: email);
     }
 
     return Scaffold(
@@ -104,10 +114,22 @@ class _SignInPageState extends State<SignInPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        TextButton(
+                            onPressed: handleGoBack,
+                            child: const Text(
+                              "<--",
+                              style: TextStyle(
+                                  fontSize: 25, color: Colors.lightBlue),
+                            )),
+                      ],
+                    ),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 15),
                       child: const Text(
-                        "Sign In",
+                        "Sign Up",
                         style: TextStyle(fontSize: 35, color: Colors.lightBlue),
                       ),
                     ),
@@ -116,32 +138,6 @@ class _SignInPageState extends State<SignInPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Container(
-                            width: 300,
-                            margin: const EdgeInsets.all(20),
-                            child: TextFormField(
-                              controller: emailInputController,
-                              decoration: InputDecoration(
-                                hintText: 'Email*',
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  borderSide:
-                                      const BorderSide(color: Colors.black),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  borderSide:
-                                      const BorderSide(color: Colors.black),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter the Email';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
                           Container(
                             width: 300,
                             margin: const EdgeInsets.all(20),
@@ -163,7 +159,7 @@ class _SignInPageState extends State<SignInPage> {
                               ),
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter the Password';
+                                  return 'Please enter an Password';
                                 }
                                 return null;
                               },
@@ -198,11 +194,12 @@ class _SignInPageState extends State<SignInPage> {
                                   ),
                                 ),
                               ),
-                              onPressed:
-                                  isSignInDisabled() ? null : handleSignIn,
+                              onPressed: isRegisterButtonDisabled()
+                                  ? null
+                                  : handleSignUp,
                               child: const Padding(
                                 padding: EdgeInsets.all(15),
-                                child: Text('SIGN IN  ->'),
+                                child: Text('REGISTER ->'),
                               ),
                             ),
                           ),
@@ -213,32 +210,7 @@ class _SignInPageState extends State<SignInPage> {
                           )
                         ],
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 25),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            child: const Text(
-                              "Don't have an account yet?",
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.black),
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            child: InkWell(
-                                onTap: handleSignUp,
-                                child: const Text("Create an account",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.lightBlue))),
-                          ),
-                        ],
-                      ),
-                    ),
+                    )
                   ],
                 ),
               ),

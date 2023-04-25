@@ -4,7 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/screens/home/home.dart';
 import 'package:project1/screens/note/note.dart';
-import 'package:project1/screens/sign_up/sign_up.dart';
+import 'package:project1/screens/sign_up/email_sign_up.dart';
+import 'package:project1/screens/sign_up/password_sign_up.dart';
 import 'package:project1/utils/constants.dart';
 import 'package:project1/widgets/auth_guard/auth_guard.dart';
 
@@ -37,7 +38,9 @@ class _AppState extends State<App> {
       ),
       initialRoute: RouteConstants.homeRoute,
       routes: {
-        RouteConstants.signUpRoute: (context) => const SignUpPage(),
+        RouteConstants.signUpEmailRoute: (context) => const EmailSignUpPage(),
+        RouteConstants.signUpPasswordRoute: (context) =>
+            const PasswordSignUpPage(),
         RouteConstants.homeRoute: (context) =>
             const AuthGuard(component: HomePage()),
         RouteConstants.noteViewRoute: (context) =>
