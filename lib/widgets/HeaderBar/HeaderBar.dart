@@ -17,15 +17,6 @@ class HeaderBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HeaderBarState extends State<HeaderBar> {
-  int _batteryLevel = -1;
-
-  Future<void> setBatteryPercentage() async {
-    final result = await getBatteryPercentage();
-    setState(() {
-      _batteryLevel = result;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     void showMessage(message) {
@@ -44,8 +35,6 @@ class _HeaderBarState extends State<HeaderBar> {
         showMessage(res);
       }
     }
-
-    setBatteryPercentage();
 
     return AppBar(
       automaticallyImplyLeading: false,
@@ -89,24 +78,39 @@ class _HeaderBarState extends State<HeaderBar> {
             ],
           ),
         ),
-        _batteryLevel >= -1
-            ? Container(
-                margin: const EdgeInsets.only(right: 30),
-                child: Row(
-                  children: [
-                    Text(
-                      _batteryLevel >= 0 ? "$_batteryLevel%" : "??%",
-                      style: const TextStyle(fontSize: 15, color: Colors.white),
+        StreamBuilder(
+          stream: getBatteryPercentage().asStream(),
+          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+            int batteryLevel;
+            if (snapshot.hasError ||
+                snapshot.connectionState == ConnectionState.waiting ||
+                snapshot.data == null) {
+              batteryLevel = -1;
+            } else {
+              batteryLevel = snapshot.data!;
+            }
+
+            return batteryLevel >= -1
+                ? Container(
+                    margin: const EdgeInsets.only(right: 30),
+                    child: Row(
+                      children: [
+                        Text(
+                          batteryLevel >= 0 ? "$batteryLevel%" : "??%",
+                          style: const TextStyle(
+                              fontSize: 15, color: Colors.white),
+                        ),
+                        const Icon(
+                          Icons.battery_full,
+                          color: Colors.white,
+                          size: 30,
+                        )
+                      ],
                     ),
-                    const Icon(
-                      Icons.battery_full,
-                      color: Colors.white,
-                      size: 30,
-                    )
-                  ],
-                ),
-              )
-            : const SizedBox()
+                  )
+                : const SizedBox();
+          },
+        ),
       ],
     );
   }
