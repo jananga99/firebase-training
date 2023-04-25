@@ -61,10 +61,6 @@ class _SignInPageState extends State<SignInPage> {
           password: passwordInputController.text);
       if (res.runtimeType == String) {
         showMessage(res);
-      } else if (context.mounted) {
-        Navigator.pushNamed(context, RouteConstants.homeRoute);
-      } else {
-        showMessage(Messages.signInFailed);
       }
       passwordInputController.clear();
       setState(() {
