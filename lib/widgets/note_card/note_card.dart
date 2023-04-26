@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 
-class NoteCard extends StatefulWidget {
-  final String title;
-  final String description;
-  final String email;
-  final String id;
+import '../../models/note.dart';
 
-  const NoteCard(
-      {Key? key,
-      required this.title,
-      required this.description,
-      required this.email,
-      required this.id})
-      : super(key: key);
+class NoteCard extends StatefulWidget {
+  final Note note;
+
+  const NoteCard(this.note, {Key? key}) : super(key: key);
 
   @override
   State<NoteCard> createState() => _NoteCardState();
@@ -53,12 +46,12 @@ class _NoteCardState extends State<NoteCard> {
           title: Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
-              widget.title,
+              widget.note.title,
               style: const TextStyle(fontSize: 28),
             ),
           ),
           subtitle: Text(
-            widget.email,
+            widget.note.email,
             style: const TextStyle(fontSize: 18),
           ),
         ),
@@ -70,7 +63,7 @@ class _NoteCardState extends State<NoteCard> {
             children: [
               Expanded(
                 child: Text(
-                  getDescription(widget.description),
+                  getDescription(widget.note.description),
                   softWrap: false,
                   maxLines: 1000,
                   overflow: TextOverflow.ellipsis,
@@ -87,7 +80,7 @@ class _NoteCardState extends State<NoteCard> {
             children: [
               TextButton(
                   onPressed: toggleShowMore,
-                  child: Text(getShowMoreText(widget.description),
+                  child: Text(getShowMoreText(widget.note.description),
                       style: const TextStyle(color: Colors.black))),
             ],
           ),

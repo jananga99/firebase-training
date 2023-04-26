@@ -35,6 +35,14 @@ Stream<QuerySnapshot<Map<String, dynamic>>> getNotesStream() {
       .snapshots();
 }
 
+Future<QuerySnapshot<Map<String, dynamic>>> fetchNotes() async {
+  final result = await FirebaseFirestore.instance
+      .collection("notes")
+      .orderBy("createdAt")
+      .get();
+  return result;
+}
+
 Stream<DocumentSnapshot<Map<String, dynamic>>> getNoteStream(String id) {
   return FirebaseFirestore.instance.collection("notes").doc(id).snapshots();
 }

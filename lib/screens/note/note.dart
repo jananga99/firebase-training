@@ -69,13 +69,10 @@ class NotePage extends StatelessWidget {
                       return const SizedBox();
                     }
 
-                    final note = Note.fromFirebase(snapshot.data!.data()!);
+                    final note = Note.fromFirebase(
+                        snapshot.data!.id, snapshot.data!.data()!);
 
-                    return NoteCard(
-                        title: note.title,
-                        description: note.description,
-                        email: note.email,
-                        id: id);
+                    return NoteCard(note);
                   },
                 ),
               ),
