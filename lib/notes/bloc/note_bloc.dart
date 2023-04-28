@@ -34,12 +34,16 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
   Future<void> _onNoteStarted(
       NoteStarted event, Emitter<NoteState> emit) async {
     emit(const NoteInProgress(<Note>[]));
-    _notesSubscription = getNotesStream().listen((event) {
-      return add(NoteFetched(
-          notes: event.docs
-              .map((e) => Note.fromFirebase(e.id, e.data()))
-              .toList()));
-    });
+    try {
+      _notesSubscription = getNotesStream().listen((event) {
+        return add(NoteFetched(
+            notes: event.docs
+                .map((e) => Note.fromFirebase(e.id, e.data()))
+                .toList()));
+      });
+    } catch (e) {
+      return add(NoteFailed());
+    }
   }
 
   void _onNoteFailed(

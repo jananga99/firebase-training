@@ -233,6 +233,11 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             BlocBuilder<NoteBloc, NoteState>(
+                              // buildWhen: (prev, state) =>
+                              //     prev.runtimeType == NoteFail &&
+                              //             state.runtimeType == NoteFail
+                              //         ? false
+                              //         : true,
                               builder: (context, state) {
                                 if (state is NoteInitial) {
                                   // context.read<NoteBloc>().add(NoteStarted());
@@ -258,6 +263,9 @@ class _HomePageState extends State<HomePage> {
                                         .toList()
                                         .cast(),
                                   );
+                                } else if (state is NoteFail) {
+                                  // showMessage(Messages.getNotesFailed);
+                                  return const SizedBox();
                                 } else {
                                   return const SizedBox();
                                 }
