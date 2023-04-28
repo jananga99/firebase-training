@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../repositories/repositories.dart';
 import '../../utils/constants.dart';
 import '../../utils/helpers.dart';
-import '../bloc/notes/notes_bloc.dart';
+import '../bloc/notes_bloc.dart';
 import 'note_card.dart';
 
 class NotesView extends StatelessWidget {
@@ -19,23 +19,30 @@ class NotesView extends StatelessWidget {
 
     return BlocProvider(
       create: (context) =>
-          NoteBloc(context.read<NoteRepository>())..add(NoteStarted()),
-      child: BlocBuilder<NoteBloc, NoteState>(
+          NotesBloc(context.read<NoteRepository>())..add(NotesStarted()),
+      child: BlocBuilder<NotesBloc, NotesState>(
         buildWhen: (prev, state) =>
-            prev.noteStatus != NoteStatus.failure ||
-            state.noteStatus != NoteStatus.failure,
+            prev.noteStatus != NotesStatus.failure ||
+            state.noteStatus != NotesStatus.failure,
         builder: (context, state) {
           Widget returnWidget;
           switch (state.noteStatus) {
-            case NoteStatus.initial:
-              context.read<NoteBloc>().add(NoteStarted());
+            case NotesStatus.initial:
+              context.read<NotesBloc>().add(NotesStarted());
               returnWidget = const Center(
                 child: CircularProgressIndicator(
                   color: Colors.green,
                 ),
               );
               break;
-            case NoteStatus.onProgress:
+            case NotesStatus.loading:
+              returnWidget = const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.green,
+                ),
+              );
+              break;
+            case NotesStatus.onProgress:
               returnWidget = ListView(
                 shrinkWrap: true,
                 children: state.notes
@@ -53,7 +60,7 @@ class NotesView extends StatelessWidget {
                     .cast(),
               );
               break;
-            case NoteStatus.failure:
+            case NotesStatus.failure:
               showMessage(context, Messages.getNotesFailed);
               returnWidget = const SizedBox();
               break;

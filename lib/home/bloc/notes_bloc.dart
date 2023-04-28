@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../repositories/repositories.dart';
+import '../../repositories/repositories.dart';
 
 part 'notes_event.dart';
 part 'notes_state.dart';
 
-class NoteBloc extends Bloc<NoteEvent, NoteState> {
-  NoteBloc(this._noteRepository) : super(const NoteState()) {
-    on<NoteFetched>(_onNoteFetched);
-    on<NoteStarted>(_onNoteStarted);
-    on<NoteFailed>(_onNoteFailed);
+class NotesBloc extends Bloc<NotesEvent, NotesState> {
+  NotesBloc(this._noteRepository) : super(const NotesState()) {
+    on<NotesFetched>(_onNoteFetched);
+    on<NotesStarted>(_onNoteStarted);
+    on<NotesFailed>(_onNoteFailed);
   }
 
   final NoteRepository _noteRepository;
@@ -26,32 +26,33 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
   }
 
   void _onNoteFetched(
-    NoteFetched event,
-    Emitter<NoteState> emit,
+    NotesFetched event,
+    Emitter<NotesState> emit,
   ) {
-    emit(state.copyWith(noteStatus: NoteStatus.onProgress, notes: event.notes));
+    emit(
+        state.copyWith(noteStatus: NotesStatus.onProgress, notes: event.notes));
   }
 
   Future<void> _onNoteStarted(
-      NoteStarted event, Emitter<NoteState> emit) async {
-    emit(state.copyWith(noteStatus: NoteStatus.onProgress, notes: <Note>[]));
+      NotesStarted event, Emitter<NotesState> emit) async {
+    emit(state.copyWith(noteStatus: NotesStatus.loading));
     try {
       _notesSubscription?.cancel();
       _notesSubscription = _noteRepository.getNotesStream().listen((event) {
-        return add(NoteFetched(
+        return add(NotesFetched(
             notes: event.docs
                 .map((e) => Note.fromFirebase(e.id, e.data()))
                 .toList()));
       });
     } catch (e) {
-      return add(NoteFailed());
+      return add(NotesFailed());
     }
   }
 
   void _onNoteFailed(
-    NoteFailed event,
-    Emitter<NoteState> emit,
+    NotesFailed event,
+    Emitter<NotesState> emit,
   ) {
-    emit(state.copyWith(noteStatus: NoteStatus.failure));
+    emit(state.copyWith(noteStatus: NotesStatus.failure));
   }
 }
