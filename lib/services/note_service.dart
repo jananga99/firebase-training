@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../models/note.dart';
+import '../home/models/note.dart';
 import '../utils/constants.dart';
 import 'auth_service.dart';
 

@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:project1/screens/home/home.dart';
-import 'package:project1/screens/note/note.dart';
+import 'package:project1/home/home.dart';
 import 'package:project1/screens/sign_up/email_sign_up.dart';
 import 'package:project1/screens/sign_up/password_sign_up.dart';
 import 'package:project1/utils/constants.dart';
@@ -18,17 +17,17 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const App());
+  runApp(App(
+    noteRepository: NoteRepository(),
+  ));
 }
 
-class App extends StatefulWidget {
-  const App({super.key});
+class App extends StatelessWidget {
+  const App({super.key, required NoteRepository noteRepository})
+      : _noteRepository = noteRepository;
 
-  @override
-  State<App> createState() => _AppState();
-}
+  final NoteRepository _noteRepository;
 
-class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -65,8 +64,10 @@ class _AppState extends State<App> {
             );
           }
         },
-        RouteConstants.homeRoute: (context) =>
-            const AuthGuard(component: HomePage()),
+        RouteConstants.homeRoute: (context) => AuthGuard(
+                component: HomePage(
+              noteRepository: _noteRepository,
+            )),
         RouteConstants.noteViewRoute: (context) =>
             const AuthGuard(component: NotePage())
       },

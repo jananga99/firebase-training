@@ -1,4 +1,4 @@
-part of 'note_bloc.dart';
+part of 'notes_bloc.dart';
 
 enum NoteStatus { initial, onProgress, failure }
 

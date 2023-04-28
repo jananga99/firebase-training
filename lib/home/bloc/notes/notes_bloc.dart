@@ -2,19 +2,21 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project1/home/repositories/note_repository.dart';
 
 import '../../models/note.dart';
-import '../../services/note_service.dart';
 
-part 'note_event.dart';
-part 'note_state.dart';
+part 'notes_event.dart';
+part 'notes_state.dart';
 
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
-  NoteBloc() : super(const NoteInitial()) {
+  NoteBloc(this._noteRepository) : super(const NoteInitial()) {
     on<NoteFetched>(_onNoteFetched);
     on<NoteStarted>(_onNoteStarted);
     on<NoteFailed>(_onNoteFailed);
   }
+
+  final NoteRepository _noteRepository;
 
   StreamSubscription<dynamic>? _notesSubscription;
 
@@ -35,7 +37,8 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
       NoteStarted event, Emitter<NoteState> emit) async {
     emit(const NoteInProgress(<Note>[]));
     try {
-      _notesSubscription = getNotesStream().listen((event) {
+      _notesSubscription?.cancel();
+      _notesSubscription = _noteRepository.getNotesStream().listen((event) {
         return add(NoteFetched(
             notes: event.docs
                 .map((e) => Note.fromFirebase(e.id, e.data()))

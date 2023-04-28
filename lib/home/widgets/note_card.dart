@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/note.dart';
+import '../models/note.dart';
 
 class NoteCard extends StatefulWidget {
   final Note note;
