@@ -22,11 +22,11 @@ class NotesView extends StatelessWidget {
           NotesBloc(context.read<NoteRepository>())..add(NotesStarted()),
       child: BlocBuilder<NotesBloc, NotesState>(
         buildWhen: (prev, state) =>
-            prev.noteStatus != NotesStatus.failure ||
-            state.noteStatus != NotesStatus.failure,
+            prev.notesStatus != NotesStatus.failure ||
+            state.notesStatus != NotesStatus.failure,
         builder: (context, state) {
           Widget returnWidget;
-          switch (state.noteStatus) {
+          switch (state.notesStatus) {
             case NotesStatus.initial:
               context.read<NotesBloc>().add(NotesStarted());
               returnWidget = const Center(

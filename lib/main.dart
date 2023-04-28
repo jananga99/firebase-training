@@ -4,6 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/home/home.dart';
+import 'package:project1/note/note.dart';
 import 'package:project1/repositories/repositories.dart';
 import 'package:project1/screens/sign_up/email_sign_up.dart';
 import 'package:project1/screens/sign_up/password_sign_up.dart';
@@ -69,8 +70,10 @@ class App extends StatelessWidget {
                 component: HomePage(
               noteRepository: _noteRepository,
             )),
-        RouteConstants.noteViewRoute: (context) =>
-            const AuthGuard(component: NotePage())
+        RouteConstants.noteViewRoute: (context) => AuthGuard(
+                component: NotePage(
+              noteRepository: _noteRepository,
+            ))
       },
     );
   }

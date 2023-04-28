@@ -10,9 +10,9 @@ part 'notes_state.dart';
 
 class NotesBloc extends Bloc<NotesEvent, NotesState> {
   NotesBloc(this._noteRepository) : super(const NotesState()) {
-    on<NotesFetched>(_onNoteFetched);
-    on<NotesStarted>(_onNoteStarted);
-    on<NotesFailed>(_onNoteFailed);
+    on<NotesFetched>(_onNotesFetched);
+    on<NotesStarted>(_onNotesStarted);
+    on<NotesFailed>(_onNotesFailed);
   }
 
   final NoteRepository _noteRepository;
@@ -25,17 +25,17 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     return super.close();
   }
 
-  void _onNoteFetched(
+  void _onNotesFetched(
     NotesFetched event,
     Emitter<NotesState> emit,
   ) {
-    emit(
-        state.copyWith(noteStatus: NotesStatus.onProgress, notes: event.notes));
+    emit(state.copyWith(
+        notesStatus: NotesStatus.onProgress, notes: event.notes));
   }
 
-  Future<void> _onNoteStarted(
+  Future<void> _onNotesStarted(
       NotesStarted event, Emitter<NotesState> emit) async {
-    emit(state.copyWith(noteStatus: NotesStatus.loading));
+    emit(state.copyWith(notesStatus: NotesStatus.loading));
     try {
       _notesSubscription?.cancel();
       _notesSubscription = _noteRepository.getNotesStream().listen((event) {
@@ -49,10 +49,10 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     }
   }
 
-  void _onNoteFailed(
+  void _onNotesFailed(
     NotesFailed event,
     Emitter<NotesState> emit,
   ) {
-    emit(state.copyWith(noteStatus: NotesStatus.failure));
+    emit(state.copyWith(notesStatus: NotesStatus.failure));
   }
 }
