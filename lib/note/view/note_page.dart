@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../repositories/note_repository/note_repository.dart';
 import '../../utils/constants.dart';
-import '../../utils/helpers.dart';
 import '../../widgets/header_bar/header_bar.dart';
 import '../bloc/note_bloc.dart';
 import '../widgets/note_card.dart';
@@ -52,6 +51,9 @@ class NotePage extends StatelessWidget {
                         NoteBloc(context.read<NoteRepository>())
                           ..add(NoteStarted(id: id)),
                     child: BlocBuilder<NoteBloc, NoteState>(
+                      buildWhen: (prev, state) =>
+                          prev.noteStatus != NoteStatus.failure ||
+                          state.noteStatus != NoteStatus.failure,
                       builder: (context, state) {
                         Widget returnWidget;
                         switch (state.noteStatus) {
@@ -76,8 +78,7 @@ class NotePage extends StatelessWidget {
                                 : NoteCard(state.note!);
                             break;
                           case NoteStatus.failure:
-                            showMessage(context, Messages.getNoteFailed);
-                            returnWidget = const SizedBox();
+                            returnWidget = const Text(Messages.getNoteFailed);
                             break;
                           default:
                             returnWidget = const SizedBox();

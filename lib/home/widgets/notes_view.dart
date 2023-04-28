@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../repositories/repositories.dart';
 import '../../utils/constants.dart';
-import '../../utils/helpers.dart';
 import '../bloc/notes_bloc.dart';
 import 'note_card.dart';
 
@@ -61,8 +60,7 @@ class NotesView extends StatelessWidget {
               );
               break;
             case NotesStatus.failure:
-              showMessage(context, Messages.getNotesFailed);
-              returnWidget = const SizedBox();
+              returnWidget = const Text(Messages.getNotesFailed);
               break;
             default:
               returnWidget = const SizedBox();
