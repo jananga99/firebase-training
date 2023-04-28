@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project1/home/widgets/note_add_form.dart';
 import 'package:project1/home/widgets/notes_view.dart';
 
+import '../../repositories/repositories.dart';
 import '../../widgets/header_bar/header_bar.dart';
-import '../repositories/note_repository.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required NoteRepository noteRepository})

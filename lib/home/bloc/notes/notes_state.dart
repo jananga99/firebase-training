@@ -2,24 +2,18 @@ part of 'notes_bloc.dart';
 
 enum NoteStatus { initial, onProgress, failure }
 
-abstract class NoteState extends Equatable {
-  const NoteState(this.status, this.notes);
+class NoteState extends Equatable {
+  const NoteState(
+      {this.noteStatus = NoteStatus.initial, this.notes = const <Note>[]});
 
-  final NoteStatus status;
+  final NoteStatus noteStatus;
   final List<Note> notes;
 
+  NoteState copyWith({NoteStatus? noteStatus, List<Note>? notes}) {
+    return NoteState(
+        noteStatus: noteStatus ?? this.noteStatus, notes: notes ?? this.notes);
+  }
+
   @override
-  List<Object> get props => [status, notes];
-}
-
-class NoteInitial extends NoteState {
-  const NoteInitial() : super(NoteStatus.initial, const <Note>[]);
-}
-
-class NoteInProgress extends NoteState {
-  const NoteInProgress(notes) : super(NoteStatus.onProgress, notes);
-}
-
-class NoteFail extends NoteState {
-  const NoteFail() : super(NoteStatus.failure, const <Note>[]);
+  List<Object> get props => [noteStatus, notes];
 }

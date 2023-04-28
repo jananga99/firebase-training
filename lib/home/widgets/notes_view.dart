@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project1/home/repositories/note_repository.dart';
 
+import '../../repositories/repositories.dart';
 import '../../utils/constants.dart';
 import '../../utils/helpers.dart';
 import '../bloc/notes/notes_bloc.dart';
-import '../models/note.dart';
 import 'note_card.dart';
 
 class NotesView extends StatelessWidget {
@@ -23,38 +22,45 @@ class NotesView extends StatelessWidget {
           NoteBloc(context.read<NoteRepository>())..add(NoteStarted()),
       child: BlocBuilder<NoteBloc, NoteState>(
         buildWhen: (prev, state) =>
-            prev.runtimeType != NoteFail || state.runtimeType != NoteFail,
+            prev.noteStatus != NoteStatus.failure ||
+            state.noteStatus != NoteStatus.failure,
         builder: (context, state) {
-          if (state is NoteInitial) {
-            context.read<NoteBloc>().add(NoteStarted());
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.green,
-              ),
-            );
-          } else if (state is NoteInProgress) {
-            return ListView(
-              shrinkWrap: true,
-              children: state.notes
-                  .map((Note note) {
-                    return TextButton(
-                      onPressed: () {
-                        if (note.id != null) {
-                          handleCardPress(note.id!);
-                        }
-                      },
-                      child: NoteCard(note),
-                    );
-                  })
-                  .toList()
-                  .cast(),
-            );
-          } else if (state is NoteFail) {
-            showMessage(context, Messages.getNotesFailed);
-            return const SizedBox();
-          } else {
-            return const SizedBox();
+          Widget returnWidget;
+          switch (state.noteStatus) {
+            case NoteStatus.initial:
+              context.read<NoteBloc>().add(NoteStarted());
+              returnWidget = const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.green,
+                ),
+              );
+              break;
+            case NoteStatus.onProgress:
+              returnWidget = ListView(
+                shrinkWrap: true,
+                children: state.notes
+                    .map((Note note) {
+                      return TextButton(
+                        onPressed: () {
+                          if (note.id != null) {
+                            handleCardPress(note.id!);
+                          }
+                        },
+                        child: NoteCard(note),
+                      );
+                    })
+                    .toList()
+                    .cast(),
+              );
+              break;
+            case NoteStatus.failure:
+              showMessage(context, Messages.getNotesFailed);
+              returnWidget = const SizedBox();
+              break;
+            default:
+              returnWidget = const SizedBox();
           }
+          return returnWidget;
         },
       ),
     );

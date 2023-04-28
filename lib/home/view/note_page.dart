@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../repositories/note_repository/models/note.dart';
 import '../../services/note_service.dart';
 import '../../utils/constants.dart';
 import '../../widgets/header_bar/header_bar.dart';
-import '../models/note.dart';
 import '../widgets/note_card.dart';
 
 class NotePage extends StatelessWidget {

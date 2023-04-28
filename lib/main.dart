@@ -4,6 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/home/home.dart';
+import 'package:project1/repositories/repositories.dart';
 import 'package:project1/screens/sign_up/email_sign_up.dart';
 import 'package:project1/screens/sign_up/password_sign_up.dart';
 import 'package:project1/utils/constants.dart';

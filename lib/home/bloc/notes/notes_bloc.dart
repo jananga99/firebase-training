@@ -2,15 +2,14 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project1/home/repositories/note_repository.dart';
 
-import '../../models/note.dart';
+import '../../../repositories/repositories.dart';
 
 part 'notes_event.dart';
 part 'notes_state.dart';
 
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
-  NoteBloc(this._noteRepository) : super(const NoteInitial()) {
+  NoteBloc(this._noteRepository) : super(const NoteState()) {
     on<NoteFetched>(_onNoteFetched);
     on<NoteStarted>(_onNoteStarted);
     on<NoteFailed>(_onNoteFailed);
@@ -30,12 +29,12 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     NoteFetched event,
     Emitter<NoteState> emit,
   ) {
-    emit(NoteInProgress(event.notes));
+    emit(state.copyWith(noteStatus: NoteStatus.onProgress, notes: event.notes));
   }
 
   Future<void> _onNoteStarted(
       NoteStarted event, Emitter<NoteState> emit) async {
-    emit(const NoteInProgress(<Note>[]));
+    emit(state.copyWith(noteStatus: NoteStatus.onProgress, notes: <Note>[]));
     try {
       _notesSubscription?.cancel();
       _notesSubscription = _noteRepository.getNotesStream().listen((event) {
@@ -53,6 +52,6 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     NoteFailed event,
     Emitter<NoteState> emit,
   ) {
-    emit(const NoteFail());
+    emit(state.copyWith(noteStatus: NoteStatus.failure));
   }
 }
