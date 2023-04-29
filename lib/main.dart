@@ -21,14 +21,20 @@ Future<void> main() async {
 
   runApp(App(
     noteRepository: NoteRepository(),
+    userRepository: UserRepository(),
   ));
 }
 
 class App extends StatelessWidget {
-  const App({super.key, required NoteRepository noteRepository})
-      : _noteRepository = noteRepository;
+  const App(
+      {super.key,
+      required NoteRepository noteRepository,
+      required UserRepository userRepository})
+      : _noteRepository = noteRepository,
+        _userRepository = userRepository;
 
   final NoteRepository _noteRepository;
+  final UserRepository _userRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -67,13 +73,17 @@ class App extends StatelessWidget {
           }
         },
         RouteConstants.homeRoute: (context) => AuthGuard(
-                component: HomePage(
-              noteRepository: _noteRepository,
-            )),
+              component: HomePage(
+                noteRepository: _noteRepository,
+              ),
+              userRepository: _userRepository,
+            ),
         RouteConstants.noteViewRoute: (context) => AuthGuard(
-                component: NotePage(
-              noteRepository: _noteRepository,
-            ))
+              component: NotePage(
+                noteRepository: _noteRepository,
+              ),
+              userRepository: _userRepository,
+            )
       },
     );
   }

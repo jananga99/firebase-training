@@ -26,25 +26,6 @@ Future<dynamic> signUp(
   }
 }
 
-Future<dynamic> signIn(
-    {required String email, required String password}) async {
-  try {
-    final UserCredential credential = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(email: email, password: password);
-    return credential;
-  } on FirebaseAuthException catch (e) {
-    late String errorMessage;
-    if (e.code == 'wrong-password' ||
-        e.code == 'user-not-found' ||
-        e.code == 'invalid-email') {
-      errorMessage = Messages.signInFailedInvalidEmailPassword;
-    } else {
-      errorMessage = Messages.signInFailed;
-    }
-    return errorMessage;
-  }
-}
-
 Future<dynamic> signOut() async {
   try {
     await FirebaseAuth.instance.signOut();
