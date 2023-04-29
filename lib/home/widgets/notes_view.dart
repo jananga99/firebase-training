@@ -16,58 +16,54 @@ class NotesView extends StatelessWidget {
           .pushReplacementNamed(RouteConstants.noteViewRoute, arguments: id);
     }
 
-    return BlocProvider(
-      create: (context) =>
-          NotesBloc(context.read<NoteRepository>())..add(NotesStarted()),
-      child: BlocBuilder<NotesBloc, NotesState>(
-        buildWhen: (prev, state) =>
-            prev.notesStatus != NotesStatus.failure ||
-            state.notesStatus != NotesStatus.failure,
-        builder: (context, state) {
-          Widget returnWidget;
-          switch (state.notesStatus) {
-            case NotesStatus.initial:
-              context.read<NotesBloc>().add(NotesStarted());
-              returnWidget = const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.green,
-                ),
-              );
-              break;
-            case NotesStatus.loading:
-              returnWidget = const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.green,
-                ),
-              );
-              break;
-            case NotesStatus.onProgress:
-              returnWidget = ListView(
-                shrinkWrap: true,
-                children: state.notes
-                    .map((Note note) {
-                      return TextButton(
-                        onPressed: () {
-                          if (note.id != null) {
-                            handleCardPress(note.id!);
-                          }
-                        },
-                        child: NoteCard(note),
-                      );
-                    })
-                    .toList()
-                    .cast(),
-              );
-              break;
-            case NotesStatus.failure:
-              returnWidget = const Text(Messages.getNotesFailed);
-              break;
-            default:
-              returnWidget = const SizedBox();
-          }
-          return returnWidget;
-        },
-      ),
+    return BlocBuilder<NotesBloc, NotesState>(
+      buildWhen: (prev, state) =>
+          prev.fetchNotesStatus != FetchNotesStatus.failure ||
+          state.fetchNotesStatus != FetchNotesStatus.failure,
+      builder: (context, state) {
+        Widget returnWidget;
+        switch (state.fetchNotesStatus) {
+          case FetchNotesStatus.initial:
+            context.read<NotesBloc>().add(FetchNotesStarted());
+            returnWidget = const Center(
+              child: CircularProgressIndicator(
+                color: Colors.green,
+              ),
+            );
+            break;
+          case FetchNotesStatus.loading:
+            returnWidget = const Center(
+              child: CircularProgressIndicator(
+                color: Colors.green,
+              ),
+            );
+            break;
+          case FetchNotesStatus.onProgress:
+            returnWidget = ListView(
+              shrinkWrap: true,
+              children: state.fetchNotes
+                  .map((Note note) {
+                    return TextButton(
+                      onPressed: () {
+                        if (note.id != null) {
+                          handleCardPress(note.id!);
+                        }
+                      },
+                      child: NoteCard(note),
+                    );
+                  })
+                  .toList()
+                  .cast(),
+            );
+            break;
+          case FetchNotesStatus.failure:
+            returnWidget = const Text(Messages.getNotesFailed);
+            break;
+          default:
+            returnWidget = const SizedBox();
+        }
+        return returnWidget;
+      },
     );
   }
 }

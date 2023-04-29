@@ -11,8 +11,11 @@ part 'notes_state.dart';
 class NotesBloc extends Bloc<NotesEvent, NotesState> {
   NotesBloc(this._noteRepository) : super(const NotesState()) {
     on<NotesFetched>(_onNotesFetched);
-    on<NotesStarted>(_onNotesStarted);
-    on<NotesFailed>(_onNotesFailed);
+    on<FetchNotesStarted>(_onNotesStarted);
+    on<FetchNotesFailed>(_onNotesFailed);
+    on<AddNoteStarted>(_onAddNoteStarted);
+    on<AddNoteSucceeded>(_onAddNoteSucceeded);
+    on<AddNoteFailed>(_onAddNoteFailed);
   }
 
   final NoteRepository _noteRepository;
@@ -30,12 +33,13 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     Emitter<NotesState> emit,
   ) {
     emit(state.copyWith(
-        notesStatus: NotesStatus.onProgress, notes: event.notes));
+        fetchNotesStatus: FetchNotesStatus.onProgress,
+        fetchNotes: event.notes));
   }
 
   Future<void> _onNotesStarted(
-      NotesStarted event, Emitter<NotesState> emit) async {
-    emit(state.copyWith(notesStatus: NotesStatus.loading));
+      FetchNotesStarted event, Emitter<NotesState> emit) async {
+    emit(state.copyWith(fetchNotesStatus: FetchNotesStatus.loading));
     try {
       _notesSubscription?.cancel();
       _notesSubscription = _noteRepository.getNotesStream().listen((event) {
@@ -45,14 +49,34 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
                 .toList()));
       });
     } catch (e) {
-      return add(NotesFailed());
+      return add(FetchNotesFailed());
     }
   }
 
   void _onNotesFailed(
-    NotesFailed event,
+    FetchNotesFailed event,
     Emitter<NotesState> emit,
   ) {
-    emit(state.copyWith(notesStatus: NotesStatus.failure));
+    emit(state.copyWith(fetchNotesStatus: FetchNotesStatus.failure));
+  }
+
+  Future<void> _onAddNoteStarted(
+      AddNoteStarted event, Emitter<NotesState> emit) async {
+    emit(state.copyWith(addNoteStatus: AddNoteStatus.loading));
+    try {
+      final id = await _noteRepository.addNote(event.note);
+      return add(AddNoteSucceeded(id!));
+    } catch (e) {
+      return add(AddNoteFailed());
+    }
+  }
+
+  void _onAddNoteSucceeded(
+      AddNoteSucceeded event, Emitter<NotesState> emit) async {
+    emit(state.copyWith(addNoteStatus: AddNoteStatus.succeeded));
+  }
+
+  void _onAddNoteFailed(AddNoteFailed event, Emitter<NotesState> emit) async {
+    emit(state.copyWith(addNoteStatus: AddNoteStatus.failure));
   }
 }

@@ -14,5 +14,5 @@ class NoteState extends Equatable {
   }
 
   @override
-  List<Object> get props => [NoteStatus, note.toString()];
+  List<dynamic> get props => [NoteStatus, note];
 }

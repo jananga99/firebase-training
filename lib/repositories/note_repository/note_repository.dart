@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'models/note.dart';
-
 export 'models/note.dart';
 
 class NoteRepository {
@@ -20,15 +18,7 @@ class NoteRepository {
     return _firebaseFirestore.collection("notes").doc(id).snapshots();
   }
 
-  Future<String?> addNote(
-      {required String title,
-      required String description,
-      required String email}) async {
-    final note = Note(
-        title: title,
-        description: description,
-        email: email,
-        createdAt: DateTime.now());
+  Future<String?> addNote(note) async {
     try {
       final docRef =
           await _firebaseFirestore.collection("notes").add(note.toFirebase());

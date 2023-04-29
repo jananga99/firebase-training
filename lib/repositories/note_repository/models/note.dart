@@ -4,7 +4,7 @@ class Note extends Equatable {
   final String title;
   final String description;
   final String email;
-  final DateTime createdAt;
+  final DateTime? createdAt;
   final String? id;
 
   const Note({
@@ -12,7 +12,7 @@ class Note extends Equatable {
     required this.title,
     required this.description,
     required this.email,
-    required this.createdAt,
+    this.createdAt,
   });
 
   Map<String, dynamic> toFirebase() {
@@ -20,7 +20,7 @@ class Note extends Equatable {
       'title': title,
       'description': description,
       'email': email,
-      'createdAt': createdAt
+      'createdAt': createdAt ?? DateTime.now()
     };
   }
 

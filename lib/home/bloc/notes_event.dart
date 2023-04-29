@@ -6,11 +6,23 @@ abstract class NotesEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class NotesStarted extends NotesEvent {}
+class FetchNotesStarted extends NotesEvent {}
 
 class NotesFetched extends NotesEvent {
   final List<Note> notes;
   const NotesFetched({required this.notes});
 }
 
-class NotesFailed extends NotesEvent {}
+class FetchNotesFailed extends NotesEvent {}
+
+class AddNoteStarted extends NotesEvent {
+  final Note note;
+  const AddNoteStarted(this.note);
+}
+
+class AddNoteSucceeded extends NotesEvent {
+  final String id;
+  const AddNoteSucceeded(this.id);
+}
+
+class AddNoteFailed extends NotesEvent {}
