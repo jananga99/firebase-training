@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../common/constants.dart';
 import '../../header_bar/header_bar.dart';
 import '../../repositories/note_repository/note_repository.dart';
-import '../../utils/constants.dart';
 import '../bloc/note_bloc.dart';
 import '../widgets/note_card.dart';
 

@@ -23,3 +23,12 @@ class SignInFailed extends SignInEvent {
   final String error;
   const SignInFailed({this.error = Messages.signInFailed});
 }
+
+class SignOutStarted extends SignInEvent {}
+
+class SignOutSucceeded extends SignInEvent {}
+
+class SignOutFailed extends SignInEvent {
+  final String error;
+  const SignOutFailed({this.error = Messages.signOutFailed});
+}

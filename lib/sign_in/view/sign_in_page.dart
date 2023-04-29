@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project1/sign_in/widgets/sign_in_form.dart';
 
-import '../../repositories/user_repository/user_repository.dart';
-import '../../utils/constants.dart';
-import '../bloc/sign_in_bloc.dart';
+import '../../common/constants.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
@@ -51,12 +48,7 @@ class SignInPage extends StatelessWidget {
                         style: TextStyle(fontSize: 35, color: Colors.lightBlue),
                       ),
                     ),
-                    BlocProvider(
-                      create: (context) =>
-                          SignInBloc(context.read<UserRepository>())
-                            ..add(SignInInitialized()),
-                      child: const SignInForm(),
-                    ),
+                    const SignInForm(),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 25),
                       child: Column(

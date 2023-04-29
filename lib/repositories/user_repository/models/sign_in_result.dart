@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:project1/utils/constants.dart';
+import 'package:project1/common/constants.dart';
 
 class SignInResult {
   final User? user;

@@ -8,8 +8,8 @@ import 'package:project1/note/note.dart';
 import 'package:project1/repositories/repositories.dart';
 import 'package:project1/screens/sign_up/email_sign_up.dart';
 import 'package:project1/screens/sign_up/password_sign_up.dart';
-import 'package:project1/utils/constants.dart';
-import 'package:project1/widgets/auth_guard/auth_guard.dart';
+import 'package:project1/common/constants.dart';
+import 'package:project1/sign_in/widgets/auth_guard.dart';
 
 import 'firebase_options.dart';
 

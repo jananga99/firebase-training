@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../services/auth_service.dart';
 import '../../services/battery_service.dart';
-import '../../utils/constants.dart';
+import '../common/constants.dart';
+import '../sign_in/bloc/sign_in_bloc.dart';
 
 class HeaderBar extends StatefulWidget implements PreferredSizeWidget {
   @override
@@ -34,21 +35,12 @@ class _HeaderBarState extends State<HeaderBar> {
 
   @override
   Widget build(BuildContext context) {
-    void showMessage(message) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(message),
-      ));
-    }
-
     void handleHomeClick() {
       Navigator.pushReplacementNamed(context, RouteConstants.homeRoute);
     }
 
     Future<void> handleSignOut() async {
-      final res = await signOut();
-      if (res.runtimeType == String) {
-        showMessage(res);
-      }
+      context.read<SignInBloc>().add(SignOutStarted());
     }
 
     return AppBar(

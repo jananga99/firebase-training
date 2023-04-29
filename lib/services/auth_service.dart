@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../utils/constants.dart';
+import '../common/constants.dart';
 
 Future<dynamic> signUp(
     {required String email, required String password}) async {

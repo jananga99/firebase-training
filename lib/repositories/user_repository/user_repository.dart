@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../../utils/constants.dart';
+import '../../common/constants.dart';
 import 'models/models.dart';
 
 class UserRepository {
@@ -35,9 +35,5 @@ class UserRepository {
     } catch (e) {
       return false;
     }
-  }
-
-  User? getCurrentUser() {
-    return _firebaseAuth.currentUser;
   }
 }

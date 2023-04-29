@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project1/utils/constants.dart';
+import 'package:project1/common/constants.dart';
+import 'package:project1/sign_in/bloc/sign_in_bloc.dart';
 
 import '../../repositories/note_repository/models/note.dart';
 import '../bloc/notes_bloc.dart';
@@ -28,11 +29,12 @@ class _NoteAddFormState extends State<NoteAddForm> {
   @override
   Widget build(BuildContext context) {
     Future<void> handleSubmit() async {
-      if (_formKey.currentState!.validate()) {
+      final String? email = context.read<SignInBloc>().state.user?.email;
+      if (_formKey.currentState!.validate() && email != null) {
         context.read<NotesBloc>().add(AddNoteStarted(Note(
             title: titleInputController.text,
             description: descriptionInputController.text,
-            email: 'test-email')));
+            email: email)));
       }
     }
 

@@ -3,8 +3,8 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:project1/repositories/user_repository/models/models.dart';
 
+import '../../common/constants.dart';
 import '../../repositories/user_repository/user_repository.dart';
-import '../../utils/constants.dart';
 
 part 'sign_in_event.dart';
 part 'sign_in_state.dart';
@@ -15,6 +15,9 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     on<SignInStarted>(_onSignInStarted);
     on<SignInSucceeded>(_onSignInSucceeded);
     on<SignInFailed>(_onSignInFailed);
+    on<SignOutStarted>(_onSignOutStarted);
+    on<SignOutSucceeded>(_onSignOutSucceeded);
+    on<SignOutFailed>(_onSignOutFailed);
   }
 
   final UserRepository _userRepository;
@@ -40,12 +43,26 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     emit(state.copyWith(status: SignInStatus.idle));
   }
 
-  void _onSignInSucceeded(
-      SignInSucceeded event, Emitter<SignInState> emit) async {
+  void _onSignInSucceeded(SignInSucceeded event, Emitter<SignInState> emit) {
     emit(state.copyWith(status: SignInStatus.succeeded, user: event.user));
   }
 
-  void _onSignInFailed(SignInFailed event, Emitter<SignInState> emit) async {
+  void _onSignInFailed(SignInFailed event, Emitter<SignInState> emit) {
     emit(state.copyWith(status: SignInStatus.failure, error: event.error));
   }
+
+  Future<void> _onSignOutStarted(
+      SignOutStarted event, Emitter<SignInState> emit) async {
+    if (await _userRepository.signOut()) {
+      add(SignOutSucceeded());
+    } else {
+      add(const SignOutFailed());
+    }
+  }
+
+  void _onSignOutSucceeded(SignOutSucceeded event, Emitter<SignInState> emit) {
+    emit(const SignInState());
+  }
+
+  void _onSignOutFailed(SignOutFailed event, Emitter<SignInState> emit) {}
 }

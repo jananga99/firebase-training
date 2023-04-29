@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../common/constants.dart';
 import '../../services/auth_service.dart';
-import '../../utils/constants.dart';
 
 class PasswordSignUpPage extends StatefulWidget {
   final String email;

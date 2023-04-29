@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../common/constants.dart';
 import '../../repositories/repositories.dart';
-import '../../utils/constants.dart';
 import '../bloc/notes_bloc.dart';
 import 'note_card.dart';
 

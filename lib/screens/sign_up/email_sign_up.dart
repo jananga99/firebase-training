@@ -2,7 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/auth_service.dart';
-import '../../utils/constants.dart';
+import '../../common/constants.dart';
 
 class EmailSignUpPage extends StatefulWidget {
   final String? email;
