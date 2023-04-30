@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:project1/common/constants.dart';
 import 'package:project1/home/home.dart';
 import 'package:project1/note/note.dart';
 import 'package:project1/repositories/repositories.dart';
-import 'package:project1/screens/sign_up/email_sign_up.dart';
-import 'package:project1/screens/sign_up/password_sign_up.dart';
-import 'package:project1/common/constants.dart';
 import 'package:project1/sign_in/widgets/auth_guard.dart';
+import 'package:project1/sign_up/view/email_sign_up_page.dart';
+import 'package:project1/sign_up/view/password_sign_up_page.dart';
 
 import 'firebase_options.dart';
 
@@ -52,9 +52,12 @@ class App extends StatelessWidget {
               args.runtimeType != String ||
               args.toString().isEmpty ||
               !EmailValidator.validate(args.toString())) {
-            return const EmailSignUpPage();
+            return EmailSignUpPage(
+              userRepository: _userRepository,
+            );
           } else {
             return EmailSignUpPage(
+              userRepository: _userRepository,
               email: args.toString(),
             );
           }
@@ -65,9 +68,12 @@ class App extends StatelessWidget {
               args.runtimeType != String ||
               args.toString().isEmpty ||
               !EmailValidator.validate(args.toString())) {
-            return const EmailSignUpPage();
+            return EmailSignUpPage(
+              userRepository: _userRepository,
+            );
           } else {
             return PasswordSignUpPage(
+              userRepository: _userRepository,
               email: args.toString(),
             );
           }

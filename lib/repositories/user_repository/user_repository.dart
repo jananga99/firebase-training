@@ -36,4 +36,43 @@ class UserRepository {
       return false;
     }
   }
+
+  Future<SignUpEmailCheckResult> isEmailAlreadyRegistered(String email) async {
+    try {
+      List<String> signInMethods =
+          await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+      return SignUpEmailCheckResult(
+          success: true, isRegistered: signInMethods.isNotEmpty);
+    } catch (e) {
+      return SignUpEmailCheckResult(
+          success: false, error: Messages.emailCheckFailed);
+    }
+  }
+
+  Future<SignUpResult> signUp(String email, String password) async {
+    late String errorMessage;
+    try {
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      if (userCredential.user != null) {
+        return SignUpResult(success: true);
+      } else {
+        errorMessage = Messages.signUpFailed;
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        errorMessage = Messages.signUpFailedWeakPassword;
+      } else if (e.code == 'email-already-in-use') {
+        errorMessage = Messages.signUpFailedDuplicateEmail;
+      } else {
+        errorMessage = Messages.signUpFailed;
+      }
+    } catch (e) {
+      errorMessage = Messages.signUpFailed;
+    }
+    return SignUpResult(success: false, error: errorMessage);
+  }
 }
