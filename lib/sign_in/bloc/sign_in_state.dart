@@ -1,10 +1,10 @@
 part of 'sign_in_bloc.dart';
 
-enum SignInStatus { idle, loading, succeeded, failure }
+enum SignInStatus { initial, loading, authorized, unauthorized, failure }
 
 class SignInState extends Equatable {
   const SignInState(
-      {this.status = SignInStatus.idle,
+      {this.status = SignInStatus.initial,
       this.email,
       this.password,
       this.error,

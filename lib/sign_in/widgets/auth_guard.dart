@@ -21,11 +21,14 @@ class AuthGuard extends StatelessWidget {
     return RepositoryProvider(
       create: (context) => _userRepository,
       child: BlocProvider(
-        create: (context) => SignInBloc(_userRepository),
+        create: (context) =>
+            SignInBloc(_userRepository)..add(SignInInitialized()),
         child: BlocBuilder<SignInBloc, SignInState>(
           buildWhen: (previous, current) => previous.user != current.user,
           builder: (context, state) {
-            return state.user != null ? _component : const SignInPage();
+            return state.status == SignInStatus.authorized && state.user != null
+                ? _component
+                : const SignInPage();
           },
         ),
       ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,7 +15,8 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   SignInBloc(this._userRepository) : super(const SignInState()) {
     on<SignInInitialized>(_onSignInInitialized);
     on<SignInStarted>(_onSignInStarted);
-    on<SignInSucceeded>(_onSignInSucceeded);
+    on<Authorized>(_onAuthorized);
+    on<Unauthorized>(_onUnauthorized);
     on<SignInFailed>(_onSignInFailed);
     on<SignOutStarted>(_onSignOutStarted);
     on<SignOutSucceeded>(_onSignOutSucceeded);
@@ -21,6 +24,24 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   final UserRepository _userRepository;
+  StreamSubscription<User?>? _userSubscription;
+
+  @override
+  Future<void> close() {
+    _userSubscription?.cancel();
+    return super.close();
+  }
+
+  void _onSignInInitialized(
+      SignInInitialized event, Emitter<SignInState> emit) {
+    _userSubscription = _userRepository.getUserStream().listen((user) {
+      if (user == null) {
+        add(const Unauthorized());
+      } else {
+        add(Authorized(user));
+      }
+    });
+  }
 
   Future<void> _onSignInStarted(
       SignInStarted event, Emitter<SignInState> emit) async {
@@ -29,7 +50,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
       final SignInResult result =
           await _userRepository.signIn(event.email, event.password);
       if (result.success) {
-        return add(SignInSucceeded(result.user!));
+        return add(Authorized(result.user!));
       } else {
         return add(SignInFailed(error: result.error!));
       }
@@ -38,13 +59,12 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
     }
   }
 
-  void _onSignInInitialized(
-      SignInInitialized event, Emitter<SignInState> emit) {
-    emit(state.copyWith(status: SignInStatus.idle));
+  void _onAuthorized(Authorized event, Emitter<SignInState> emit) {
+    emit(state.copyWith(status: SignInStatus.authorized, user: event.user));
   }
 
-  void _onSignInSucceeded(SignInSucceeded event, Emitter<SignInState> emit) {
-    emit(state.copyWith(status: SignInStatus.succeeded, user: event.user));
+  void _onUnauthorized(Unauthorized event, Emitter<SignInState> emit) {
+    emit(state.copyWith(status: SignInStatus.unauthorized));
   }
 
   void _onSignInFailed(SignInFailed event, Emitter<SignInState> emit) {

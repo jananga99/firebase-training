@@ -14,9 +14,13 @@ class SignInStarted extends SignInEvent {
   const SignInStarted({required this.email, required this.password});
 }
 
-class SignInSucceeded extends SignInEvent {
+class Authorized extends SignInEvent {
   final User user;
-  const SignInSucceeded(this.user);
+  const Authorized(this.user);
+}
+
+class Unauthorized extends SignInEvent {
+  const Unauthorized();
 }
 
 class SignInFailed extends SignInEvent {

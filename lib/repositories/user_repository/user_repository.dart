@@ -8,6 +8,10 @@ class UserRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
   final FirebaseAuth _firebaseAuth;
 
+  Stream<User?> getUserStream() {
+    return _firebaseAuth.authStateChanges();
+  }
+
   Future<SignInResult> signIn(String email, String password) async {
     try {
       final UserCredential userCredential = await _firebaseAuth
