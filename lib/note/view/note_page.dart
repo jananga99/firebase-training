@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/constants.dart';
-import '../../header_bar/header_bar.dart';
+import '../../header_bar/view/header_bar.dart';
 import '../../repositories/note_repository/note_repository.dart';
 import '../bloc/note_bloc.dart';
 import '../widgets/note_card.dart';
@@ -22,7 +22,7 @@ class NotePage extends StatelessWidget {
     final id = ModalRoute.of(context)!.settings.arguments as String;
 
     return Scaffold(
-      appBar: const HeaderBar(),
+      appBar: HeaderBar(),
       backgroundColor: const Color(0xff00ffff),
       body: RepositoryProvider(
         create: (context) => _noteRepository,

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project1/home/widgets/note_add_form.dart';
 import 'package:project1/home/widgets/notes_view.dart';
 
-import '../../header_bar/header_bar.dart';
+import '../../header_bar/view/header_bar.dart';
 import '../../repositories/repositories.dart';
 import '../bloc/notes_bloc.dart';
 
@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const HeaderBar(),
+      appBar: HeaderBar(),
       backgroundColor: const Color(0xff00ffff),
       body: RepositoryProvider(
         create: (context) => _noteRepository,
