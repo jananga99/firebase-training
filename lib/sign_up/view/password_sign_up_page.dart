@@ -4,7 +4,7 @@ import 'package:project1/repositories/repositories.dart';
 import 'package:project1/sign_up/bloc/sign_up_bloc.dart';
 
 import '../../common/constants.dart';
-import '../widgets/password_sign_up_form.dart';
+import '../widgets/widgets.dart';
 
 class PasswordSignUpPage extends StatelessWidget {
   final UserRepository _userRepository;

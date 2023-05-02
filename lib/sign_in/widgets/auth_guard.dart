@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project1/repositories/repositories.dart';
 
+import '../../repositories/user_repository/user_repository.dart';
 import '../bloc/sign_in_bloc.dart';
 import '../view/sign_in_page.dart';
 

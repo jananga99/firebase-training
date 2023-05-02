@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:project1/repositories/battery_repository/models/battery_percentage_result.dart';
 
+export 'models/models.dart';
+
 class BatteryRepository {
   dynamic getPlatform() {
     if (kIsWeb) {

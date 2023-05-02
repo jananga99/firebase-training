@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:project1/common/constants.dart';
-import 'package:project1/repositories/user_repository/models/models.dart';
-
-import '../../repositories/user_repository/user_repository.dart';
+import 'package:project1/repositories/user_repository/user_repository.dart';
 
 part 'sign_up_event.dart';
 part 'sign_up_state.dart';

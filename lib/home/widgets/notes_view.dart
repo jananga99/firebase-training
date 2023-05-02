@@ -40,6 +40,7 @@ class NotesView extends StatelessWidget {
             break;
           case FetchNotesStatus.onProgress:
             returnWidget = ListView(
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               children: state.fetchNotes
                   .map((Note note) {

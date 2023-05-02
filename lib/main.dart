@@ -7,9 +7,8 @@ import 'package:project1/common/constants.dart';
 import 'package:project1/home/home.dart';
 import 'package:project1/note/note.dart';
 import 'package:project1/repositories/repositories.dart';
-import 'package:project1/sign_in/widgets/auth_guard.dart';
-import 'package:project1/sign_up/view/email_sign_up_page.dart';
-import 'package:project1/sign_up/view/password_sign_up_page.dart';
+import 'package:project1/sign_in/sign_in.dart';
+import 'package:project1/sign_up/sign_up.dart';
 
 import 'firebase_options.dart';
 

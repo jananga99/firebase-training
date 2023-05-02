@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project1/repositories/repositories.dart';
-import 'package:project1/sign_up/widgets/email_sign_up_form.dart';
+import 'package:project1/sign_up/widgets/widgets.dart';
 
 import '../../common/constants.dart';
 import '../bloc/sign_up_bloc.dart';

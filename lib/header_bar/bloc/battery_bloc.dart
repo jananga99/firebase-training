@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:project1/repositories/battery_repository/battery_repository.dart';
-import 'package:project1/repositories/battery_repository/models/battery_percentage_result.dart';
 
 part 'battery_event.dart';
 part 'battery_state.dart';

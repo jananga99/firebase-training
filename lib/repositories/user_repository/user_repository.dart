@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../common/constants.dart';
 import 'models/models.dart';
 
+export 'models/models.dart';
+
 class UserRepository {
   UserRepository({FirebaseAuth? firebaseAuth})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;

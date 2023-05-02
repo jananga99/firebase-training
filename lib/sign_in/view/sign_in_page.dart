@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project1/sign_in/widgets/sign_in_form.dart';
+import 'package:project1/sign_in/widgets/widgets.dart';
 
 import '../../common/constants.dart';
 

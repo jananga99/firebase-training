@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/battery_bloc.dart';
 
-class Battery extends StatefulWidget {
-  const Battery({Key? key}) : super(key: key);
+class BatteryIcon extends StatefulWidget {
+  const BatteryIcon({Key? key}) : super(key: key);
 
   @override
-  State<Battery> createState() => _BatteryState();
+  State<BatteryIcon> createState() => _BatteryIconState();
 }
 
-class _BatteryState extends State<Battery> {
+class _BatteryIconState extends State<BatteryIcon> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BatteryBloc, BatteryState>(

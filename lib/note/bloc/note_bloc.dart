@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../repositories/repositories.dart';
+import '../../repositories/note_repository/note_repository.dart';
 
 part 'note_event.dart';
 part 'note_state.dart';

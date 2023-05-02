@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project1/common/constants.dart';
-import 'package:project1/sign_in/bloc/sign_in_bloc.dart';
+import 'package:project1/sign_in/sign_in.dart';
 
-import '../../repositories/note_repository/models/note.dart';
+import '../../repositories/note_repository/note_repository.dart';
 import '../bloc/notes_bloc.dart';
 
 class NoteAddForm extends StatefulWidget {

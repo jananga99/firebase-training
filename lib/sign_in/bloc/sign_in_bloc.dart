@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:project1/repositories/user_repository/models/models.dart';
 
 import '../../common/constants.dart';
 import '../../repositories/user_repository/user_repository.dart';
