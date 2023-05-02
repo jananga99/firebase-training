@@ -33,6 +33,20 @@ class Note extends Equatable {
         createdAt: data['createdAt'].toDate());
   }
 
+  Note copyWith(
+      {String? id,
+      String? title,
+      String? description,
+      String? email,
+      DateTime? createdAt}) {
+    return Note(
+        id: id ?? this.id,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        email: email ?? this.email,
+        createdAt: createdAt ?? this.createdAt);
+  }
+
   @override
   List<Object?> get props => [id, title, description, email, createdAt];
 }

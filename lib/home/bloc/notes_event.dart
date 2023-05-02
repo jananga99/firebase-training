@@ -21,8 +21,8 @@ class AddNoteStarted extends NotesEvent {
 }
 
 class AddNoteSucceeded extends NotesEvent {
-  final String id;
-  const AddNoteSucceeded(this.id);
+  final Note note;
+  const AddNoteSucceeded(this.note);
 }
 
 class AddNoteFailed extends NotesEvent {}

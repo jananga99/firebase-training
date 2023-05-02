@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'models/note.dart';
+
 export 'models/note.dart';
 
 class NoteRepository {
@@ -9,20 +11,20 @@ class NoteRepository {
 
   Stream<QuerySnapshot<Map<String, dynamic>>> getNotesStream() {
     return _firebaseFirestore
-        .collection("notes")
+        .collection("notes1")
         .orderBy("createdAt")
         .snapshots();
   }
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> getNoteStream(String id) {
-    return _firebaseFirestore.collection("notes").doc(id).snapshots();
+    return _firebaseFirestore.collection("notes1").doc(id).snapshots();
   }
 
-  Future<String?> addNote(note) async {
+  Future<Note?> addNote(Note note) async {
     try {
-      final docRef =
-          await _firebaseFirestore.collection("notes").add(note.toFirebase());
-      return docRef.id;
+      final DocumentReference<Map<String, dynamic>> docRef =
+          await _firebaseFirestore.collection("notes1").add(note.toFirebase());
+      return note.copyWith(id: docRef.id);
     } catch (e) {
       return null;
     }

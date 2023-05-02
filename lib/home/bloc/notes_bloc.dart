@@ -64,8 +64,8 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
       AddNoteStarted event, Emitter<NotesState> emit) async {
     emit(state.copyWith(addNoteStatus: AddNoteStatus.loading));
     try {
-      final id = await _noteRepository.addNote(event.note);
-      return add(AddNoteSucceeded(id!));
+      final Note? note = await _noteRepository.addNote(event.note);
+      return add(AddNoteSucceeded(note!));
     } catch (e) {
       return add(AddNoteFailed());
     }
@@ -73,6 +73,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
   void _onAddNoteSucceeded(
       AddNoteSucceeded event, Emitter<NotesState> emit) async {
+    state.fetchNotes.add(event.note);
     emit(state.copyWith(addNoteStatus: AddNoteStatus.succeeded));
   }
 
