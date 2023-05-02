@@ -37,59 +37,67 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      initialRoute: RouteConstants.homeRoute,
-      routes: {
-        RouteConstants.signUpEmailRoute: (context) {
-          final args = ModalRoute.of(context)!.settings.arguments;
-          if (args == null ||
-              args.runtimeType != String ||
-              args.toString().isEmpty ||
-              !EmailValidator.validate(args.toString())) {
-            return EmailSignUpPage(
-              userRepository: _userRepository,
-            );
-          } else {
-            return EmailSignUpPage(
-              userRepository: _userRepository,
-              email: args.toString(),
-            );
-          }
-        },
-        RouteConstants.signUpPasswordRoute: (context) {
-          final args = ModalRoute.of(context)!.settings.arguments;
-          if (args == null ||
-              args.runtimeType != String ||
-              args.toString().isEmpty ||
-              !EmailValidator.validate(args.toString())) {
-            return EmailSignUpPage(
-              userRepository: _userRepository,
-            );
-          } else {
-            return PasswordSignUpPage(
-              userRepository: _userRepository,
-              email: args.toString(),
-            );
-          }
-        },
-        RouteConstants.homeRoute: (context) => AuthGuard(
-              component: HomePage(
-                noteRepository: _noteRepository,
-              ),
-              userRepository: _userRepository,
-            ),
-        RouteConstants.noteViewRoute: (context) => AuthGuard(
-              component: NotePage(
-                noteRepository: _noteRepository,
-              ),
-              userRepository: _userRepository,
-            )
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
       },
+      child: MaterialApp(
+        title: '',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: RouteConstants.homeRoute,
+        routes: {
+          RouteConstants.signUpEmailRoute: (context) {
+            final args = ModalRoute.of(context)!.settings.arguments;
+            if (args == null ||
+                args.runtimeType != String ||
+                args.toString().isEmpty ||
+                !EmailValidator.validate(args.toString())) {
+              return EmailSignUpPage(
+                userRepository: _userRepository,
+              );
+            } else {
+              return EmailSignUpPage(
+                userRepository: _userRepository,
+                email: args.toString(),
+              );
+            }
+          },
+          RouteConstants.signUpPasswordRoute: (context) {
+            final args = ModalRoute.of(context)!.settings.arguments;
+            if (args == null ||
+                args.runtimeType != String ||
+                args.toString().isEmpty ||
+                !EmailValidator.validate(args.toString())) {
+              return EmailSignUpPage(
+                userRepository: _userRepository,
+              );
+            } else {
+              return PasswordSignUpPage(
+                userRepository: _userRepository,
+                email: args.toString(),
+              );
+            }
+          },
+          RouteConstants.homeRoute: (context) => AuthGuard(
+                component: HomePage(
+                  noteRepository: _noteRepository,
+                ),
+                userRepository: _userRepository,
+              ),
+          RouteConstants.noteViewRoute: (context) => AuthGuard(
+                component: NotePage(
+                  noteRepository: _noteRepository,
+                ),
+                userRepository: _userRepository,
+              )
+        },
+      ),
     );
   }
 }
