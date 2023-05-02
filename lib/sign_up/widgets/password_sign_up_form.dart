@@ -5,8 +5,7 @@ import '../../common/constants.dart';
 import '../bloc/sign_up_bloc.dart';
 
 class PasswordSignUpForm extends StatefulWidget {
-  final String _email;
-  const PasswordSignUpForm({super.key, required String email}) : _email = email;
+  const PasswordSignUpForm({super.key});
 
   @override
   State<PasswordSignUpForm> createState() => _PasswordSignUpFormState();
@@ -27,6 +26,16 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
   @override
   void initState() {
     super.initState();
+    final state = context.read<SignUpBloc>().state;
+    print("In password sign up form init state");
+    print(state.email);
+    print(state.status);
+    print(state.password);
+    final email = state.email;
+    if (email == null) {
+      Navigator.of(context)
+          .pushReplacementNamed(RouteConstants.signUpEmailRoute);
+    }
     passwordInputController.addListener(() {
       setState(() {
         isPasswordEmpty = passwordInputController.text.isEmpty;
@@ -48,7 +57,7 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
     if (_formKey.currentState!.validate()) {
       context
           .read<SignUpBloc>()
-          .add(SignUpStarted(widget._email, passwordInputController.text));
+          .add(SignUpStarted(passwordInputController.text));
       passwordInputController.clear();
     }
   }

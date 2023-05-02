@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:email_validator/email_validator.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project1/common/constants.dart';
+import 'package:project1/header_bar/header_bar.dart';
 import 'package:project1/home/home.dart';
 import 'package:project1/note/note.dart';
 import 'package:project1/repositories/repositories.dart';
@@ -18,22 +19,29 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(App(
-    noteRepository: NoteRepository(),
-    userRepository: UserRepository(),
+  final UserRepository userRepository = UserRepository();
+  final NoteRepository noteRepository = NoteRepository();
+  final BatteryRepository batteryRepository = BatteryRepository();
+
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider<SignUpBloc>(
+          create: (BuildContext context) => SignUpBloc(userRepository)),
+      BlocProvider<SignInBloc>(
+          create: (BuildContext context) => SignInBloc(userRepository)),
+      BlocProvider<NotesBloc>(
+          create: (BuildContext context) => NotesBloc(noteRepository)),
+      BlocProvider<NoteBloc>(
+          create: (BuildContext context) => NoteBloc(noteRepository)),
+      BlocProvider<BatteryBloc>(
+          create: (BuildContext context) => BatteryBloc(batteryRepository)),
+    ],
+    child: const App(),
   ));
 }
 
 class App extends StatelessWidget {
-  const App(
-      {super.key,
-      required NoteRepository noteRepository,
-      required UserRepository userRepository})
-      : _noteRepository = noteRepository,
-        _userRepository = userRepository;
-
-  final NoteRepository _noteRepository;
-  final UserRepository _userRepository;
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,49 +57,14 @@ class App extends StatelessWidget {
         ),
         initialRoute: RouteConstants.homeRoute,
         routes: {
-          RouteConstants.signUpEmailRoute: (context) {
-            final args = ModalRoute.of(context)!.settings.arguments;
-            if (args == null ||
-                args.runtimeType != String ||
-                args.toString().isEmpty ||
-                !EmailValidator.validate(args.toString())) {
-              return EmailSignUpPage(
-                userRepository: _userRepository,
-              );
-            } else {
-              return EmailSignUpPage(
-                userRepository: _userRepository,
-                email: args.toString(),
-              );
-            }
-          },
-          RouteConstants.signUpPasswordRoute: (context) {
-            final args = ModalRoute.of(context)!.settings.arguments;
-            if (args == null ||
-                args.runtimeType != String ||
-                args.toString().isEmpty ||
-                !EmailValidator.validate(args.toString())) {
-              return EmailSignUpPage(
-                userRepository: _userRepository,
-              );
-            } else {
-              return PasswordSignUpPage(
-                userRepository: _userRepository,
-                email: args.toString(),
-              );
-            }
-          },
-          RouteConstants.homeRoute: (context) => AuthGuard(
-                component: HomePage(
-                  noteRepository: _noteRepository,
-                ),
-                userRepository: _userRepository,
+          RouteConstants.signUpEmailRoute: (context) => const EmailSignUpPage(),
+          RouteConstants.signUpPasswordRoute: (context) =>
+              const PasswordSignUpPage(),
+          RouteConstants.homeRoute: (context) => const AuthGuard(
+                component: HomePage(),
               ),
-          RouteConstants.noteViewRoute: (context) => AuthGuard(
-                component: NotePage(
-                  noteRepository: _noteRepository,
-                ),
-                userRepository: _userRepository,
+          RouteConstants.noteViewRoute: (context) => const AuthGuard(
+                component: NotePage(),
               )
         },
       ),

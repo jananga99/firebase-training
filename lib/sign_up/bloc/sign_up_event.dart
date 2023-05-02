@@ -21,9 +21,8 @@ class EmailCheckFailed extends SignUpEvent {
 }
 
 class SignUpStarted extends SignUpEvent {
-  final String email;
   final String password;
-  SignUpStarted(this.email, this.password);
+  SignUpStarted(this.password);
 }
 
 class SignUpSucceeded extends SignUpEvent {}

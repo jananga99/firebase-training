@@ -6,9 +6,7 @@ import '../../common/constants.dart';
 import '../bloc/sign_up_bloc.dart';
 
 class EmailSignUpForm extends StatefulWidget {
-  final String? _email;
-
-  const EmailSignUpForm({super.key, String? email}) : _email = email;
+  const EmailSignUpForm({super.key});
 
   @override
   State<EmailSignUpForm> createState() => _EmailSignUpFormState();
@@ -28,8 +26,11 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
   @override
   void initState() {
     super.initState();
-    if (widget._email != null && widget._email!.isNotEmpty) {
-      emailInputController.text = widget._email!;
+
+    final email = context.read<SignUpBloc>().state.email;
+
+    if (email != null && email.isNotEmpty) {
+      emailInputController.text = email;
       setState(() {
         isEmailEmpty = false;
       });
@@ -58,7 +59,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
   void handleEmailChecked() {
     Navigator.of(context).pushReplacementNamed(
         RouteConstants.signUpPasswordRoute,
-        arguments: emailInputController.text);
+        arguments: context.read<SignUpBloc>());
   }
 
   @override

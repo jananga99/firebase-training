@@ -47,17 +47,22 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   Future<void> _onSignUpStarted(
       SignUpStarted event, Emitter<SignUpState> emit) async {
     emit(state.copyWith(status: SignUpStatus.signUpLoading));
-    final SignUpResult result =
-        await _userRepository.signUp(event.email, event.password);
-    if (result.success) {
-      add(SignUpSucceeded());
+    if (state.email != null) {
+      final SignUpResult result =
+          await _userRepository.signUp(state.email!, event.password);
+      if (result.success) {
+        add(SignUpSucceeded());
+      } else {
+        add(SignUpFailed(error: result.error));
+      }
     } else {
-      add(SignUpFailed(error: result.error));
+      add(SignUpFailed());
     }
   }
 
   void _onSignUpSucceeded(SignUpSucceeded event, Emitter<SignUpState> emit) {
-    emit(state.copyWith(status: SignUpStatus.signUpSucceeded));
+    emit(state.copyWith(
+        status: SignUpStatus.signUpSucceeded, email: null, password: null));
   }
 
   void _onSignUpFailed(SignUpFailed event, Emitter<SignUpState> emit) {
