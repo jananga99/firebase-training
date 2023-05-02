@@ -73,7 +73,6 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
   void _onAddNoteSucceeded(
       AddNoteSucceeded event, Emitter<NotesState> emit) async {
-    state.fetchNotes.add(event.note);
     emit(state.copyWith(addNoteStatus: AddNoteStatus.succeeded));
   }
 
