@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/constants.dart';
+import '../../note/note.dart';
 import '../../repositories/repositories.dart';
 import '../bloc/notes_bloc.dart';
 import 'note_card.dart';
@@ -12,8 +13,8 @@ class NotesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void handleCardPress(String id) {
-      Navigator.of(context)
-          .pushReplacementNamed(RouteConstants.noteViewRoute, arguments: id);
+      context.read<NoteBloc>().add(NoteStarted(id: id));
+      Navigator.of(context).pushReplacementNamed(RouteConstants.noteViewRoute);
     }
 
     return BlocBuilder<NotesBloc, NotesState>(

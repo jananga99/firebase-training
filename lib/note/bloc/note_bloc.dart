@@ -34,7 +34,7 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
 
   Future<void> _onNoteStarted(
       NoteStarted event, Emitter<NoteState> emit) async {
-    emit(state.copyWith(noteStatus: NoteStatus.loading));
+    emit(state.copyWith(noteStatus: NoteStatus.loading, id: event.id));
     try {
       _noteSubscription?.cancel();
       _noteSubscription = _noteRepository.getNoteStream(event.id).listen((e) {

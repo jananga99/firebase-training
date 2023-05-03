@@ -6,17 +6,31 @@ import '../../header_bar/header_bar.dart';
 import '../bloc/note_bloc.dart';
 import '../widgets/note_card.dart';
 
-class NotePage extends StatelessWidget {
+class NotePage extends StatefulWidget {
   const NotePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments;
-    if (args == null || (args as String).isEmpty) {
-      Navigator.pushReplacementNamed(context, RouteConstants.homeRoute);
-    }
-    final id = ModalRoute.of(context)!.settings.arguments as String;
+  State<NotePage> createState() => _NotePageState();
+}
 
+class _NotePageState extends State<NotePage> {
+  late String id;
+
+  @override
+  void initState() {
+    super.initState();
+    final String? stateId = context.read<NoteBloc>().state.id;
+    if (stateId == null || stateId.isEmpty) {
+      Future(() {
+        Navigator.pushReplacementNamed(context, RouteConstants.homeRoute);
+      });
+    } else {
+      id = stateId;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: HeaderBar(),
       backgroundColor: const Color(0xff00ffff),
@@ -48,7 +62,6 @@ class NotePage extends StatelessWidget {
                     Widget returnWidget;
                     switch (state.noteStatus) {
                       case NoteStatus.initial:
-                        context.read<NoteBloc>().add(NoteStarted(id: id));
                         returnWidget = const Center(
                           child: CircularProgressIndicator(
                             color: Colors.green,

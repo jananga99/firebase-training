@@ -2,13 +2,13 @@ part of 'notes_bloc.dart';
 
 enum FetchNotesStatus { initial, loading, onProgress, failure }
 
-enum AddNoteStatus { idle, loading, succeeded, failure }
+enum AddNoteStatus { initial, loading, succeeded, failure }
 
 class NotesState extends Equatable {
   const NotesState(
       {this.fetchNotesStatus = FetchNotesStatus.initial,
       this.fetchNotes = const <Note>[],
-      this.addNoteStatus = AddNoteStatus.idle,
+      this.addNoteStatus = AddNoteStatus.initial,
       this.addNote});
 
   final FetchNotesStatus fetchNotesStatus;

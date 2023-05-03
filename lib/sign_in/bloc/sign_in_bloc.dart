@@ -59,11 +59,19 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
   }
 
   void _onAuthorized(Authorized event, Emitter<SignInState> emit) {
-    emit(state.copyWith(status: SignInStatus.authorized, user: event.user));
+    emit(state.copyWith(
+        status: SignInStatus.authorized,
+        user: event.user,
+        email: null,
+        password: null));
   }
 
   void _onUnauthorized(Unauthorized event, Emitter<SignInState> emit) {
-    emit(state.copyWith(status: SignInStatus.unauthorized));
+    emit(state.copyWith(
+        status: SignInStatus.unauthorized,
+        user: null,
+        email: null,
+        password: null));
   }
 
   void _onSignInFailed(SignInFailed event, Emitter<SignInState> emit) {
