@@ -13,9 +13,9 @@ class HomeIcon extends StatelessWidget {
 
     return TextButton(
       onPressed: handleHomeClick,
-      child: const Icon(
+      child: Icon(
         Icons.home,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.onBackground,
         size: 30,
       ),
     );

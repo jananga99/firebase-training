@@ -50,7 +50,7 @@ class _NoteAddFormState extends State<NoteAddForm> {
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
                   controller: titleInputController,
-                  cursorColor: Colors.white,
+                  cursorColor: Theme.of(context).colorScheme.onBackground,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(20),
                     filled: true,
@@ -119,11 +119,14 @@ class _NoteAddFormState extends State<NoteAddForm> {
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30))),
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "SUBMIT",
-                            style: TextStyle(fontSize: 20, color: Colors.black),
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Theme.of(context).colorScheme.onSecondary,
+                            ),
                           ),
                         )),
                   ),
@@ -139,9 +142,9 @@ class _NoteAddFormState extends State<NoteAddForm> {
                         visible: state.addNoteStatus == AddNoteStatus.loading,
                         child: Container(
                           margin: const EdgeInsets.symmetric(vertical: 15),
-                          child: const Center(
+                          child: Center(
                             child: CircularProgressIndicator(
-                              color: Colors.red,
+                              color: Theme.of(context).colorScheme.error,
                             ),
                           ),
                         ),
@@ -151,10 +154,10 @@ class _NoteAddFormState extends State<NoteAddForm> {
                         child: Center(
                           child: Container(
                             margin: const EdgeInsets.symmetric(vertical: 15),
-                            child: const Text(
+                            child: Text(
                               Messages.addNoteFailed,
                               style: TextStyle(
-                                  color: Colors.red,
+                                  color: Theme.of(context).colorScheme.error,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -166,10 +169,11 @@ class _NoteAddFormState extends State<NoteAddForm> {
                         child: Center(
                           child: Container(
                             margin: const EdgeInsets.symmetric(vertical: 15),
-                            child: const Text(
+                            child: Text(
                               Messages.addNoteSuccess,
                               style: TextStyle(
-                                  color: Colors.green,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold),
                             ),

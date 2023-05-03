@@ -26,16 +26,16 @@ class NotesView extends StatelessWidget {
         switch (state.fetchNotesStatus) {
           case FetchNotesStatus.initial:
             context.read<NotesBloc>().add(FetchNotesStarted());
-            returnWidget = const Center(
+            returnWidget = Center(
               child: CircularProgressIndicator(
-                color: Colors.green,
+                color: Theme.of(context).colorScheme.secondary,
               ),
             );
             break;
           case FetchNotesStatus.loading:
-            returnWidget = const Center(
+            returnWidget = Center(
               child: CircularProgressIndicator(
-                color: Colors.green,
+                color: Theme.of(context).colorScheme.secondary,
               ),
             );
             break;

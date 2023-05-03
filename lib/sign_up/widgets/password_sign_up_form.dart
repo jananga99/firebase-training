@@ -27,10 +27,6 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
   void initState() {
     super.initState();
     final state = context.read<SignUpBloc>().state;
-    print("In password sign up form init state");
-    print(state.email);
-    print(state.status);
-    print(state.password);
     final email = state.email;
     if (email == null) {
       Navigator.of(context)
@@ -79,11 +75,13 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
                 hintText: 'Password*',
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.onSecondary),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.onSecondary),
                 ),
               ),
               validator: (value) {
@@ -103,16 +101,16 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
                 backgroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
                   if (states.contains(MaterialState.disabled)) {
-                    return Colors.black12;
+                    return Theme.of(context).colorScheme.onSurface;
                   }
-                  return Colors.blue;
+                  return Theme.of(context).colorScheme.primary;
                 }),
                 foregroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
                   if (states.contains(MaterialState.disabled)) {
-                    return Colors.white;
+                    return Theme.of(context).colorScheme.onBackground;
                   }
-                  return Colors.white;
+                  return Theme.of(context).colorScheme.onBackground;
                 }),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -145,8 +143,8 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
                           margin: const EdgeInsets.symmetric(vertical: 15),
                           child: Text(
                             state.signUpError ?? '',
-                            style: const TextStyle(
-                                color: Colors.red,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.error,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
                           ))),

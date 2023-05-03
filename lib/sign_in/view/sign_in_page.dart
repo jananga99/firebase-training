@@ -13,7 +13,7 @@ class SignInPage extends StatelessWidget {
     }
 
     return Scaffold(
-        backgroundColor: const Color(0xff00ffff),
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Center(
             child: SingleChildScrollView(
           child: Column(
@@ -26,8 +26,10 @@ class SignInPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Image.asset(Assets.logo, width: 25, height: 25),
                   ),
-                  const Text("Dear Diary",
-                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                  Text("Dear Diary",
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Theme.of(context).colorScheme.onBackground)),
                 ],
               ),
               Container(
@@ -36,16 +38,18 @@ class SignInPage extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onBackground,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 15),
-                      child: const Text(
+                      child: Text(
                         "Sign In",
-                        style: TextStyle(fontSize: 35, color: Colors.lightBlue),
+                        style: TextStyle(
+                            fontSize: 35,
+                            color: Theme.of(context).secondaryHeaderColor),
                       ),
                     ),
                     const SignInForm(),
@@ -56,20 +60,24 @@ class SignInPage extends StatelessWidget {
                         children: [
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 5),
-                            child: const Text(
+                            child: Text(
                               "Don't have an account yet?",
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.black),
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSecondary),
                             ),
                           ),
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 5),
                             child: InkWell(
                                 onTap: handleSignUp,
-                                child: const Text("Create an account",
+                                child: Text("Create an account",
                                     style: TextStyle(
                                         fontSize: 15,
-                                        color: Colors.lightBlue))),
+                                        color: Theme.of(context)
+                                            .secondaryHeaderColor))),
                           ),
                         ],
                       ),

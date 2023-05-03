@@ -13,7 +13,7 @@ class PasswordSignUpPage extends StatelessWidget {
     }
 
     return Scaffold(
-        backgroundColor: const Color(0xff00ffff),
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Center(
             child: SingleChildScrollView(
           child: Column(
@@ -26,8 +26,11 @@ class PasswordSignUpPage extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Image.asset(Assets.logo, width: 25, height: 25),
                   ),
-                  const Text("Dear Diary",
-                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                  Text("Dear Diary",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Theme.of(context).colorScheme.onBackground,
+                      )),
                 ],
               ),
               Container(
@@ -36,7 +39,7 @@ class PasswordSignUpPage extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onBackground,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -46,18 +49,22 @@ class PasswordSignUpPage extends StatelessWidget {
                       children: [
                         TextButton(
                             onPressed: handleGoBack,
-                            child: const Text(
+                            child: Text(
                               "<--",
                               style: TextStyle(
-                                  fontSize: 25, color: Colors.lightBlue),
+                                  fontSize: 25,
+                                  color:
+                                      Theme.of(context).secondaryHeaderColor),
                             )),
                       ],
                     ),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 15),
-                      child: const Text(
+                      child: Text(
                         "Sign Up",
-                        style: TextStyle(fontSize: 35, color: Colors.lightBlue),
+                        style: TextStyle(
+                            fontSize: 35,
+                            color: Theme.of(context).secondaryHeaderColor),
                       ),
                     ),
                     const PasswordSignUpForm()

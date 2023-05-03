@@ -67,7 +67,8 @@ class _NoteCardState extends State<NoteCard> {
                   softWrap: false,
                   maxLines: 1000,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: Colors.black),
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondary),
                 ),
               ),
             ],
@@ -81,7 +82,8 @@ class _NoteCardState extends State<NoteCard> {
               TextButton(
                   onPressed: toggleShowMore,
                   child: Text(getShowMoreText(widget.note.description),
-                      style: const TextStyle(color: Colors.black))),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSecondary))),
             ],
           ),
         )

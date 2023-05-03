@@ -5,9 +5,9 @@ class NotificationIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Icon(
+    return Icon(
       Icons.notifications_outlined,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.onBackground,
       size: 30,
     );
   }

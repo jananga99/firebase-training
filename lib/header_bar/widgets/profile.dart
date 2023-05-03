@@ -13,10 +13,10 @@ class Profile extends StatelessWidget {
     }
 
     return DropdownButton<String>(
-      icon: const CircleAvatar(
-          backgroundColor: Colors.deepPurple,
+      icon: CircleAvatar(
+          backgroundColor: Theme.of(context).iconTheme.color,
           radius: 15,
-          child: Icon(Icons.person_2_rounded)),
+          child: const Icon(Icons.person_2_rounded)),
       onChanged: (String? value) {
         if (value == "sign-out") {
           handleSignOut();

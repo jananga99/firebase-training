@@ -62,16 +62,16 @@ class _NotePageState extends State<NotePage> {
                     Widget returnWidget;
                     switch (state.noteStatus) {
                       case NoteStatus.initial:
-                        returnWidget = const Center(
+                        returnWidget = Center(
                           child: CircularProgressIndicator(
-                            color: Colors.green,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         );
                         break;
                       case NoteStatus.loading:
-                        returnWidget = const Center(
+                        returnWidget = Center(
                           child: CircularProgressIndicator(
-                            color: Colors.green,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                         );
                         break;

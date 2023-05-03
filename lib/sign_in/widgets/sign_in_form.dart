@@ -70,11 +70,13 @@ class _SignInFormState extends State<SignInForm> {
                 hintText: 'Email*',
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.onSecondary),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.onSecondary),
                 ),
               ),
               validator: (value) {
@@ -95,11 +97,13 @@ class _SignInFormState extends State<SignInForm> {
                 hintText: 'Password*',
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.onSecondary),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(color: Colors.black),
+                  borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.onSecondary),
                 ),
               ),
               validator: (value) {
@@ -119,16 +123,16 @@ class _SignInFormState extends State<SignInForm> {
                 backgroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
                   if (states.contains(MaterialState.disabled)) {
-                    return Colors.black12;
+                    return Theme.of(context).colorScheme.onSurface;
                   }
-                  return Colors.blue;
+                  return Theme.of(context).colorScheme.primary;
                 }),
                 foregroundColor: MaterialStateProperty.resolveWith<Color>(
                     (Set<MaterialState> states) {
                   if (states.contains(MaterialState.disabled)) {
-                    return Colors.white;
+                    return Theme.of(context).colorScheme.onBackground;
                   }
-                  return Colors.white;
+                  return Theme.of(context).colorScheme.onBackground;
                 }),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -157,8 +161,8 @@ class _SignInFormState extends State<SignInForm> {
                           margin: const EdgeInsets.symmetric(vertical: 15),
                           child: Text(
                             state.error ?? '',
-                            style: const TextStyle(
-                                color: Colors.red,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.error,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold),
                           ))),

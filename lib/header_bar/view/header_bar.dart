@@ -19,7 +19,7 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: const Color(0xff00ffff),
+      backgroundColor: Theme.of(context).colorScheme.background,
       elevation: 0,
       actions: [
         Container(

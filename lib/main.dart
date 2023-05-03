@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project1/common/constants.dart';
+import 'package:project1/common/theme.dart';
 import 'package:project1/header_bar/header_bar.dart';
 import 'package:project1/home/home.dart';
 import 'package:project1/note/note.dart';
@@ -52,9 +53,7 @@ class App extends StatelessWidget {
       child: MaterialApp(
         title: '',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: CustomTheme.getThemeData(),
         initialRoute: RouteConstants.homeRoute,
         routes: {
           RouteConstants.signUpEmailRoute: (context) => const EmailSignUpPage(),

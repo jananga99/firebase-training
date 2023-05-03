@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: HeaderBar(),
-      backgroundColor: const Color(0xff00ffff),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -20,11 +20,11 @@ class HomePage extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "Home",
                         style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onBackground,
                             fontSize: 25,
                             fontWeight: FontWeight.w900),
                       ),
@@ -34,11 +34,11 @@ class HomePage extends StatelessWidget {
                   margin: const EdgeInsets.symmetric(vertical: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         "You are here: Home",
                         style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.onBackground,
                             fontSize: 15,
                             fontWeight: FontWeight.normal),
                       ),
