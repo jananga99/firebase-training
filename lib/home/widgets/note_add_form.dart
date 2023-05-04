@@ -16,13 +16,16 @@ class NoteAddForm extends StatefulWidget {
 class _NoteAddFormState extends State<NoteAddForm> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController titleInputController = TextEditingController();
-  TextEditingController descriptionInputController = TextEditingController();
+  final TextEditingController _titleInputController = TextEditingController();
+  final TextEditingController _descriptionInputController =
+      TextEditingController();
+  late NotesBloc _notesBloc;
 
   @override
   void dispose() {
-    descriptionInputController.dispose();
-    titleInputController.dispose();
+    _descriptionInputController.dispose();
+    _titleInputController.dispose();
+    _notesBloc.add(AddNoteReset());
     super.dispose();
   }
 
@@ -32,8 +35,8 @@ class _NoteAddFormState extends State<NoteAddForm> {
       final String? email = context.read<SignInBloc>().state.user?.email;
       if (_formKey.currentState!.validate() && email != null) {
         context.read<NotesBloc>().add(AddNoteStarted(Note(
-            title: titleInputController.text,
-            description: descriptionInputController.text,
+            title: _titleInputController.text,
+            description: _descriptionInputController.text,
             email: email)));
       }
     }
@@ -49,7 +52,7 @@ class _NoteAddFormState extends State<NoteAddForm> {
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 child: TextFormField(
-                  controller: titleInputController,
+                  controller: _titleInputController,
                   cursorColor: Theme.of(context).colorScheme.onBackground,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(20),
@@ -82,7 +85,7 @@ class _NoteAddFormState extends State<NoteAddForm> {
                 child: TextFormField(
                   maxLines: null,
                   minLines: 10,
-                  controller: descriptionInputController,
+                  controller: _descriptionInputController,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: const Color(0xff4284f5),
@@ -136,6 +139,7 @@ class _NoteAddFormState extends State<NoteAddForm> {
                 buildWhen: (prev, state) =>
                     prev.addNoteStatus != state.addNoteStatus,
                 builder: (context, state) {
+                  _notesBloc = context.read<NotesBloc>();
                   return Column(
                     children: [
                       Visibility(

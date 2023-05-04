@@ -31,3 +31,9 @@ class SignUpFailed extends SignUpEvent {
   final String? error;
   SignUpFailed({this.error = Messages.signUpFailed});
 }
+
+class SignUpReset extends SignUpEvent {}
+
+class EmailReset extends SignUpEvent {}
+
+class PasswordReset extends SignUpEvent {}

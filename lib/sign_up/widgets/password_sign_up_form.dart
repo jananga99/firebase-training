@@ -14,7 +14,10 @@ class PasswordSignUpForm extends StatefulWidget {
 class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController passwordInputController = TextEditingController();
+  final TextEditingController _passwordInputController =
+      TextEditingController();
+
+  late SignUpBloc _signUpBloc;
 
   bool isRegisterButtonDisabled() {
     return isPasswordEmpty;
@@ -26,35 +29,34 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
   @override
   void initState() {
     super.initState();
-    final state = context.read<SignUpBloc>().state;
-    final email = state.email;
+    final email = context.read<SignUpBloc>().state.email;
     if (email == null) {
       Navigator.of(context)
           .pushReplacementNamed(RouteConstants.signUpEmailRoute);
     }
-    passwordInputController.addListener(() {
+    _passwordInputController.addListener(() {
       setState(() {
-        isPasswordEmpty = passwordInputController.text.isEmpty;
+        isPasswordEmpty = _passwordInputController.text.isEmpty;
       });
     });
   }
 
   void handleSignUpSuccess() {
+    _signUpBloc.add(SignUpReset());
     Navigator.of(context).pushReplacementNamed(RouteConstants.homeRoute);
   }
 
   @override
   void dispose() {
-    passwordInputController.dispose();
+    _passwordInputController.dispose();
+    _signUpBloc.add(PasswordReset());
     super.dispose();
   }
 
   Future<void> handleSignUp() async {
     if (_formKey.currentState!.validate()) {
-      context
-          .read<SignUpBloc>()
-          .add(SignUpStarted(passwordInputController.text));
-      passwordInputController.clear();
+      _signUpBloc.add(SignUpStarted(_passwordInputController.text));
+      _passwordInputController.clear();
     }
   }
 
@@ -69,7 +71,7 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
             width: 300,
             margin: const EdgeInsets.all(20),
             child: TextFormField(
-              controller: passwordInputController,
+              controller: _passwordInputController,
               obscureText: true,
               decoration: InputDecoration(
                 hintText: 'Password*',
@@ -132,6 +134,7 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
               }
             },
             builder: (context, state) {
+              _signUpBloc = context.read<SignUpBloc>();
               return Column(
                 children: [
                   Visibility(

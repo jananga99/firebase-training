@@ -44,7 +44,7 @@ class SignInBloc extends Bloc<SignInEvent, SignInState> {
 
   Future<void> _onSignInStarted(
       SignInStarted event, Emitter<SignInState> emit) async {
-    emit(state.copyWith(status: SignInStatus.loading));
+    emit(state.copyWith(status: SignInStatus.loading, error: null));
     try {
       final SignInResult result =
           await _userRepository.signIn(event.email, event.password);

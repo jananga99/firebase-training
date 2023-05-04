@@ -16,6 +16,8 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     on<AddNoteStarted>(_onAddNoteStarted);
     on<AddNoteSucceeded>(_onAddNoteSucceeded);
     on<AddNoteFailed>(_onAddNoteFailed);
+    on<FetchNotesReset>(_onFetchNotesReset);
+    on<AddNoteReset>(_onAddNoteReset);
   }
 
   final NoteRepository _noteRepository;
@@ -26,6 +28,12 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
   Future<void> close() {
     _notesSubscription?.cancel();
     return super.close();
+  }
+
+  void _onFetchNotesReset(FetchNotesReset event, Emitter<NotesState> emit) {
+    _notesSubscription?.cancel();
+    emit(state.copyWith(
+        fetchNotes: <Note>[], fetchNotesStatus: FetchNotesStatus.initial));
   }
 
   void _onNotesFetched(
@@ -58,6 +66,10 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
     Emitter<NotesState> emit,
   ) {
     emit(state.copyWith(fetchNotesStatus: FetchNotesStatus.failure));
+  }
+
+  void _onAddNoteReset(AddNoteReset event, Emitter<NotesState> emit) {
+    emit(state.copyWith(addNoteStatus: AddNoteStatus.initial, addNote: null));
   }
 
   Future<void> _onAddNoteStarted(

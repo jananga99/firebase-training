@@ -15,7 +15,9 @@ class EmailSignUpForm extends StatefulWidget {
 class _EmailSignUpFormState extends State<EmailSignUpForm> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController emailInputController = TextEditingController();
+  final TextEditingController _emailInputController = TextEditingController();
+
+  late SignUpBloc _signUpBloc;
 
   bool isContinueButtonDisabled() {
     return isEmailEmpty;
@@ -30,33 +32,32 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
     final email = context.read<SignUpBloc>().state.email;
 
     if (email != null && email.isNotEmpty) {
-      emailInputController.text = email;
+      _emailInputController.text = email;
       setState(() {
         isEmailEmpty = false;
       });
     }
-    emailInputController.addListener(() {
+    _emailInputController.addListener(() {
       setState(() {
-        isEmailEmpty = emailInputController.text.isEmpty;
+        isEmailEmpty = _emailInputController.text.isEmpty;
       });
     });
   }
 
   @override
   void dispose() {
-    emailInputController.dispose();
+    _emailInputController.dispose();
     super.dispose();
   }
 
   void handleContinue() async {
     if (_formKey.currentState!.validate()) {
-      context
-          .read<SignUpBloc>()
-          .add(EmailCheckStarted(emailInputController.text));
+      _signUpBloc.add(EmailCheckStarted(_emailInputController.text));
     }
   }
 
   void handleEmailChecked() {
+    _signUpBloc.add(EmailReset());
     Navigator.of(context).pushReplacementNamed(
         RouteConstants.signUpPasswordRoute,
         arguments: context.read<SignUpBloc>());
@@ -73,7 +74,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
             width: 300,
             margin: const EdgeInsets.all(20),
             child: TextFormField(
-              controller: emailInputController,
+              controller: _emailInputController,
               decoration: InputDecoration(
                 hintText: 'Email*',
                 focusedBorder: OutlineInputBorder(
@@ -136,6 +137,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
               }
             },
             builder: (context, state) {
+              _signUpBloc = context.read<SignUpBloc>();
               return Column(
                 children: [
                   Visibility(

@@ -6,6 +6,8 @@ abstract class NotesEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class FetchNotesReset extends NotesEvent {}
+
 class FetchNotesStarted extends NotesEvent {}
 
 class NotesFetched extends NotesEvent {
@@ -26,3 +28,5 @@ class AddNoteSucceeded extends NotesEvent {
 }
 
 class AddNoteFailed extends NotesEvent {}
+
+class AddNoteReset extends NotesEvent {}

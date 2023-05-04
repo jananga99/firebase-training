@@ -16,11 +16,15 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     on<SignUpStarted>(_onSignUpStarted);
     on<SignUpSucceeded>(_onSignUpSucceeded);
     on<SignUpFailed>(_onSignUpFailed);
+    on<SignUpReset>(_onSignUpReset);
+    on<EmailReset>(_onEmailReset);
+    on<PasswordReset>(_onPasswordReset);
   }
 
   Future<void> _onEmailCheckStarted(
       EmailCheckStarted event, Emitter<SignUpState> emit) async {
-    emit(state.copyWith(status: SignUpStatus.emailChecking));
+    emit(state.copyWith(
+        status: SignUpStatus.emailChecking, password: null, signUpError: null));
     final SignUpEmailCheckResult result =
         await _userRepository.isEmailAlreadyRegistered(event.email);
     if (result.success && result.isRegistered.runtimeType == bool) {
@@ -36,12 +40,17 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
   void _onEmailCheckSucceeded(
       EmailCheckSucceeded event, Emitter<SignUpState> emit) {
-    emit(state.copyWith(status: SignUpStatus.emailChecked, email: event.email));
+    emit(state.copyWith(
+        status: SignUpStatus.emailChecked,
+        email: event.email,
+        emailCheckError: null));
   }
 
   void _onEmailCheckFailed(EmailCheckFailed event, Emitter<SignUpState> emit) {
     emit(state.copyWith(
-        status: SignUpStatus.emailCheckFailure, emailCheckError: event.error));
+        status: SignUpStatus.emailCheckFailure,
+        emailCheckError: event.error,
+        email: null));
   }
 
   Future<void> _onSignUpStarted(
@@ -61,12 +70,29 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   }
 
   void _onSignUpSucceeded(SignUpSucceeded event, Emitter<SignUpState> emit) {
-    emit(state.copyWith(
-        status: SignUpStatus.signUpSucceeded, email: null, password: null));
+    emit(state.copyWith(status: SignUpStatus.signUpSucceeded));
   }
 
   void _onSignUpFailed(SignUpFailed event, Emitter<SignUpState> emit) {
     emit(state.copyWith(
         status: SignUpStatus.signUpFailure, signUpError: event.error));
+  }
+
+  void _onSignUpReset(SignUpReset event, Emitter<SignUpState> emit) {
+    emit(state.copyWith(
+        status: SignUpStatus.initial,
+        email: null,
+        password: null,
+        emailCheckError: null,
+        signUpError: null));
+  }
+
+  void _onPasswordReset(PasswordReset event, Emitter<SignUpState> emit) {
+    emit(state.copyWith(
+        status: SignUpStatus.initial, password: null, signUpError: null));
+  }
+
+  void _onEmailReset(EmailReset event, Emitter<SignUpState> emit) {
+    emit(state.copyWith(status: SignUpStatus.initial, emailCheckError: null));
   }
 }

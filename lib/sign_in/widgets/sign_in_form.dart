@@ -12,9 +12,11 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailInputController = TextEditingController();
+  final TextEditingController _passwordInputController =
+      TextEditingController();
 
-  TextEditingController emailInputController = TextEditingController();
-  TextEditingController passwordInputController = TextEditingController();
+  late SignInBloc _signInBloc;
 
   bool isEmailEmpty = true;
   bool isPasswordEmpty = true;
@@ -22,22 +24,22 @@ class _SignInFormState extends State<SignInForm> {
   @override
   void initState() {
     super.initState();
-    emailInputController.addListener(() {
+    _emailInputController.addListener(() {
       setState(() {
-        isEmailEmpty = emailInputController.text.isEmpty;
+        isEmailEmpty = _emailInputController.text.isEmpty;
       });
     });
-    passwordInputController.addListener(() {
+    _passwordInputController.addListener(() {
       setState(() {
-        isPasswordEmpty = passwordInputController.text.isEmpty;
+        isPasswordEmpty = _passwordInputController.text.isEmpty;
       });
     });
   }
 
   @override
   void dispose() {
-    emailInputController.dispose();
-    passwordInputController.dispose();
+    _emailInputController.dispose();
+    _passwordInputController.dispose();
     super.dispose();
   }
 
@@ -49,11 +51,11 @@ class _SignInFormState extends State<SignInForm> {
   Widget build(BuildContext context) {
     Future<void> handleSignIn() async {
       if (_formKey.currentState!.validate()) {
-        context.read<SignInBloc>().add(SignInStarted(
-            email: emailInputController.text,
-            password: passwordInputController.text));
+        _signInBloc.add(SignInStarted(
+            email: _emailInputController.text,
+            password: _passwordInputController.text));
       }
-      passwordInputController.clear();
+      _passwordInputController.clear();
     }
 
     return Form(
@@ -65,7 +67,7 @@ class _SignInFormState extends State<SignInForm> {
             width: 300,
             margin: const EdgeInsets.all(20),
             child: TextFormField(
-              controller: emailInputController,
+              controller: _emailInputController,
               decoration: InputDecoration(
                 hintText: 'Email*',
                 focusedBorder: OutlineInputBorder(
@@ -91,7 +93,7 @@ class _SignInFormState extends State<SignInForm> {
             width: 300,
             margin: const EdgeInsets.all(20),
             child: TextFormField(
-              controller: passwordInputController,
+              controller: _passwordInputController,
               obscureText: true,
               decoration: InputDecoration(
                 hintText: 'Password*',
@@ -150,6 +152,7 @@ class _SignInFormState extends State<SignInForm> {
           BlocBuilder<SignInBloc, SignInState>(
             buildWhen: (prev, current) => prev.status != current.status,
             builder: (context, state) {
+              _signInBloc = context.read<SignInBloc>();
               return Column(
                 children: [
                   Visibility(

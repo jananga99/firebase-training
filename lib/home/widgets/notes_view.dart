@@ -7,13 +7,29 @@ import '../../repositories/repositories.dart';
 import '../bloc/notes_bloc.dart';
 import 'note_card.dart';
 
-class NotesView extends StatelessWidget {
+class NotesView extends StatefulWidget {
   const NotesView({Key? key}) : super(key: key);
 
   @override
+  State<NotesView> createState() => _NotesViewState();
+}
+
+class _NotesViewState extends State<NotesView> {
+  late NotesBloc _notesBloc;
+  late NoteBloc _noteBloc;
+
+  @override
+  void dispose() {
+    _notesBloc.add(FetchNotesReset());
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _noteBloc = context.read<NoteBloc>();
+
     void handleCardPress(String id) {
-      context.read<NoteBloc>().add(NoteStarted(id: id));
+      _noteBloc.add(NoteStarted(id: id));
       Navigator.of(context).pushReplacementNamed(RouteConstants.noteViewRoute);
     }
 
@@ -22,10 +38,11 @@ class NotesView extends StatelessWidget {
           prev.fetchNotesStatus != FetchNotesStatus.failure ||
           state.fetchNotesStatus != FetchNotesStatus.failure,
       builder: (context, state) {
+        _notesBloc = context.read<NotesBloc>();
         Widget returnWidget;
         switch (state.fetchNotesStatus) {
           case FetchNotesStatus.initial:
-            context.read<NotesBloc>().add(FetchNotesStarted());
+            _notesBloc.add(FetchNotesStarted());
             returnWidget = Center(
               child: CircularProgressIndicator(
                 color: Theme.of(context).colorScheme.secondary,
