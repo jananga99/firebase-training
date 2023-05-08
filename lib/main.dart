@@ -26,16 +26,16 @@ Future<void> main() async {
 
   runApp(MultiBlocProvider(
     providers: [
-      BlocProvider<SignUpBloc>(
-          create: (BuildContext context) => SignUpBloc(userRepository)),
-      BlocProvider<SignInBloc>(
-          create: (BuildContext context) => SignInBloc(userRepository)),
-      BlocProvider<NotesBloc>(
-          create: (BuildContext context) => NotesBloc(noteRepository)),
-      BlocProvider<NoteBloc>(
-          create: (BuildContext context) => NoteBloc(noteRepository)),
-      BlocProvider<BatteryBloc>(
-          create: (BuildContext context) => BatteryBloc(batteryRepository)),
+      BlocProvider<SignUpCubit>(
+          create: (BuildContext context) => SignUpCubit(userRepository)),
+      BlocProvider<AuthCubit>(
+          create: (BuildContext context) => AuthCubit(userRepository)),
+      BlocProvider<NotesCubit>(
+          create: (BuildContext context) => NotesCubit(noteRepository)),
+      BlocProvider<NoteCubit>(
+          create: (BuildContext context) => NoteCubit(noteRepository)),
+      BlocProvider<BatteryCubit>(
+          create: (BuildContext context) => BatteryCubit(batteryRepository)),
     ],
     child: const App(),
   ));

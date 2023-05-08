@@ -1,2 +1,2 @@
-export 'bloc/note_bloc.dart';
+export 'cubit/note_cubit.dart';
 export 'view/note_page.dart';

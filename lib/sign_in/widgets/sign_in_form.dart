@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/sign_in_bloc.dart';
+import '../cubit/auth_cubit.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class _SignInFormState extends State<SignInForm> {
   final TextEditingController _passwordInputController =
       TextEditingController();
 
-  late SignInBloc _signInBloc;
+  late AuthCubit _authCubit;
 
   bool isEmailEmpty = true;
   bool isPasswordEmpty = true;
@@ -51,9 +51,9 @@ class _SignInFormState extends State<SignInForm> {
   Widget build(BuildContext context) {
     Future<void> handleSignIn() async {
       if (_formKey.currentState!.validate()) {
-        _signInBloc.add(SignInStarted(
+        _authCubit.signIn(
             email: _emailInputController.text,
-            password: _passwordInputController.text));
+            password: _passwordInputController.text);
       }
       _passwordInputController.clear();
     }
@@ -149,17 +149,17 @@ class _SignInFormState extends State<SignInForm> {
               ),
             ),
           ),
-          BlocBuilder<SignInBloc, SignInState>(
+          BlocBuilder<AuthCubit, AuthState>(
             buildWhen: (prev, current) => prev.status != current.status,
             builder: (context, state) {
-              _signInBloc = context.read<SignInBloc>();
+              _authCubit = context.read<AuthCubit>();
               return Column(
                 children: [
                   Visibility(
-                      visible: state.status == SignInStatus.loading,
+                      visible: state.status == AuthStatus.loading,
                       child: const CircularProgressIndicator()),
                   Visibility(
-                      visible: state.status == SignInStatus.failure,
+                      visible: state.status == AuthStatus.failure,
                       child: Container(
                           margin: const EdgeInsets.symmetric(vertical: 15),
                           child: Text(

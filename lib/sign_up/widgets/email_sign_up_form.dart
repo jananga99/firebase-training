@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/constants.dart';
-import '../bloc/sign_up_bloc.dart';
+import '../cubit/sign_up_cubit.dart';
 
 class EmailSignUpForm extends StatefulWidget {
   const EmailSignUpForm({super.key});
@@ -17,7 +17,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
 
   final TextEditingController _emailInputController = TextEditingController();
 
-  late SignUpBloc _signUpBloc;
+  late SignUpCubit _signUpCubit;
 
   bool isContinueButtonDisabled() {
     return isEmailEmpty;
@@ -29,7 +29,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
   void initState() {
     super.initState();
 
-    final email = context.read<SignUpBloc>().state.email;
+    final email = context.read<SignUpCubit>().state.email;
 
     if (email != null && email.isNotEmpty) {
       _emailInputController.text = email;
@@ -52,15 +52,15 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
 
   void handleContinue() async {
     if (_formKey.currentState!.validate()) {
-      _signUpBloc.add(EmailCheckStarted(_emailInputController.text));
+      _signUpCubit.checkEmail(_emailInputController.text);
     }
   }
 
   void handleEmailChecked() {
-    _signUpBloc.add(EmailReset());
+    _signUpCubit.resetEmail();
     Navigator.of(context).pushReplacementNamed(
         RouteConstants.signUpPasswordRoute,
-        arguments: context.read<SignUpBloc>());
+        arguments: context.read<SignUpCubit>());
   }
 
   @override
@@ -130,14 +130,14 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
               ),
             ),
           ),
-          BlocConsumer<SignUpBloc, SignUpState>(
+          BlocConsumer<SignUpCubit, SignUpState>(
             listener: (context, state) {
               if (state.status == SignUpStatus.emailChecked) {
                 handleEmailChecked();
               }
             },
             builder: (context, state) {
-              _signUpBloc = context.read<SignUpBloc>();
+              _signUpCubit = context.read<SignUpCubit>();
               return Column(
                 children: [
                   Visibility(

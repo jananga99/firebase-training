@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project1/common/constants.dart';
 import 'package:project1/sign_in/sign_in.dart';
 
-import '../../repositories/note_repository/note_repository.dart';
-import '../bloc/notes_bloc.dart';
+import '../../repositories/repositories.dart';
+import '../cubit/notes_cubit.dart';
 
 class NoteAddForm extends StatefulWidget {
   const NoteAddForm({Key? key}) : super(key: key);
@@ -19,25 +19,25 @@ class _NoteAddFormState extends State<NoteAddForm> {
   final TextEditingController _titleInputController = TextEditingController();
   final TextEditingController _descriptionInputController =
       TextEditingController();
-  late NotesBloc _notesBloc;
+  late NotesCubit _notesCubit;
 
   @override
   void dispose() {
     _descriptionInputController.dispose();
     _titleInputController.dispose();
-    _notesBloc.add(AddNoteReset());
+    _notesCubit.resetAddingNote();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     Future<void> handleSubmit() async {
-      final String? email = context.read<SignInBloc>().state.user?.email;
+      final String? email = context.read<AuthCubit>().state.user?.email;
       if (_formKey.currentState!.validate() && email != null) {
-        context.read<NotesBloc>().add(AddNoteStarted(Note(
+        context.read<NotesCubit>().addNote(Note(
             title: _titleInputController.text,
             description: _descriptionInputController.text,
-            email: email)));
+            email: email));
       }
     }
 
@@ -135,11 +135,11 @@ class _NoteAddFormState extends State<NoteAddForm> {
                   ),
                 ),
               ),
-              BlocBuilder<NotesBloc, NotesState>(
+              BlocBuilder<NotesCubit, NotesState>(
                 buildWhen: (prev, state) =>
                     prev.addNoteStatus != state.addNoteStatus,
                 builder: (context, state) {
-                  _notesBloc = context.read<NotesBloc>();
+                  _notesCubit = context.read<NotesCubit>();
                   return Column(
                     children: [
                       Visibility(

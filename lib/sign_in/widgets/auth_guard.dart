@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../bloc/sign_in_bloc.dart';
+import '../cubit/auth_cubit.dart';
 import '../view/sign_in_page.dart';
 
 class AuthGuard extends StatelessWidget {
@@ -12,10 +12,10 @@ class AuthGuard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SignInBloc, SignInState>(
+    return BlocBuilder<AuthCubit, AuthState>(
       buildWhen: (previous, current) => previous.user != current.user,
       builder: (context, state) {
-        return state.status == SignInStatus.authorized && state.user != null
+        return state.status == AuthStatus.authorized && state.user != null
             ? _component
             : const SignInPage();
       },

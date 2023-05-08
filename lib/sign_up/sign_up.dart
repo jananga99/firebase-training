@@ -1,3 +1,3 @@
-export 'bloc/sign_up_bloc.dart';
+export 'cubit/sign_up_cubit.dart';
 export 'view/view.dart';
 export 'widgets/widgets.dart';

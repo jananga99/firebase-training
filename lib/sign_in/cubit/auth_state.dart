@@ -1,28 +1,28 @@
-part of 'sign_in_bloc.dart';
+part of 'auth_cubit.dart';
 
-enum SignInStatus { initial, loading, authorized, unauthorized, failure }
+enum AuthStatus { initial, loading, authorized, unauthorized, failure }
 
-class SignInState extends Equatable {
-  const SignInState(
-      {this.status = SignInStatus.initial,
+class AuthState extends Equatable {
+  const AuthState(
+      {this.status = AuthStatus.initial,
       this.email,
       this.password,
       this.error,
       this.user});
 
-  final SignInStatus status;
+  final AuthStatus status;
   final String? email;
   final String? password;
   final String? error;
   final User? user;
 
-  SignInState copyWith(
-      {SignInStatus? status,
+  AuthState copyWith(
+      {AuthStatus? status,
       String? email,
       String? password,
       String? error,
       User? user}) {
-    return SignInState(
+    return AuthState(
         status: status ?? this.status,
         email: email ?? this.email,
         password: password ?? this.password,

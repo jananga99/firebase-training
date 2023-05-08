@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/theme.dart';
-import '../bloc/battery_bloc.dart';
+import '../cubit/battery_cubit.dart';
 
 class BatteryIcon extends StatefulWidget {
   const BatteryIcon({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class BatteryIcon extends StatefulWidget {
 class _BatteryIconState extends State<BatteryIcon> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BatteryBloc, BatteryState>(
+    return BlocBuilder<BatteryCubit, BatteryState>(
       buildWhen: (prev, current) => prev != current,
       builder: (context, state) {
         return Container(

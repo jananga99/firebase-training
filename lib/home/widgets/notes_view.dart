@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project1/home/cubit/notes_cubit.dart';
 
 import '../../common/constants.dart';
 import '../../note/note.dart';
 import '../../repositories/repositories.dart';
-import '../bloc/notes_bloc.dart';
 import 'note_card.dart';
 
 class NotesView extends StatefulWidget {
@@ -15,34 +15,34 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesViewState extends State<NotesView> {
-  late NotesBloc _notesBloc;
-  late NoteBloc _noteBloc;
+  late NotesCubit _notesCubit;
+  late NoteCubit _noteCubit;
 
   @override
   void dispose() {
-    _notesBloc.add(FetchNotesReset());
+    _notesCubit.resetFetchingNotes();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _noteBloc = context.read<NoteBloc>();
+    _noteCubit = context.read<NoteCubit>();
 
     void handleCardPress(String id) {
-      _noteBloc.add(NoteStarted(id: id));
+      _noteCubit.fetchNote(id);
       Navigator.of(context).pushReplacementNamed(RouteConstants.noteViewRoute);
     }
 
-    return BlocBuilder<NotesBloc, NotesState>(
+    return BlocBuilder<NotesCubit, NotesState>(
       buildWhen: (prev, state) =>
           prev.fetchNotesStatus != FetchNotesStatus.failure ||
           state.fetchNotesStatus != FetchNotesStatus.failure,
       builder: (context, state) {
-        _notesBloc = context.read<NotesBloc>();
+        _notesCubit = context.read<NotesCubit>();
         Widget returnWidget;
         switch (state.fetchNotesStatus) {
           case FetchNotesStatus.initial:
-            _notesBloc.add(FetchNotesStarted());
+            _notesCubit.fetchNotes();
             returnWidget = Center(
               child: CircularProgressIndicator(
                 color: Theme.of(context).colorScheme.secondary,

@@ -1,3 +1,3 @@
-export 'bloc/notes_bloc.dart';
+export 'cubit/notes_cubit.dart';
 export 'view/home_page.dart';
 export 'widgets/widgets.dart';

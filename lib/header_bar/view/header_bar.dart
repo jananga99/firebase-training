@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project1/repositories/battery_repository/battery_repository.dart';
 
-import '../bloc/battery_bloc.dart';
+import '../cubit/battery_cubit.dart';
 import '../widgets/widgets.dart';
 
 class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
@@ -32,8 +32,8 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
         RepositoryProvider(
           create: (context) => _batteryRepository,
           child: BlocProvider(
-            create: (context) => BatteryBloc(_batteryRepository)
-              ..add(BatteryPercentageFetchingStarted()),
+            create: (context) =>
+                BatteryCubit(_batteryRepository)..fetchPercentage(),
             child: const BatteryIcon(),
           ),
         )

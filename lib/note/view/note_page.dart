@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/constants.dart';
 import '../../header_bar/header_bar.dart';
-import '../bloc/note_bloc.dart';
+import '../cubit/note_cubit.dart';
 import '../widgets/note_card.dart';
 
 class NotePage extends StatefulWidget {
@@ -19,7 +19,7 @@ class _NotePageState extends State<NotePage> {
   @override
   void initState() {
     super.initState();
-    final String? stateId = context.read<NoteBloc>().state.id;
+    final String? stateId = context.read<NoteCubit>().state.id;
     if (stateId == null || stateId.isEmpty) {
       Future(() {
         Navigator.pushReplacementNamed(context, RouteConstants.homeRoute);
@@ -54,7 +54,7 @@ class _NotePageState extends State<NotePage> {
               ),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 50),
-                child: BlocBuilder<NoteBloc, NoteState>(
+                child: BlocBuilder<NoteCubit, NoteState>(
                   buildWhen: (prev, state) =>
                       prev.noteStatus != NoteStatus.failure ||
                       state.noteStatus != NoteStatus.failure,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/constants.dart';
-import '../bloc/sign_up_bloc.dart';
+import '../cubit/sign_up_cubit.dart';
 
 class PasswordSignUpForm extends StatefulWidget {
   const PasswordSignUpForm({super.key});
@@ -17,7 +17,7 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
   final TextEditingController _passwordInputController =
       TextEditingController();
 
-  late SignUpBloc _signUpBloc;
+  late SignUpCubit _signUpCubit;
 
   bool isRegisterButtonDisabled() {
     return isPasswordEmpty;
@@ -29,7 +29,7 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
   @override
   void initState() {
     super.initState();
-    final email = context.read<SignUpBloc>().state.email;
+    final email = context.read<SignUpCubit>().state.email;
     if (email == null) {
       Navigator.of(context)
           .pushReplacementNamed(RouteConstants.signUpEmailRoute);
@@ -42,20 +42,20 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
   }
 
   void handleSignUpSuccess() {
-    _signUpBloc.add(SignUpReset());
+    _signUpCubit.resetEmail();
     Navigator.of(context).pushReplacementNamed(RouteConstants.homeRoute);
   }
 
   @override
   void dispose() {
     _passwordInputController.dispose();
-    _signUpBloc.add(PasswordReset());
+    _signUpCubit.resetPassword();
     super.dispose();
   }
 
   Future<void> handleSignUp() async {
     if (_formKey.currentState!.validate()) {
-      _signUpBloc.add(SignUpStarted(_passwordInputController.text));
+      _signUpCubit.signUp(_passwordInputController.text);
       _passwordInputController.clear();
     }
   }
@@ -127,14 +127,14 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
               ),
             ),
           ),
-          BlocConsumer<SignUpBloc, SignUpState>(
+          BlocConsumer<SignUpCubit, SignUpState>(
             listener: (context, state) {
               if (state.status == SignUpStatus.signUpSucceeded) {
                 handleSignUpSuccess();
               }
             },
             builder: (context, state) {
-              _signUpBloc = context.read<SignUpBloc>();
+              _signUpCubit = context.read<SignUpCubit>();
               return Column(
                 children: [
                   Visibility(

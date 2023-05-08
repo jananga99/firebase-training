@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project1/sign_up/bloc/sign_up_bloc.dart';
 import 'package:project1/sign_up/widgets/widgets.dart';
 
 import '../../common/constants.dart';
+import '../cubit/sign_up_cubit.dart';
 
 class EmailSignUpPage extends StatelessWidget {
   const EmailSignUpPage({super.key});
@@ -11,7 +11,7 @@ class EmailSignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void handleSignIn() {
-      context.read<SignUpBloc>().add(SignUpReset());
+      context.read<SignUpCubit>().resetSignUp();
       Navigator.pushReplacementNamed(context, RouteConstants.homeRoute);
     }
 

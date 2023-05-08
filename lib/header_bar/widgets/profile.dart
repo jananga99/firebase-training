@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../sign_in/bloc/sign_in_bloc.dart';
+import '../../sign_in/sign_in.dart';
 
 class Profile extends StatelessWidget {
   const Profile({Key? key}) : super(key: key);
@@ -9,7 +9,7 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future<void> handleSignOut() async {
-      context.read<SignInBloc>().add(SignOutStarted());
+      context.read<AuthCubit>().signOut();
     }
 
     return DropdownButton<String>(

@@ -1,4 +1,4 @@
-part of 'notes_bloc.dart';
+part of 'notes_cubit.dart';
 
 enum FetchNotesStatus { initial, loading, onProgress, failure }
 

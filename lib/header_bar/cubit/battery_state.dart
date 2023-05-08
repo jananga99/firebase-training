@@ -1,4 +1,4 @@
-part of 'battery_bloc.dart';
+part of 'battery_cubit.dart';
 
 enum BatteryPercentageFetchingStatus {
   initial,
