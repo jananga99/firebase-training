@@ -29,4 +29,12 @@ class BatteryRepository {
       return const BatteryPercentageResult(notApplied: true);
     }
   }
+
+  Stream<BatteryPercentageResult> getBatteryPercentageStream() async* {
+    while (true) {
+      BatteryPercentageResult res = await getBatteryPercentage();
+      yield res;
+      await Future.delayed(const Duration(seconds: 60));
+    }
+  }
 }

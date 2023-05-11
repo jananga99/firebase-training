@@ -18,21 +18,31 @@ class BatteryBloc extends Bloc<BatteryEvent, BatteryState> {
   }
 
   final BatteryRepository _batteryRepository;
+  StreamSubscription<BatteryPercentageResult>? _batterySubscription;
+
+  @override
+  Future<void> close() {
+    _batterySubscription?.cancel();
+    return super.close();
+  }
 
   Future<void> _onBatteryPercentageFetchingStarted(
       BatteryPercentageFetchingStarted event,
       Emitter<BatteryState> emit) async {
     emit(state.copyWith(status: BatteryPercentageFetchingStatus.loading));
-    final BatteryPercentageResult result =
-        await _batteryRepository.getBatteryPercentage();
-    if (result.notApplied) {
-      add(BatteryPercentageFetchingNotApplied());
-    } else if (result.batteryPercentage != null) {
-      add(BatteryPercentageFetchingSucceeded(
-          battery: result.batteryPercentage!));
-    } else {
-      add(BatteryPercentageFetchingFailed());
-    }
+
+    _batterySubscription = _batteryRepository
+        .getBatteryPercentageStream()
+        .listen((BatteryPercentageResult event) {
+      if (event.notApplied) {
+        add(BatteryPercentageFetchingNotApplied());
+      } else if (event.batteryPercentage == null) {
+        add(BatteryPercentageFetchingFailed());
+      } else {
+        add(BatteryPercentageFetchingSucceeded(
+            battery: event.batteryPercentage!));
+      }
+    });
   }
 
   void _onBatteryPercentageFetchingSucceeded(
