@@ -33,7 +33,7 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
           create: (context) => _batteryRepository,
           child: BlocProvider(
             create: (context) =>
-                BatteryCubit(_batteryRepository)..fetchPercentage(),
+                BatteryCubit(_batteryRepository)..startFetchPercentage(),
             child: const BatteryIcon(),
           ),
         )

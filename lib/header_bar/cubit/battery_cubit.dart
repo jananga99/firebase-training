@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -8,18 +10,27 @@ part 'battery_state.dart';
 class BatteryCubit extends Cubit<BatteryState> {
   BatteryCubit(this._batteryRepository) : super(const BatteryState());
   final BatteryRepository _batteryRepository;
+  StreamSubscription<BatteryPercentageResult>? _batterySubscription;
 
-  Future<void> fetchPercentage() async {
+  @override
+  Future<void> close() {
+    _batterySubscription?.cancel();
+    return super.close();
+  }
+
+  Future<void> startFetchPercentage() async {
     emit(state.copyWith(status: BatteryPercentageFetchingStatus.loading));
-    final BatteryPercentageResult result =
-        await _batteryRepository.getBatteryPercentage();
-    if (result.notApplied) {
-      notApplyFetchPercentage();
-    } else if (result.batteryPercentage != null) {
-      successFetchPercentage(result.batteryPercentage!);
-    } else {
-      failFetchPercentage();
-    }
+    _batterySubscription = _batteryRepository
+        .getBatteryPercentageStream()
+        .listen((BatteryPercentageResult event) {
+      if (event.notApplied) {
+        notApplyFetchPercentage();
+      } else if (event.batteryPercentage == null) {
+        failFetchPercentage();
+      } else {
+        successFetchPercentage(event.batteryPercentage!);
+      }
+    });
   }
 
   void successFetchPercentage(int battery) {
