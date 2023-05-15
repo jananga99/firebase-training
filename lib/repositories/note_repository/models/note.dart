@@ -33,6 +33,15 @@ class Note extends Equatable {
         createdAt: data['createdAt'].toDate());
   }
 
+  factory Note.fromJson(Map<String, dynamic> json) {
+    return Note(
+        id: json['id'],
+        title: json['title'],
+        description: json['description'],
+        email: json['email'],
+        createdAt: DateTime.parse(json['createdAt']));
+  }
+
   Note copyWith(
       {String? id,
       String? title,

@@ -11,7 +11,7 @@ class NotesCubit extends Cubit<NotesState> {
   NotesCubit(this._noteRepository) : super(const NotesState());
   final NoteRepository _noteRepository;
 
-  StreamSubscription<dynamic>? _notesSubscription;
+  StreamSubscription<FetchNotesResult>? _notesSubscription;
 
   @override
   Future<void> close() {
@@ -34,9 +34,12 @@ class NotesCubit extends Cubit<NotesState> {
     emit(state.copyWith(fetchNotesStatus: FetchNotesStatus.loading));
     try {
       _notesSubscription?.cancel();
-      _notesSubscription = _noteRepository.getNotesStream().listen((event) {
-        return successFetchNotes(
-            event.docs.map((e) => Note.fromFirebase(e.id, e.data())).toList());
+      _notesSubscription = _noteRepository.getNotesStreamMock().listen((event) {
+        if (event.success && event.notes != null) {
+          successFetchNotes(event.notes!);
+        } else {
+          failFetchingNotes();
+        }
       });
     } catch (e) {
       return failFetchingNotes();

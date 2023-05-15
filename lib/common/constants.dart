@@ -20,6 +20,9 @@ class Messages {
 
   static const String getNotesFailed = "Getting notes failed";
   static const String getNoteFailed = "Getting note failed";
+
+  static const String connectionFailed = "Network error";
+  static const String connectionError = "Failed host lookup";
 }
 
 class Assets {
