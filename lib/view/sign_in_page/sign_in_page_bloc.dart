@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:project1/common/constants.dart';
-import 'package:project1/repositories/user_repository/models/sign_in_result.dart';
-import 'package:project1/repositories/user_repository/user_repository.dart';
+import 'package:project1/db/repo/user_repository.dart';
 
 part 'sign_in_page_event.dart';
 part 'sign_in_page_state.dart';
@@ -46,13 +45,19 @@ class SignInPageBloc extends Bloc<SignInPageEvent, SignInPageState> {
       StartSignInEvent event, Emitter<SignInPageState> emit) async {
     emit(state.clone(status: SignInStatus.loading, error: null));
     try {
-      final SignInResult result =
+      final User? user =
           await _userRepository.signIn(event.email, event.password);
-      if (result.success) {
-        return add(AuthorizeEvent(result.user!));
+      add(AuthorizeEvent((user!)));
+    } on FirebaseAuthException catch (e) {
+      late String errorMessage;
+      if (e.code == 'wrong-password' ||
+          e.code == 'user-not-found' ||
+          e.code == 'invalid-email') {
+        errorMessage = Messages.signInFailedInvalidEmailPassword;
       } else {
-        return add(ErrorSignInEvent(error: result.error!));
+        errorMessage = Messages.signInFailed;
       }
+      add(ErrorSignInEvent(error: errorMessage));
     } catch (e) {
       return add(ErrorSignInEvent());
     }
@@ -80,9 +85,9 @@ class SignInPageBloc extends Bloc<SignInPageEvent, SignInPageState> {
 
   Future<void> _onSignOutStarted(
       StartSignOutEvent event, Emitter<SignInPageState> emit) async {
-    if (await _userRepository.signOut()) {
+    try {
       add(SignOutEvent());
-    } else {
+    } catch (e) {
       add(ErrorSignOutEvent());
     }
   }

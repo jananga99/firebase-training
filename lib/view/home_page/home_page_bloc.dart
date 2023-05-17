@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project1/repositories/note_repository/models/note.dart';
-import 'package:project1/repositories/note_repository/note_repository.dart';
+import 'package:project1/db/model/note.dart';
+import 'package:project1/db/repo/note_repository.dart';
 
 part 'home_page_event.dart';
 part 'home_page_state.dart';
@@ -50,11 +50,9 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     emit(state.clone(fetchNotesStatus: FetchNotesStatus.loading));
     try {
       _notesSubscription?.cancel();
-      _notesSubscription = _noteRepository.getNotesStream().listen((event) {
-        return add(FetchNotesEvent(
-            notes: event.docs
-                .map((e) => Note.fromFirebase(e.id, e.data()))
-                .toList()));
+      _notesSubscription = _noteRepository.query().listen((e) {
+        return add(
+            FetchNotesEvent(notes: _noteRepository.fromQuerySnapshot(e)));
       });
     } catch (e) {
       return add(ErrorFetchNotesEvent());
@@ -76,8 +74,8 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
       AddNoteEvent event, Emitter<HomePageState> emit) async {
     emit(state.clone(addNoteStatus: AddNoteStatus.loading));
     try {
-      final Note? note = await _noteRepository.addNote(event.note);
-      return add(SuccessAddNoteEvent(note!));
+      await _noteRepository.add(event.note);
+      return add(SuccessAddNoteEvent());
     } catch (e) {
       return add(ErrorAddNoteEvent());
     }

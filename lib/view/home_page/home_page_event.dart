@@ -18,10 +18,7 @@ class AddNoteEvent extends HomePageEvent {
   AddNoteEvent(this.note);
 }
 
-class SuccessAddNoteEvent extends HomePageEvent {
-  final Note note;
-  SuccessAddNoteEvent(this.note);
-}
+class SuccessAddNoteEvent extends HomePageEvent {}
 
 class ErrorAddNoteEvent extends HomePageEvent {}
 

@@ -1,8 +1,7 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:project1/common/constants.dart';
-import 'package:project1/repositories/user_repository/models/sign_up_email_check.dart';
-import 'package:project1/repositories/user_repository/models/sign_up_result.dart';
-import 'package:project1/repositories/user_repository/user_repository.dart';
+import 'package:project1/db/repo/user_repository.dart';
 
 part 'sign_up_page_event.dart';
 part 'sign_up_page_state.dart';
@@ -26,16 +25,16 @@ class SignUpPageBloc extends Bloc<SignUpPageEvent, SignUpPageState> {
       CheckEmailEvent event, Emitter<SignUpPageState> emit) async {
     emit(state.clone(
         status: SignUpStatus.emailChecking, password: null, signUpError: null));
-    final SignUpEmailCheckResult result =
-        await _userRepository.isEmailAlreadyRegistered(event.email);
-    if (result.success && result.isRegistered.runtimeType == bool) {
-      if (!result.isRegistered!) {
+    try {
+      final bool isRegistered =
+          await _userRepository.isEmailAlreadyRegistered(event.email);
+      if (!isRegistered) {
         add(SuccessEmailCheckEvent(event.email));
       } else {
         add(ErrorEmailCheckEvent(error: Messages.signUpFailedDuplicateEmail));
       }
-    } else {
-      add(ErrorEmailCheckEvent(error: result.error));
+    } catch (e) {
+      add(ErrorEmailCheckEvent(error: Messages.emailCheckFailed));
     }
   }
 
@@ -59,13 +58,27 @@ class SignUpPageBloc extends Bloc<SignUpPageEvent, SignUpPageState> {
       SignUpEvent event, Emitter<SignUpPageState> emit) async {
     emit(state.clone(status: SignUpStatus.signUpLoading));
     if (state.email != null) {
-      final SignUpResult result =
-          await _userRepository.signUp(state.email!, event.password);
-      if (result.success) {
-        add(SuccessSignUpEvent());
-      } else {
-        add(SignUpFailedEvent(error: result.error));
+      late String errorMessage;
+      try {
+        final UserCredential userCredential =
+            await _userRepository.signUp(state.email!, event.password);
+        if (userCredential.user != null) {
+          return add(SuccessSignUpEvent());
+        } else {
+          errorMessage = Messages.signUpFailed;
+        }
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          errorMessage = Messages.signUpFailedWeakPassword;
+        } else if (e.code == 'email-already-in-use') {
+          errorMessage = Messages.signUpFailedDuplicateEmail;
+        } else {
+          errorMessage = Messages.signUpFailed;
+        }
+      } catch (e) {
+        errorMessage = Messages.signUpFailed;
       }
+      add(SignUpFailedEvent(error: errorMessage));
     } else {
       add(SignUpFailedEvent());
     }

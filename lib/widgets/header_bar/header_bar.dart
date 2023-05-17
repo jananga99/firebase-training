@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project1/repositories/battery_repository/battery_repository.dart';
+import 'package:project1/db/repo/battery_repository.dart';
 import 'package:project1/widgets/header_bar/header_bar_bloc.dart';
 import 'package:project1/widgets/header_bar/widgets/battery.dart';
 import 'package:project1/widgets/header_bar/widgets/home_icon.dart';

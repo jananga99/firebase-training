@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project1/common/constants.dart';
-import 'package:project1/repositories/note_repository/models/note.dart';
+import 'package:project1/db/model/note.dart';
 import 'package:project1/view/home_page/home_page_bloc.dart';
 import 'package:project1/view/sign_in_page/sign_in_page_bloc.dart';
 

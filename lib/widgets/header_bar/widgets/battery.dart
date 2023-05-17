@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../common/theme.dart';
-import '../header_bar_bloc.dart';
+import 'package:project1/common/theme.dart';
+import 'package:project1/widgets/header_bar/header_bar_bloc.dart';
 
 class BatteryIcon extends StatefulWidget {
   const BatteryIcon({Key? key}) : super(key: key);

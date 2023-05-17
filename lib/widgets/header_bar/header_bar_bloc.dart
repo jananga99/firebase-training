@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:project1/repositories/battery_repository/battery_repository.dart';
+import 'package:project1/db/model/battery.dart';
+import 'package:project1/db/repo/battery_repository.dart';
 
 part 'header_bar_event.dart';
 part 'header_bar_state.dart';
@@ -15,7 +16,7 @@ class HeaderBarBloc extends Bloc<HeaderBarEvent, HeaderBarState> {
   }
 
   final BatteryRepository _batteryRepository = BatteryRepository();
-  StreamSubscription<BatteryPercentageResult>? _batterySubscription;
+  StreamSubscription<Battery>? _batterySubscription;
 
   @override
   Future<void> close() {
@@ -27,9 +28,7 @@ class HeaderBarBloc extends Bloc<HeaderBarEvent, HeaderBarState> {
       StartBatteryFetchEvent event, Emitter<HeaderBarState> emit) async {
     emit(state.clone(status: BatteryFetchingStatus.loading));
 
-    _batterySubscription = _batteryRepository
-        .getBatteryPercentageStream()
-        .listen((BatteryPercentageResult event) {
+    _batterySubscription = _batteryRepository.query().listen((Battery event) {
       if (event.notApplied) {
         add(NotAppliedBatteryFetch());
       } else if (event.batteryPercentage == null) {

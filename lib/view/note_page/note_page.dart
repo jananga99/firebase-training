@@ -10,8 +10,8 @@ class NotePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _notePageBloc = BlocProvider.of<NotePageBloc>(context);
-    final String? stateId = _notePageBloc.state.id;
+    final notePageBloc = BlocProvider.of<NotePageBloc>(context);
+    final String? stateId = notePageBloc.state.id;
     late String id;
     if (stateId == null || stateId.isEmpty) {
       Future(() {
