@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project1/common/constants.dart';
 import 'package:project1/common/theme.dart';
-import 'package:project1/view/home_page/home_page_bloc.dart';
-import 'package:project1/view/home_page/home_page_view.dart';
+import 'package:project1/view/home_page/home_page_provider.dart';
 import 'package:project1/view/note_page/note_page.dart';
 import 'package:project1/view/note_page/note_page_bloc.dart';
 import 'package:project1/view/sign_in_page/sign_in_page_bloc.dart';
@@ -30,8 +29,6 @@ Future<void> main() async {
           create: (BuildContext context) => SignUpPageBloc()),
       BlocProvider<SignInPageBloc>(
           create: (BuildContext context) => SignInPageBloc()),
-      BlocProvider<HomePageBloc>(
-          create: (BuildContext context) => HomePageBloc()),
       BlocProvider<NotePageBloc>(
           create: (BuildContext context) => NotePageBloc()),
       BlocProvider<HeaderBarBloc>(
@@ -59,8 +56,8 @@ class App extends StatelessWidget {
           RouteConstants.signUpEmailRoute: (context) => const EmailSignUpPage(),
           RouteConstants.signUpPasswordRoute: (context) =>
               const PasswordSignUpPage(),
-          RouteConstants.homeRoute: (context) => const AuthGuard(
-                component: HomePage(),
+          RouteConstants.homeRoute: (context) => AuthGuard(
+                component: HomePageProvider(),
               ),
           RouteConstants.noteViewRoute: (context) => const AuthGuard(
                 component: NotePage(),
