@@ -9,14 +9,14 @@ part 'home_page_state.dart';
 
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
   HomePageBloc() : super(HomePageState.initialState) {
-    on<FetchNotesEvent>(_onNotesFetched);
-    on<StartFetchNotesEvent>(_onNotesStarted);
-    on<ErrorFetchNotesEvent>(_onNotesFailed);
-    on<AddNoteEvent>(_onAddNoteStarted);
-    on<SuccessAddNoteEvent>(_onAddNoteSucceeded);
-    on<ErrorAddNoteEvent>(_onAddNoteFailed);
-    on<ResetFetchNotesEvent>(_onFetchNotesReset);
-    on<ResetAddNoteEvent>(_onAddNoteReset);
+    on<FetchNotesEvent>(_onFetchNotes);
+    on<StartFetchNotesEvent>(_onStartFetchNotes);
+    on<ErrorFetchNotesEvent>(_onErrorFetchNotes);
+    on<AddNoteEvent>(_onAddNote);
+    on<SuccessAddNoteEvent>(_onSuccessAddNote);
+    on<ErrorAddNoteEvent>(_onErrorAddNote);
+    on<ResetFetchNotesEvent>(_onRestFetchNotes);
+    on<ResetAddNoteEvent>(_onResetAddNote);
   }
 
   final NoteRepository _noteRepository = NoteRepository();
@@ -29,14 +29,14 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     return super.close();
   }
 
-  void _onFetchNotesReset(
+  void _onRestFetchNotes(
       ResetFetchNotesEvent event, Emitter<HomePageState> emit) {
     _notesSubscription?.cancel();
     emit(state.clone(
         fetchNotes: <Note>[], fetchNotesStatus: FetchNotesStatus.initial));
   }
 
-  void _onNotesFetched(
+  void _onFetchNotes(
     FetchNotesEvent event,
     Emitter<HomePageState> emit,
   ) {
@@ -45,7 +45,7 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
         fetchNotes: event.notes));
   }
 
-  Future<void> _onNotesStarted(
+  Future<void> _onStartFetchNotes(
       StartFetchNotesEvent event, Emitter<HomePageState> emit) async {
     emit(state.clone(fetchNotesStatus: FetchNotesStatus.loading));
     try {
@@ -59,18 +59,18 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     }
   }
 
-  void _onNotesFailed(
+  void _onErrorFetchNotes(
     ErrorFetchNotesEvent event,
     Emitter<HomePageState> emit,
   ) {
     emit(state.clone(fetchNotesStatus: FetchNotesStatus.failure));
   }
 
-  void _onAddNoteReset(ResetAddNoteEvent event, Emitter<HomePageState> emit) {
+  void _onResetAddNote(ResetAddNoteEvent event, Emitter<HomePageState> emit) {
     emit(state.clone(addNoteStatus: AddNoteStatus.initial, addNote: null));
   }
 
-  Future<void> _onAddNoteStarted(
+  Future<void> _onAddNote(
       AddNoteEvent event, Emitter<HomePageState> emit) async {
     emit(state.clone(addNoteStatus: AddNoteStatus.loading));
     try {
@@ -81,12 +81,12 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     }
   }
 
-  void _onAddNoteSucceeded(
+  void _onSuccessAddNote(
       SuccessAddNoteEvent event, Emitter<HomePageState> emit) async {
     emit(state.clone(addNoteStatus: AddNoteStatus.succeeded));
   }
 
-  void _onAddNoteFailed(
+  void _onErrorAddNote(
       ErrorAddNoteEvent event, Emitter<HomePageState> emit) async {
     emit(state.clone(addNoteStatus: AddNoteStatus.failure));
   }

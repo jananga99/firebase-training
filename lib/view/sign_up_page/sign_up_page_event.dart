@@ -24,9 +24,9 @@ class SignUpEvent extends SignUpPageEvent {
 
 class SuccessSignUpEvent extends SignUpPageEvent {}
 
-class SignUpFailedEvent extends SignUpPageEvent {
+class ErrorSignUpEvent extends SignUpPageEvent {
   final String? error;
-  SignUpFailedEvent({this.error = Messages.signUpFailed});
+  ErrorSignUpEvent({this.error = Messages.signUpFailed});
 }
 
 class ResetSignUpEvent extends SignUpPageEvent {}

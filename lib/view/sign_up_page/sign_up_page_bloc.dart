@@ -10,18 +10,18 @@ class SignUpPageBloc extends Bloc<SignUpPageEvent, SignUpPageState> {
   final UserRepository _userRepository = UserRepository();
 
   SignUpPageBloc() : super(SignUpPageState.initialState) {
-    on<CheckEmailEvent>(_onEmailCheckStarted);
-    on<SuccessEmailCheckEvent>(_onEmailCheckSucceeded);
-    on<ErrorEmailCheckEvent>(_onEmailCheckFailed);
-    on<SignUpEvent>(_onSignUpStarted);
-    on<SuccessSignUpEvent>(_onSignUpSucceeded);
-    on<SignUpFailedEvent>(_onSignUpFailed);
-    on<ResetSignUpEvent>(_onSignUpReset);
-    on<ResetSignUpEmailEvent>(_onEmailReset);
-    on<ResetPasswordEmailEvent>(_onPasswordReset);
+    on<CheckEmailEvent>(_onCheckEmail);
+    on<SuccessEmailCheckEvent>(_onSuccessEmailCheck);
+    on<ErrorEmailCheckEvent>(_onErrorEmailCheck);
+    on<SignUpEvent>(_onSignUp);
+    on<SuccessSignUpEvent>(_onSuccessSignUp);
+    on<ErrorSignUpEvent>(_onErrorSignUp);
+    on<ResetSignUpEvent>(_onResetSignUp);
+    on<ResetSignUpEmailEvent>(_onResetSignUpEmail);
+    on<ResetPasswordEmailEvent>(_onResetPasswordEmail);
   }
 
-  Future<void> _onEmailCheckStarted(
+  Future<void> _onCheckEmail(
       CheckEmailEvent event, Emitter<SignUpPageState> emit) async {
     emit(state.clone(
         status: SignUpStatus.emailChecking, password: null, signUpError: null));
@@ -38,7 +38,7 @@ class SignUpPageBloc extends Bloc<SignUpPageEvent, SignUpPageState> {
     }
   }
 
-  void _onEmailCheckSucceeded(
+  void _onSuccessEmailCheck(
       SuccessEmailCheckEvent event, Emitter<SignUpPageState> emit) {
     emit(state.clone(
         status: SignUpStatus.emailChecked,
@@ -46,7 +46,7 @@ class SignUpPageBloc extends Bloc<SignUpPageEvent, SignUpPageState> {
         emailCheckError: null));
   }
 
-  void _onEmailCheckFailed(
+  void _onErrorEmailCheck(
       ErrorEmailCheckEvent event, Emitter<SignUpPageState> emit) {
     emit(state.clone(
         status: SignUpStatus.emailCheckFailure,
@@ -54,7 +54,7 @@ class SignUpPageBloc extends Bloc<SignUpPageEvent, SignUpPageState> {
         email: null));
   }
 
-  Future<void> _onSignUpStarted(
+  Future<void> _onSignUp(
       SignUpEvent event, Emitter<SignUpPageState> emit) async {
     emit(state.clone(status: SignUpStatus.signUpLoading));
     if (state.email != null) {
@@ -78,23 +78,23 @@ class SignUpPageBloc extends Bloc<SignUpPageEvent, SignUpPageState> {
       } catch (e) {
         errorMessage = Messages.signUpFailed;
       }
-      add(SignUpFailedEvent(error: errorMessage));
+      add(ErrorSignUpEvent(error: errorMessage));
     } else {
-      add(SignUpFailedEvent());
+      add(ErrorSignUpEvent());
     }
   }
 
-  void _onSignUpSucceeded(
+  void _onSuccessSignUp(
       SuccessSignUpEvent event, Emitter<SignUpPageState> emit) {
     emit(state.clone(status: SignUpStatus.signUpSucceeded));
   }
 
-  void _onSignUpFailed(SignUpFailedEvent event, Emitter<SignUpPageState> emit) {
+  void _onErrorSignUp(ErrorSignUpEvent event, Emitter<SignUpPageState> emit) {
     emit(state.clone(
         status: SignUpStatus.signUpFailure, signUpError: event.error));
   }
 
-  void _onSignUpReset(ResetSignUpEvent event, Emitter<SignUpPageState> emit) {
+  void _onResetSignUp(ResetSignUpEvent event, Emitter<SignUpPageState> emit) {
     emit(state.clone(
         status: SignUpStatus.initial,
         email: null,
@@ -103,13 +103,13 @@ class SignUpPageBloc extends Bloc<SignUpPageEvent, SignUpPageState> {
         signUpError: null));
   }
 
-  void _onPasswordReset(
+  void _onResetPasswordEmail(
       ResetPasswordEmailEvent event, Emitter<SignUpPageState> emit) {
     emit(state.clone(
         status: SignUpStatus.initial, password: null, signUpError: null));
   }
 
-  void _onEmailReset(
+  void _onResetSignUpEmail(
       ResetSignUpEmailEvent event, Emitter<SignUpPageState> emit) {
     emit(state.clone(status: SignUpStatus.initial, emailCheckError: null));
   }

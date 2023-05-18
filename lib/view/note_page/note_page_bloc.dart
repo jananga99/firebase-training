@@ -9,9 +9,9 @@ part 'note_page_state.dart';
 
 class NotePageBloc extends Bloc<NotePageEvent, NotePageState> {
   NotePageBloc() : super(NotePageState.initialState) {
-    on<FetchNoteEvent>(_onNoteFetched);
-    on<StartFetchNoteEvent>(_onNoteStarted);
-    on<ErrorFetchNoteEvent>(_onNoteFailed);
+    on<FetchNoteEvent>(_onFetchNote);
+    on<StartFetchNoteEvent>(_onStartFetchNote);
+    on<ErrorFetchNoteEvent>(_onErrorFetchNote);
   }
 
   final NoteRepository _noteRepository = NoteRepository();
@@ -24,14 +24,14 @@ class NotePageBloc extends Bloc<NotePageEvent, NotePageState> {
     return super.close();
   }
 
-  void _onNoteFetched(
+  void _onFetchNote(
     FetchNoteEvent event,
     Emitter<NotePageState> emit,
   ) {
     emit(state.clone(noteStatus: FetchNoteStatus.onProgress, note: event.note));
   }
 
-  Future<void> _onNoteStarted(
+  Future<void> _onStartFetchNote(
       StartFetchNoteEvent event, Emitter<NotePageState> emit) async {
     emit(state.clone(noteStatus: FetchNoteStatus.loading, id: event.id));
     try {
@@ -45,7 +45,7 @@ class NotePageBloc extends Bloc<NotePageEvent, NotePageState> {
     }
   }
 
-  void _onNoteFailed(
+  void _onErrorFetchNote(
     ErrorFetchNoteEvent event,
     Emitter<NotePageState> emit,
   ) {

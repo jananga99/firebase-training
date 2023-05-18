@@ -10,14 +10,14 @@ part 'sign_in_page_state.dart';
 
 class SignInPageBloc extends Bloc<SignInPageEvent, SignInPageState> {
   SignInPageBloc() : super(SignInPageState.initialState) {
-    on<InitializeUserCheckEvent>(_onSignInInitialized);
-    on<StartSignInEvent>(_onSignInStarted);
-    on<AuthorizeEvent>(_onAuthorized);
-    on<UnauthorizeEvent>(_onUnauthorized);
-    on<ErrorSignInEvent>(_onSignInFailed);
-    on<StartSignOutEvent>(_onSignOutStarted);
-    on<SignOutEvent>(_onSignOutSucceeded);
-    on<ErrorSignOutEvent>(_onSignOutFailed);
+    on<InitializeUserCheckEvent>(_onInitializeUserCheck);
+    on<StartSignInEvent>(_onStartSignIn);
+    on<AuthorizeEvent>(_onAuthorize);
+    on<UnauthorizeEvent>(_onUnauthorize);
+    on<ErrorSignInEvent>(_onErrorSignIn);
+    on<StartSignOutEvent>(_onStartSignOut);
+    on<SignOutEvent>(_onSignOut);
+    on<ErrorSignOutEvent>(_onErrorSignOut);
   }
 
   final UserRepository _userRepository = UserRepository();
@@ -29,7 +29,7 @@ class SignInPageBloc extends Bloc<SignInPageEvent, SignInPageState> {
     return super.close();
   }
 
-  void _onSignInInitialized(
+  void _onInitializeUserCheck(
       InitializeUserCheckEvent event, Emitter<SignInPageState> emit) {
     _userSubscription?.cancel();
     _userSubscription = _userRepository.getUserStream().listen((user) {
@@ -41,7 +41,7 @@ class SignInPageBloc extends Bloc<SignInPageEvent, SignInPageState> {
     });
   }
 
-  Future<void> _onSignInStarted(
+  Future<void> _onStartSignIn(
       StartSignInEvent event, Emitter<SignInPageState> emit) async {
     emit(state.clone(status: SignInStatus.loading, error: null));
     try {
@@ -63,7 +63,7 @@ class SignInPageBloc extends Bloc<SignInPageEvent, SignInPageState> {
     }
   }
 
-  void _onAuthorized(AuthorizeEvent event, Emitter<SignInPageState> emit) {
+  void _onAuthorize(AuthorizeEvent event, Emitter<SignInPageState> emit) {
     emit(state.clone(
         status: SignInStatus.authorized,
         user: event.user,
@@ -71,7 +71,7 @@ class SignInPageBloc extends Bloc<SignInPageEvent, SignInPageState> {
         password: null));
   }
 
-  void _onUnauthorized(UnauthorizeEvent event, Emitter<SignInPageState> emit) {
+  void _onUnauthorize(UnauthorizeEvent event, Emitter<SignInPageState> emit) {
     emit(state.clone(
         status: SignInStatus.unauthorized,
         user: null,
@@ -79,11 +79,11 @@ class SignInPageBloc extends Bloc<SignInPageEvent, SignInPageState> {
         password: null));
   }
 
-  void _onSignInFailed(ErrorSignInEvent event, Emitter<SignInPageState> emit) {
+  void _onErrorSignIn(ErrorSignInEvent event, Emitter<SignInPageState> emit) {
     emit(state.clone(status: SignInStatus.failure, error: event.error));
   }
 
-  Future<void> _onSignOutStarted(
+  Future<void> _onStartSignOut(
       StartSignOutEvent event, Emitter<SignInPageState> emit) async {
     try {
       add(SignOutEvent());
@@ -92,10 +92,10 @@ class SignInPageBloc extends Bloc<SignInPageEvent, SignInPageState> {
     }
   }
 
-  void _onSignOutSucceeded(SignOutEvent event, Emitter<SignInPageState> emit) {
+  void _onSignOut(SignOutEvent event, Emitter<SignInPageState> emit) {
     emit(SignInPageState.initialState);
   }
 
-  void _onSignOutFailed(
+  void _onErrorSignOut(
       ErrorSignOutEvent event, Emitter<SignInPageState> emit) {}
 }
