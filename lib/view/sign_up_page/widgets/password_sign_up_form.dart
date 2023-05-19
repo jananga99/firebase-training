@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project1/view/sign_in_page/auth_guard_provider.dart';
+import 'package:project1/view/sign_in_page/sign_in_page_bloc.dart';
 import 'package:project1/view/sign_up_page/sign_up_page_bloc.dart';
-import 'package:project1/widgets/custom/constants.dart';
+
+import '../../home_page/home_page_provider.dart';
+import '../../home_page/home_page_view.dart';
+import '../providers/email_sign_up_page_provider.dart';
+import '../views/email_sign_up_page.dart';
 
 class PasswordSignUpForm extends StatefulWidget {
   const PasswordSignUpForm({super.key});
@@ -30,8 +36,16 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
     super.initState();
     final email = context.read<SignUpPageBloc>().state.email;
     if (email == null) {
-      Navigator.of(context)
-          .pushReplacementNamed(RouteConstants.signUpEmailRoute);
+      Future(() {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              settings: const RouteSettings(name: EmailSignUpPage.ROUTE),
+              builder: (context) => EmailSignUpPageProvider(
+                bloc: _signUpPageBloc,
+              ),
+            ));
+      });
     }
     _passwordInputController.addListener(() {
       setState(() {
@@ -40,9 +54,18 @@ class _PasswordSignUpFormState extends State<PasswordSignUpForm> {
     });
   }
 
-  void handleSignUpSuccess() {
+  Future<void> handleSignUpSuccess() async {
     _signUpPageBloc.add(ResetSignUpEvent());
-    Navigator.of(context).pushReplacementNamed(RouteConstants.homeRoute);
+    final signInBloc = SignInPageBloc();
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            settings: const RouteSettings(name: HomePage.ROUTE),
+            builder: (context) => AuthGuardProvider(
+                component: HomePageProvider(
+                  bloc: signInBloc,
+                ),
+                bloc: signInBloc)));
   }
 
   @override

@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project1/view/sign_in_page/sign_in_page.dart';
+import 'package:project1/view/sign_in_page/sign_in_page_bloc.dart';
 
-import '../view/sign_in_page/sign_in_page.dart';
-import '../view/sign_in_page/sign_in_page_bloc.dart';
+class AuthGuardView extends StatelessWidget {
+  final Widget child;
 
-class AuthGuard extends StatelessWidget {
-  final Widget _component;
-
-  const AuthGuard({super.key, required Widget component})
-      : _component = component;
+  const AuthGuardView({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +14,7 @@ class AuthGuard extends StatelessWidget {
       buildWhen: (pre, current) => pre.user != current.user,
       builder: (context, state) {
         return state.status == SignInStatus.authorized && state.user != null
-            ? _component
+            ? child
             : const SignInPage();
       },
     );

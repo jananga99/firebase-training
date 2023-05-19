@@ -2,7 +2,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:project1/view/sign_up_page/sign_up_page_bloc.dart';
-import 'package:project1/widgets/custom/constants.dart';
+
+import '../providers/password_sign_up_page.dart';
+import '../views/password_sign_up_page.dart';
 
 class EmailSignUpForm extends StatefulWidget {
   const EmailSignUpForm({super.key});
@@ -55,11 +57,16 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
     }
   }
 
-  void handleEmailChecked() {
+  Future<void> handleEmailChecked() async {
     _signUpPageBloc.add(ResetSignUpEmailEvent());
-    Navigator.of(context).pushReplacementNamed(
-        RouteConstants.signUpPasswordRoute,
-        arguments: context.read<SignUpPageBloc>());
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+          settings: const RouteSettings(name: PasswordSignUpPage.ROUTE),
+          builder: (context) => PasswordSignUpPageProvider(
+            bloc: _signUpPageBloc,
+          ),
+        ));
   }
 
   @override

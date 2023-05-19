@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:project1/view/sign_in_page/sign_in_form.dart';
+import 'package:project1/view/sign_up_page/sign_up_page_bloc.dart';
+import 'package:project1/view/sign_up_page/views/email_sign_up_page.dart';
 import 'package:project1/widgets/custom/constants.dart';
 import 'package:project1/widgets/custom/custom_colors.dart';
+
+import '../sign_up_page/providers/email_sign_up_page_provider.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    void handleSignUp() {
-      Navigator.pushReplacementNamed(context, RouteConstants.signUpEmailRoute);
+    Future<void> handleSignUp() async {
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+            settings: const RouteSettings(name: EmailSignUpPage.ROUTE),
+            builder: (context) => EmailSignUpPageProvider(
+              bloc: SignUpPageBloc(),
+            ),
+          ));
     }
 
     return Scaffold(

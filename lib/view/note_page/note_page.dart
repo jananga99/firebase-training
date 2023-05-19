@@ -1,21 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project1/view/home_page/home_page_provider.dart';
+import 'package:project1/view/home_page/home_page_view.dart';
 import 'package:project1/view/note_page/note_card.dart';
 import 'package:project1/view/note_page/note_page_bloc.dart';
+import 'package:project1/view/sign_in_page/auth_guard_provider.dart';
+import 'package:project1/view/sign_in_page/sign_in_page_bloc.dart';
 import 'package:project1/widgets/custom/constants.dart';
 import 'package:project1/widgets/header_bar/header_bar.dart';
 
 class NotePage extends StatelessWidget {
+  static const String ROUTE = 'note';
+
   const NotePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final notePageBloc = BlocProvider.of<NotePageBloc>(context);
+    final signInPageBloc = BlocProvider.of<SignInPageBloc>(context);
     final String? stateId = notePageBloc.state.id;
     late String id;
     if (stateId == null || stateId.isEmpty) {
       Future(() {
-        Navigator.pushReplacementNamed(context, RouteConstants.homeRoute);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                settings: const RouteSettings(name: HomePage.ROUTE),
+                builder: (context) => AuthGuardProvider(
+                      component: HomePageProvider(
+                        bloc: signInPageBloc,
+                      ),
+                      bloc: signInPageBloc,
+                    )));
       });
     } else {
       id = stateId;

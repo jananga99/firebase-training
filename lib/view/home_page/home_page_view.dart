@@ -4,6 +4,8 @@ import 'package:project1/view/home_page/widgets/notes_view.dart';
 import 'package:project1/widgets/header_bar/header_bar.dart';
 
 class HomePage extends StatelessWidget {
+  static const String ROUTE = 'home';
+
   const HomePage({super.key});
 
   @override

@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project1/view/sign_up_page/sign_up_page_bloc.dart';
 import 'package:project1/view/sign_up_page/widgets/password_sign_up_form.dart';
 import 'package:project1/widgets/custom/constants.dart';
 import 'package:project1/widgets/custom/custom_colors.dart';
 
+import '../providers/email_sign_up_page_provider.dart';
+import 'email_sign_up_page.dart';
+
 class PasswordSignUpPage extends StatelessWidget {
+  static const String ROUTE = 'password';
+
   const PasswordSignUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final signUpPageBloc = BlocProvider.of<SignUpPageBloc>(context);
+
     void handleGoBack() {
-      Navigator.pushReplacementNamed(context, RouteConstants.signUpEmailRoute);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              settings: const RouteSettings(name: EmailSignUpPage.ROUTE),
+              builder: (context) =>
+                  EmailSignUpPageProvider(bloc: signUpPageBloc)));
     }
 
     return Scaffold(
@@ -49,12 +63,10 @@ class PasswordSignUpPage extends StatelessWidget {
                       children: [
                         TextButton(
                             onPressed: handleGoBack,
-                            child: Text(
+                            child: const Text(
                               "<--",
                               style: TextStyle(
-                                  fontSize: 25,
-                                  color:
-                                      Theme.of(context).secondaryHeaderColor),
+                                  fontSize: 25, color: CustomColors.LIGHT_BLUE),
                             )),
                       ],
                     ),

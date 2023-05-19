@@ -6,6 +6,11 @@ import 'package:project1/view/home_page/widgets/note_card.dart';
 import 'package:project1/view/note_page/note_page_bloc.dart';
 import 'package:project1/widgets/custom/constants.dart';
 
+import '../../note_page/note_page.dart';
+import '../../note_page/note_page_provider.dart';
+import '../../sign_in_page/auth_guard_provider.dart';
+import '../../sign_in_page/sign_in_page_bloc.dart';
+
 class NotesView extends StatefulWidget {
   const NotesView({Key? key}) : super(key: key);
 
@@ -14,22 +19,34 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesViewState extends State<NotesView> {
-  late HomePageBloc _notesBloc;
+  late HomePageBloc _homePageBloc;
 
   @override
   void dispose() {
-    _notesBloc.add(ResetFetchNotesEvent());
+    _homePageBloc.add(ResetFetchNotesEvent());
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final noteBloc = BlocProvider.of<NotePageBloc>(context);
-    _notesBloc = BlocProvider.of<HomePageBloc>(context);
+    final signInBloc = BlocProvider.of<SignInPageBloc>(context);
+    _homePageBloc = BlocProvider.of<HomePageBloc>(context);
 
-    void handleCardPress(String id) {
+    Future<void> handleCardPress(String id) async {
       noteBloc.add(StartFetchNoteEvent(id: id));
-      Navigator.of(context).pushReplacementNamed(RouteConstants.noteViewRoute);
+      await Navigator.push(
+          context,
+          MaterialPageRoute(
+            settings: const RouteSettings(name: NotePage.ROUTE),
+            builder: (context) => AuthGuardProvider(
+              bloc: signInBloc,
+              component: NotePageProvider(
+                notePageBloc: noteBloc,
+                signInPageBloc: signInBloc,
+              ),
+            ),
+          ));
     }
 
     return BlocBuilder<HomePageBloc, HomePageState>(
@@ -40,7 +57,7 @@ class _NotesViewState extends State<NotesView> {
         Widget returnWidget;
         switch (state.fetchNotesStatus) {
           case FetchNotesStatus.initial:
-            _notesBloc.add(StartFetchNotesEvent());
+            _homePageBloc.add(StartFetchNotesEvent());
             returnWidget = Center(
               child: CircularProgressIndicator(
                 color: Theme.of(context).colorScheme.secondary,
