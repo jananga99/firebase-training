@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project1/common/constants.dart';
 import 'package:project1/view/sign_up_page/sign_up_page_bloc.dart';
 import 'package:project1/view/sign_up_page/widgets/email_sign_up_form.dart';
+import 'package:project1/widgets/custom/constants.dart';
+import 'package:project1/widgets/custom/custom_colors.dart';
 
 class EmailSignUpPage extends StatelessWidget {
   const EmailSignUpPage({super.key});
@@ -49,14 +50,12 @@ class EmailSignUpPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      margin: const EdgeInsets.symmetric(vertical: 15),
-                      child: Text(
-                        "Sign Up",
-                        style: TextStyle(
-                            fontSize: 35,
-                            color: Theme.of(context).secondaryHeaderColor),
-                      ),
-                    ),
+                        margin: const EdgeInsets.symmetric(vertical: 15),
+                        child: const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                              fontSize: 35, color: CustomColors.LIGHT_BLUE),
+                        )),
                     const EmailSignUpForm(),
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 25),
@@ -75,15 +74,13 @@ class EmailSignUpPage extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            child: InkWell(
-                                onTap: handleSignIn,
-                                child: Text("Sign in",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Theme.of(context)
-                                            .secondaryHeaderColor))),
-                          ),
+                              margin: const EdgeInsets.symmetric(vertical: 5),
+                              child: InkWell(
+                                  onTap: handleSignIn,
+                                  child: const Text("Sign in",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: CustomColors.LIGHT_BLUE)))),
                         ],
                       ),
                     ),

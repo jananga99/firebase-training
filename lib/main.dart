@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project1/common/constants.dart';
-import 'package:project1/common/theme.dart';
 import 'package:project1/view/home_page/home_page_bloc.dart';
 import 'package:project1/view/home_page/home_page_view.dart';
 import 'package:project1/view/note_page/note_page.dart';
@@ -14,6 +12,8 @@ import 'package:project1/view/sign_up_page/sign_up_page_bloc.dart';
 import 'package:project1/view/sign_up_page/views/email_sign_up_page.dart';
 import 'package:project1/view/sign_up_page/views/password_sign_up_page.dart';
 import 'package:project1/widgets/auth_guard.dart';
+import 'package:project1/widgets/custom/constants.dart';
+import 'package:project1/widgets/custom/custom_themes.dart';
 import 'package:project1/widgets/header_bar/header_bar_bloc.dart';
 
 import 'firebase_options.dart';
@@ -53,7 +53,7 @@ class App extends StatelessWidget {
       child: MaterialApp(
         title: '',
         debugShowCheckedModeBanner: false,
-        theme: CustomTheme.getThemeData(),
+        theme: CustomThemes.lightTheme(context),
         initialRoute: RouteConstants.homeRoute,
         routes: {
           RouteConstants.signUpEmailRoute: (context) => const EmailSignUpPage(),

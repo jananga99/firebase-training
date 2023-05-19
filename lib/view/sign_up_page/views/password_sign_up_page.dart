@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project1/common/constants.dart';
 import 'package:project1/view/sign_up_page/widgets/password_sign_up_form.dart';
+import 'package:project1/widgets/custom/constants.dart';
+import 'package:project1/widgets/custom/custom_colors.dart';
 
 class PasswordSignUpPage extends StatelessWidget {
   const PasswordSignUpPage({super.key});
@@ -58,14 +59,14 @@ class PasswordSignUpPage extends StatelessWidget {
                       ],
                     ),
                     Container(
-                      margin: const EdgeInsets.symmetric(vertical: 15),
-                      child: Text(
-                        "Sign Up",
-                        style: TextStyle(
+                        margin: const EdgeInsets.symmetric(vertical: 15),
+                        child: const Text(
+                          "Sign Up",
+                          style: TextStyle(
                             fontSize: 35,
-                            color: Theme.of(context).secondaryHeaderColor),
-                      ),
-                    ),
+                            color: CustomColors.LIGHT_BLUE,
+                          ),
+                        )),
                     const PasswordSignUpForm()
                   ],
                 ),

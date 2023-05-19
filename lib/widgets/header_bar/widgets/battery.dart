@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project1/common/theme.dart';
+import 'package:project1/widgets/custom/custom_colors.dart';
 import 'package:project1/widgets/header_bar/header_bar_bloc.dart';
 
 class BatteryIcon extends StatefulWidget {
@@ -25,8 +25,8 @@ class _BatteryIconState extends State<BatteryIcon> {
                         state.battery != null
                     ? "${state.battery!}%"
                     : "??%",
-                style:
-                    TextStyle(fontSize: 15, color: CustomTheme.iconBackground),
+                style: const TextStyle(
+                    fontSize: 15, color: CustomColors.ICON_BACKGROUND),
               ),
               Icon(
                 Icons.battery_full,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/constants.dart';
+import '../../custom/constants.dart';
 
 class HomeIcon extends StatelessWidget {
   const HomeIcon({Key? key}) : super(key: key);

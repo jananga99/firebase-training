@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project1/common/constants.dart';
 import 'package:project1/view/sign_in_page/sign_in_form.dart';
+import 'package:project1/widgets/custom/constants.dart';
+import 'package:project1/widgets/custom/custom_colors.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
@@ -44,11 +45,10 @@ class SignInPage extends StatelessWidget {
                   children: [
                     Container(
                       margin: const EdgeInsets.symmetric(vertical: 15),
-                      child: Text(
+                      child: const Text(
                         "Sign In",
                         style: TextStyle(
-                            fontSize: 35,
-                            color: Theme.of(context).secondaryHeaderColor),
+                            fontSize: 35, color: CustomColors.LIGHT_BLUE),
                       ),
                     ),
                     const SignInForm(),
@@ -71,13 +71,13 @@ class SignInPage extends StatelessWidget {
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 5),
                             child: InkWell(
-                                onTap: handleSignUp,
-                                child: Text("Create an account",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Theme.of(context)
-                                            .secondaryHeaderColor))),
-                          ),
+                              onTap: handleSignUp,
+                              child: const Text("Create an account",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: CustomColors.LIGHT_BLUE)),
+                            ),
+                          )
                         ],
                       ),
                     ),

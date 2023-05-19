@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:project1/common/constants.dart';
 import 'package:project1/db/repo/user_repository.dart';
+import 'package:project1/widgets/custom/constants.dart';
 
 part 'sign_in_page_event.dart';
 part 'sign_in_page_state.dart';

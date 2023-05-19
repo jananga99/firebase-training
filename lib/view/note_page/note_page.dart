@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:project1/common/constants.dart';
 import 'package:project1/view/note_page/note_card.dart';
 import 'package:project1/view/note_page/note_page_bloc.dart';
+import 'package:project1/widgets/custom/constants.dart';
 import 'package:project1/widgets/header_bar/header_bar.dart';
 
 class NotePage extends StatelessWidget {
